@@ -35,7 +35,7 @@ class ViewController: UIViewController {
                               "metadata.urlScheme": "demoapp://",
                               "description": "First Data Mobile Test",
                               "env": "sandbox",
-                              "localUrl": "192.168.0.13:8000"]
+                              "localUrl": "http://192.168.0.13:8000"]
         
         self.trustlyView.onChangeListener { (eventName, attributes) in
             print("onChangeListener: \(eventName) \(attributes)")
