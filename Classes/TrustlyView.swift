@@ -106,6 +106,8 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         mainWebView.navigationDelegate = self
         mainWebView.uiDelegate = self
         mainWebView.scrollView.bounces = false
+        mainWebView.backgroundColor = UIColor.clear
+        mainWebView.isOpaque = false
 
         addSubview(mainWebView)
     }
@@ -478,7 +480,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         }
 
         if ("local" == env), let urlLocal = localUrl {
-            url = "http://"+urlLocal+"/start/selectBank/"+fn+"?v="+build+"-ios-sdk"
+            url = urlLocal+"/start/selectBank/"+fn+"?v="+build+"-ios-sdk"
             
             let cleanLocalUrl = urlLocal.components(separatedBy: ":")[0]
             self.baseUrls.append(cleanLocalUrl)
