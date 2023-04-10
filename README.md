@@ -3,7 +3,8 @@
 [![License](https://badgen.net/badge/license/MIT/blue?icon=swift)](https://cocoapods.org/pods/TrustlySDK)
 [![Swift Version](https://badgen.net/badge/swift/5/orange?icon=swift)](https://cocoapods.org/pods/TrustlySDK)
 [![Platform](https://badgen.net/badge/iOS/v12/green?icon=swift)](https://cocoapods.org/pods/TrustlySDK)
-[![Cocoapods Version](https://badgen.net/badge/cocoapods/1.12.0/blue?icon=swift)](https://cocoapods.org/pods/TrustlySDK)
+[![Cocoapods Version](https://badgen.net/badge/cocoapods/v1.12.0/blue?icon=swift)](https://cocoapods.org/pods/TrustlySDK)
+[![Pod Version](https://badgen.net/badge/pod/v3.0.0/yellow?icon=swift)](https://cocoapods.org/pods/TrustlySDK)
 
 ## Example App
 ---
