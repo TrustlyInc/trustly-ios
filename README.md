@@ -24,6 +24,11 @@ To run the example project, clone the repo, and run `pod install` from the Examp
     pod 'TrustlySDK'
     ```
 
+    For development and test reasons, you can install the pod from a branch in github:
+    ```ruby
+    pod 'TrustlySDK', :git => 'https://github.com/TrustlyInc/trustly-ios.git', :branch => '<BRANCH_NAME>'
+    ```
+
 ## Usage
 
 ```swift
