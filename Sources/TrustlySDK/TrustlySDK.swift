@@ -1,7 +1,6 @@
 //
 //  TrustlySDK.swift
 //  Pods
-//  Validation
 //  Created by Marcos Rivereto on 30/03/23.
 //
 
