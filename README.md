@@ -5,6 +5,7 @@
 [![Platform](https://badgen.net/badge/iOS/v12/green?icon=swift)](https://cocoapods.org/pods/TrustlySDK)
 [![Cocoapods Version](https://badgen.net/badge/cocoapods/v1.12.0/blue?icon=swift)](https://cocoapods.org/pods/TrustlySDK)
 [![Pod Version](https://badgen.net/badge/pod/v3.0.0/yellow?icon=swift)](https://cocoapods.org/pods/TrustlySDK)
+[![Swift Package Maager](https://badgen.net/badge/spm/available/green?icon=swift)](https://cocoapods.org/pods/TrustlySDK)
 
 ## Example App
 ---
@@ -16,18 +17,34 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Installation
 ---
-- ### Cocoapods
-    TrustlySDK is available through [CocoaPods](https://cocoapods.org). To install
-    it, simply add the following line to your Podfile:
+<details open>
+<summary>Cocoapods</summary>
+<br />
 
-    ```ruby
-    pod 'TrustlySDK'
-    ```
+TrustlySDK is available through [CocoaPods](https://cocoapods.org). To install
+it, simply add the following line to your Podfile:
 
-    For development and test reasons, you can install the pod from a branch in github:
-    ```ruby
-    pod 'TrustlySDK', :git => 'https://github.com/TrustlyInc/trustly-ios.git', :branch => '<BRANCH_NAME>'
-    ```
+```ruby
+pod 'TrustlySDK'
+```
+
+For development and test reasons, you can install the pod from a branch in github:
+```ruby
+pod 'TrustlySDK', :git => 'https://github.com/TrustlyInc/trustly-ios.git', :branch => '<BRANCH_NAME>'
+```
+</details>
+
+<details open>
+<summary>Swift Package Manager - SPM</summary>
+<br />
+TrustlySDK is available through [Swift Package Manager](https://cocoapods.org). To install
+it, simply click on File -> Add packages -> Search or Enter Package URL, paste the github url about this package `https://github.com/TrustlyInc/trustly-ios.git`:
+
+![Add package url](docs/images/swift_package_manager.png)
+
+For production reason choose the `main` branch, but for test or validation choose the branch described in the [release version table](#versions).
+</details>
+<br />
 
 ## Usage
 
@@ -87,9 +104,9 @@ class ViewController: UIViewController {
 ## Versions
 ___
 
-| VERSION   | DESCRIPTION |
-| :-------:   | :----------- |
-3.0.0     | Add cocoapods, and swift package manager support
+| VERSION   | DESCRIPTION   | BRANCH |
+| :-------: | :-----------  | :----------- |
+3.0.0     | Add cocoapods, and swift package manager support | *main*
 
 
 <br />
@@ -98,5 +115,3 @@ ___
 ___
 
 TrustlySDK is available under the MIT license. See the LICENSE file for more info.
-
-
