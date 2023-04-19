@@ -2,9 +2,7 @@
 //  TrustlyLightBoxViewController.swift
 //  TrustlySDK_Example
 //
-//  Created by Marcos Rivereto on 06/04/23.
-//  Copyright © 2023 CocoaPods. All rights reserved.
-//
+
 
 import Foundation
 import TrustlySDK

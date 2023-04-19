@@ -48,57 +48,9 @@ For production reason choose the `main` branch, but for test or validation choos
 
 ## Usage
 
-```swift
-import TrustlySDK
+To quickly get up and running with this SDK see the [iOS Quickstart](https://amer.developers.trustly.com/payments/docs/ios-quickstart) in the Trustly Developer Documentation.
 
-class ViewController: UIViewController {
 
-    ...
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.establishData = ["accessId": "<ACCESS_ID>",
-                              "merchantId" : "<MERCHANT_ID>",
-                              "currency" : "USD",
-                              "amount" : "1.00",
-                              "merchantReference" : "<MERCHANT_REFERENCE>",
-                              "paymentType" : "Retrieval",
-                              "returnUrl": "/returnUrl",
-                              "cancelUrl": "/cancelUrl",
-                              "requestSignature": "<REQUEST_SIGNATURE>",
-                              "customer.name": "John",
-                              "customer.address.country": "US",
-                              "metadata.urlScheme": "demoapp://",
-                              "description": "First Data Mobile Test",
-                              "env": "<[int, sandbox, local]>",
-                              "localUrl": "<YOUR LOCAL URL WHEN `ENV` PROPERTY IS `LOCAL` (ex: https://192.168.0.30:8000)>"]
-        
-        self.trustlyView.onChangeListener { (eventName, attributes) in
-            print("onChangeListener: \(eventName) \(attributes)")
-        }
-
-        self.trustlyView.selectBankWidget(establishData: establishData) { (view, data) in
-            print("returnParameters:\(data)")
-            self.establishData = data
-        }
-
-        self.view = trustlyLightboxPanel.establish(establishData: establishData,
-                                                    onReturn: {(payWithMyBank, returnParameters)->Void in
-            let response = returnParameters as! [String:String]
-            //TODO: implement your success behavior here
-            
-        }, onCancel: {(payWithMyBank, returnParameters)->Void in
-            let response = returnParameters as! [String:String]
-            //TODO: implement your cancel or failure behavior here
-        })
-
-    }
-
-    ...
-
-}
-```
 <br />
 
 ## Versions

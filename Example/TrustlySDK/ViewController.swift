@@ -2,9 +2,7 @@
 //  ViewController.swift
 //  TrustlySDK
 //
-//  Created by Marcos Rivereto on 04/06/2023.
-//  Copyright (c) 2023 Marcos Rivereto. All rights reserved.
-//
+
 
 import UIKit
 import TrustlySDK
