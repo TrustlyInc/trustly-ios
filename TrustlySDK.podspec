@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
   s.author           = { 'Trustly' => 'amer.developer.experience@trustly.com' }
   s.source           = { :git => 'https://github.com/TrustlyInc/trustly-ios.git', :tag => s.version.to_s }
 
-  s.ios.deployment_target = '12.0'
+  s.ios.deployment_target = '16.0'
 
   s.source_files = 'Sources/TrustlySDK/**/*.swift'
 

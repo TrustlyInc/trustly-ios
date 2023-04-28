@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		1587AB912A2FE043006F6FC3 /* SessionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1587AB902A2FE043006F6FC3 /* SessionManagerTests.swift */; };
 		15987B0929DEF79D00D7A395 /* TrustlyLightBoxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15987B0829DEF79D00D7A395 /* TrustlyLightBoxViewController.swift */; };
+		15D5276929FBFCF4006BEAEC /* SuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D5276729FBFCF4006BEAEC /* SuccessViewController.swift */; };
+		15D5276A29FBFCF4006BEAEC /* SuccessViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15D5276829FBFCF4006BEAEC /* SuccessViewController.xib */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
@@ -31,6 +33,9 @@
 /* Begin PBXFileReference section */
 		1587AB902A2FE043006F6FC3 /* SessionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManagerTests.swift; sourceTree = "<group>"; };
 		15987B0829DEF79D00D7A395 /* TrustlyLightBoxViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrustlyLightBoxViewController.swift; sourceTree = "<group>"; };
+		15D5276029FAE84C006BEAEC /* TrustlySDK_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TrustlySDK_Example.entitlements; sourceTree = "<group>"; };
+		15D5276729FBFCF4006BEAEC /* SuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessViewController.swift; sourceTree = "<group>"; };
+		15D5276829FBFCF4006BEAEC /* SuccessViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SuccessViewController.xib; sourceTree = "<group>"; };
 		2416E32056EECA07B4C86E1B /* TrustlySDK.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = TrustlySDK.podspec; path = ../TrustlySDK.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		24C6055BF6640A73038BF66E /* Pods_TrustlySDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TrustlySDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		38845E178FF73A019452105E /* Pods-TrustlySDK_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrustlySDK_Tests.debug.xcconfig"; path = "Target Support Files/Pods-TrustlySDK_Tests/Pods-TrustlySDK_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -74,6 +79,7 @@
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
+				15D5276029FAE84C006BEAEC /* TrustlySDK_Example.entitlements */,
 				607FACF51AFB993E008FA782 /* Podspec Metadata */,
 				607FACD21AFB9204008FA782 /* Example for TrustlySDK */,
 				607FACE81AFB9204008FA782 /* Tests */,
@@ -102,6 +108,8 @@
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
 				15987B0829DEF79D00D7A395 /* TrustlyLightBoxViewController.swift */,
+				15D5276729FBFCF4006BEAEC /* SuccessViewController.swift */,
+				15D5276829FBFCF4006BEAEC /* SuccessViewController.xib */,
 			);
 			name = "Example for TrustlySDK";
 			path = TrustlySDK;
@@ -173,7 +181,7 @@
 				607FACCC1AFB9204008FA782 /* Sources */,
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
-				63B59E6FC13D7828E4A76443 /* [CP] Embed Pods Frameworks */,
+				F36A14F4B8890F82DACEDBAF /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -252,6 +260,7 @@
 			files = (
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
+				15D5276A29FBFCF4006BEAEC /* SuccessViewController.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -288,24 +297,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		63B59E6FC13D7828E4A76443 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TrustlySDK_Example/Pods-TrustlySDK_Example-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/TrustlySDK/TrustlySDK.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TrustlySDK.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TrustlySDK_Example/Pods-TrustlySDK_Example-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		E90016EDF08FB3DCC19102F1 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -328,6 +319,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		F36A14F4B8890F82DACEDBAF /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TrustlySDK_Example/Pods-TrustlySDK_Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/TrustlySDK/TrustlySDK.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TrustlySDK.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TrustlySDK_Example/Pods-TrustlySDK_Example-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -337,6 +346,7 @@
 			files = (
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				15D5276929FBFCF4006BEAEC /* SuccessViewController.swift in Sources */,
 				15987B0929DEF79D00D7A395 /* TrustlyLightBoxViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -483,12 +493,13 @@
 			baseConfigurationReference = E4A893CD7E4194BD1860A4BF /* Pods-TrustlySDK_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = TrustlySDK_Example.entitlements;
 				DEVELOPMENT_TEAM = 935WTYE9VM;
 				INFOPLIST_FILE = TrustlySDK/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.TrustlySDK-Example";
+				PRODUCT_BUNDLE_IDENTIFIER = com.trustly.demobank.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
@@ -500,12 +511,13 @@
 			baseConfigurationReference = F6B3BBFE7E8396C2B1D558CB /* Pods-TrustlySDK_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = TrustlySDK_Example.entitlements;
 				DEVELOPMENT_TEAM = 935WTYE9VM;
 				INFOPLIST_FILE = TrustlySDK/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.TrustlySDK-Example";
+				PRODUCT_BUNDLE_IDENTIFIER = com.trustly.demobank.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
@@ -525,7 +537,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -544,7 +556,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
