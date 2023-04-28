@@ -16,6 +16,7 @@ class ViewController: BaseViewController {
     var alertObj:UIAlertController?
     var establishData:Dictionary<AnyHashable,Any> = [:]
     var trustlyPanel = TrustlyView()
+    var passKeyManager = PassKeyManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -87,6 +88,29 @@ class ViewController: BaseViewController {
 
         self.present(trustlyLightboxViewController, animated: true)
         
+        if let emailText = emailTextView.text, !emailText.isEmpty {
+            
+            establishData["customer.email"] = emailText
+
+        }
+        
+        trustlyLightboxViewController.establishData = establishData
+
+        self.present(trustlyLightboxViewController, animated: true)
+        
+    }
+    
+    // MARK: Helpers
+    private func getWindow() -> UIWindow {
+        guard let window = self.view.window else { fatalError("The view was not in the app's view hierarchy!") }
+        return window
+    }
+    
+    private func showPassKey(email: String?) {
+        
+        if let email = email {
+            self.passKeyManager.signUpWith(email: email, anchor: self.getWindow())
+        }
     }
     
 }
