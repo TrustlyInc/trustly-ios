@@ -7,7 +7,7 @@
 import UIKit
 import TrustlySDK
 
-class ViewController: UIViewController {
+class ViewController: BaseViewController {
 
     @IBOutlet weak var trustlyView: TrustlyView!
     @IBOutlet weak var amountTextView: UITextField!
@@ -16,7 +16,6 @@ class ViewController: UIViewController {
     var alertObj:UIAlertController?
     var establishData:Dictionary<AnyHashable,Any> = [:]
     var trustlyPanel = TrustlyView()
-    var passKeyManager = PassKeyManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,7 +47,7 @@ class ViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        self.passKeyManager.signInWith(anchor: self.getWindow(), preferImmediatelyAvailableCredentials: true)
+        super.getPassKeyManager().signInWith(anchor: super.getWindow(), preferImmediatelyAvailableCredentials: true)
     }
 
     override func didReceiveMemoryWarning() {
@@ -81,25 +80,12 @@ class ViewController: UIViewController {
         
     }
     
-    // MARK: Helpers
-    private func getWindow() -> UIWindow {
-        guard let window = self.view.window else { fatalError("The view was not in the app's view hierarchy!") }
-        return window
-    }
-    
-    private func showPassKey(email: String?) {
-        
-        if let email = email {
-            self.passKeyManager.signUpWith(email: email, anchor: self.getWindow())
-        }
-    }
 }
 
 extension ViewController: TrustlyLightboxViewProtocol {
     
     func onReturnWithTransactionId(transactionId: String, controller: TrustlyLightBoxViewController) {
         controller.dismiss(animated: true)
-        self.showPassKey(email: establishData["customer.email"] as? String)
         self.showSuccessView()
     }
     
@@ -124,6 +110,7 @@ extension ViewController: TrustlyLightboxViewProtocol {
     
     private func showSuccessView(){
         let successViewController = SuccessViewController(nibName: "SuccessViewController", bundle: nil)
+        successViewController.email = self.establishData["customer.email"] as? String
         self.getWindow().rootViewController = successViewController
     }
     

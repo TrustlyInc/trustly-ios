@@ -8,7 +8,9 @@
 
 import UIKit
 
-class SuccessViewController: UIViewController {
+class SuccessViewController: BaseViewController {
+    
+    var email: String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -16,6 +18,13 @@ class SuccessViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
 
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+        if let email = email, !email.isEmpty {
+            super.getPassKeyManager().signUpWith(email: email, anchor: super.getWindow())
+        }
+    }
 
 
     // MARK: - Actions
