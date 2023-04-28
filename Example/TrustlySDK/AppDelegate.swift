@@ -7,10 +7,12 @@
 //
 
 import UIKit
+import TrustlySDK
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    var passKeyManager = PassKeyManager()
     var window: UIWindow?
 
 
