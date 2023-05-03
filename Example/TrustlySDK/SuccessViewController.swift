@@ -22,7 +22,7 @@ class SuccessViewController: BaseViewController {
     override func viewDidAppear(_ animated: Bool) {
         
         if let email = email, !email.isEmpty {
-            super.getPassKeyManager().signUpWith(email: email, anchor: super.getWindow())
+//            super.getPassKeyManager().signUpWith(email: email, anchor: super.getWindow())
         }
     }
 

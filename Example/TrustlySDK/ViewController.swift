@@ -47,7 +47,7 @@ class ViewController: BaseViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        super.getPassKeyManager().signInWith(anchor: super.getWindow(), preferImmediatelyAvailableCredentials: true)
+//        super.getPassKeyManager().signInWith(anchor: super.getWindow(), preferImmediatelyAvailableCredentials: true)
     }
 
     override func didReceiveMemoryWarning() {
