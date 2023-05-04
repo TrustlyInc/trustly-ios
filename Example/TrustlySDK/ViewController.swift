@@ -89,11 +89,11 @@ class ViewController: BaseViewController {
         self.present(trustlyLightboxViewController, animated: true)
         
         if let emailText = emailTextView.text, !emailText.isEmpty {
-            
+
             establishData["customer.email"] = emailText
 
         }
-        
+
         trustlyLightboxViewController.establishData = establishData
 
         self.present(trustlyLightboxViewController, animated: true)

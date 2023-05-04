@@ -73,6 +73,7 @@ struct RP: Codable, Hashable {
 
 public struct PassKeyResult: Codable, Hashable {
     let status: String?
+    let message: String?
     let challenge: String?
     let message: String?
     
