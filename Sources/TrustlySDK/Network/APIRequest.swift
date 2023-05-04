@@ -8,11 +8,49 @@
 import Foundation
 
 struct APIPayload: Codable, Hashable {
-    let username: String
+    let username: String?
+    let attestationObject: String?
+    let clientDataJSON: String?
+    let credentialID: String?
+    let authenticatorData: String?
+    let signature: String?
+    let userID: String?
+
+
+    init(username: String){
+        self.username = username
+        self.attestationObject = nil
+        self.clientDataJSON = nil
+        self.credentialID = nil
+        self.authenticatorData = nil
+        self.signature = nil
+        self.userID = nil
+    }
+    
+    init(attestationObject: String, clientDataJSON: String, credentialID: String){
+        self.attestationObject = attestationObject
+        self.clientDataJSON = clientDataJSON
+        self.credentialID = credentialID
+        self.username = nil
+        self.authenticatorData = nil
+        self.signature = nil
+        self.userID = nil
+    }
+    
+    init(clientDataJSON: String, credentialID: String, authenticatorData: String, signature: String, userID: String){
+        self.clientDataJSON = clientDataJSON
+        self.credentialID = credentialID
+        self.authenticatorData = authenticatorData
+        self.signature = signature
+        self.userID = userID
+        self.username = nil
+        self.attestationObject = nil
+    }
+    
 }
 
 struct User: Codable, Hashable {
-    let id: Int?
+    let id: String?
     let username: String?
     let name: String?
     let email: String?
@@ -26,6 +64,7 @@ struct RP: Codable, Hashable {
 
 struct PassKeyResult: Codable, Hashable {
     let status: String?
+    let message: String?
     let challenge: String?
     let user: User?
     let rp: RP?
@@ -35,7 +74,7 @@ struct PassKeyResult: Codable, Hashable {
 
 struct APIRequest {
     
-    private static let BASE_URL = "https://ac1d-2804-14d-1289-9843-cdbc-54f9-9043-21e7.ngrok-free.app"
+    private static let BASE_URL = "https://9f37-2804-14d-1289-9843-ad9a-7d5c-21b7-24cd.ngrok-free.app/passkey"
     static let CHALLENGE_ADDRESS = "challenge"
     static let REGISTER_ADDRESS = "register"
     static let FINISH_ADDRESS = "finish"
@@ -51,6 +90,18 @@ struct APIRequest {
 
         //You can pass any required content types her
         request.httpMethod = httpMethod
+        
+        if let body = bodyData {
+            do {
+                let jsonData = try JSONEncoder().encode(body)
+                request.httpBody = jsonData
+                
+            } catch {
+                print(error.localizedDescription)
+            }
+            
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        }
         
         print(request)
 

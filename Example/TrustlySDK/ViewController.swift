@@ -20,11 +20,11 @@ class ViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.establishData = ["accessId": "A48B73F694C4C8EE6307",
-                              "merchantId" : "1009542823",
+        self.establishData = ["accessId": "A48B73F694C4C8EE6306",
+                              "merchantId" : "110005514",
                               "currency" : "USD",
                               "amount" : "1.00",
-                              "merchantReference" : "3D51F3A42EFE499A",
+                              "merchantReference" : "cac73df7-52b4-47d7-89d3-9628d4cfb65e",
                               "paymentType" : "Retrieval",
                               "returnUrl": "/returnUrl",
                               "cancelUrl": "/cancelUrl",
@@ -32,7 +32,7 @@ class ViewController: BaseViewController {
                               "customer.name": "John",
                               "customer.address.country": "US",
                               "metadata.urlScheme": "demoapp://",
-                              "description": "Globex Demo",
+                              "description": "First Data Mobile Test",
                               "env": "sandbox"]
         
         self.trustlyView.onChangeListener { (eventName, attributes) in
@@ -47,7 +47,9 @@ class ViewController: BaseViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-//        super.getPassKeyManager().signInWith(anchor: super.getWindow(), preferImmediatelyAvailableCredentials: true)
+        Task {
+            await super.getPassKeyManager().login(presentationAnchor: super.getWindow(), preferImmediatelyAvailableCredentials: true)
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -64,16 +66,16 @@ class ViewController: BaseViewController {
 
         if let amountText = amountTextView.text,
            let amount = Double(amountText) {
-            
+
             establishData["amount"] = String(format: "%.2f", amount)
         }
-        
+
         if let emailText = emailTextView.text, !emailText.isEmpty {
-            
+
             establishData["customer.email"] = emailText
 
         }
-        
+
         trustlyLightboxViewController.establishData = establishData
 
         self.present(trustlyLightboxViewController, animated: true)
