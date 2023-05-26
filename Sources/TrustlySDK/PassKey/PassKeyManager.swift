@@ -15,7 +15,7 @@ extension NSNotification.Name {
 }
 
 public class PassKeyManager: NSObject, ASAuthorizationControllerPresentationContextProviding, ASAuthorizationControllerDelegate {
-    let domain = "96db-2804-14d-1282-9d15-74c5-9600-2682-d67.ngrok-free.app"
+    let domain = "8547-2804-14d-1289-8652-1c60-6169-37-c055.ngrok-free.app"
     var authenticationAnchor: ASPresentationAnchor?
     var isPerformingModalReqest = false
 
