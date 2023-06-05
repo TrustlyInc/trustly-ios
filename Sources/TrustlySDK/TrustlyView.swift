@@ -60,6 +60,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
     private var webSession: ASWebAuthenticationSession!
     private var baseUrls = ["paywithmybank.com", "trustly.one"]
     private let oauthLoginPath = "/oauth/login/"
+    private var sessionCid = "ios wrong cid"
 
     
     //Constructors
@@ -83,6 +84,10 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
 
     func initView() {
         self.createNotifications()
+        
+        if let cid = generateCid() {
+            sessionCid = getOrCreateSessionCid(cid)
+        }
         
         self.navBarColor = Rgb2UIColor(254, 255, 254)
         self.navBarButtonColor = Rgb2UIColor(109, 109, 109)
@@ -114,6 +119,8 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
     //TrustlySDK Protocol
     public func selectBankWidget(establishData eD:[AnyHashable : Any], onBankSelected: TrustlyCallback?) -> UIView? {
         establishData = eD
+        
+        self.addSessionCid()
         
         var query = [String : Any]()
         var hash = [String : Any]()
@@ -163,6 +170,8 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
 
     public func establish(establishData eD: [AnyHashable : Any], onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) -> UIView? {
         establishData = eD
+        
+        self.addSessionCid()
 
         let deviceType = establishData?["deviceType"] ?? "mobile" + ":ios:native"
         establishData?["deviceType"] = deviceType
@@ -563,7 +572,14 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
          }
         return parts.joined(separator: "&")
     }
+    
+    private func addSessionCid() {
+        
+        self.establishData?["sessionCid"] = sessionCid
+        self.establishData?["cid"] = sessionCid
 
+    }
+    
 }
 
 @available(iOS 12.0, *)
