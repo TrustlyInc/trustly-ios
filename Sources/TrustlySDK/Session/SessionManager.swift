@@ -80,7 +80,3 @@ private func getTimestampBase36() -> String? {
 
     return String(timestampBase36, radix: 36, uppercase: true)
 }
-
-private func getSessionCid() {
-    
-}
