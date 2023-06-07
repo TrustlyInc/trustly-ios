@@ -33,9 +33,9 @@ struct SessionCid: Codable {
  */
 func generateCid() -> String? {
     
-    guard let uuid = getFingerPrint() else { return nil }
-    guard let random = getRandomKey() else { return nil }
-    guard let timestampBase36 = getTimestampBase36()  else { return nil }
+    guard let uuid = getFingerPrint(deviceUUID: getDeviceUUID()) else { return nil }
+    guard let random = getRandomKey(randomUUID: UUID().uuidString) else { return nil }
+    guard let timestampBase36 = getTimestampBase36(timeInMilliseconds: Date().millisecondsReferenceDate)  else { return nil }
     
     return "\(uuid)-\(random)-\(timestampBase36)"
 }
@@ -62,21 +62,16 @@ func getOrCreateSessionCid(_ cid: String) -> String {
 
 // MARK: - Private functions to help to generate CID
 
-private func getFingerPrint() -> String? {
-    guard let deviceUUID = getDeviceUUID() else { return nil }
+func getFingerPrint(deviceUUID: String?) -> String? {
+    guard let deviceUUID = deviceUUID else { return nil }
     
     return String(deviceUUID.split(separator: "-")[1])
 }
 
-private func getRandomKey() -> String? {
-    let randomUUID = UUID().uuidString
-    
-    return String(randomUUID.split(separator: "-")[1])
+func getRandomKey(randomUUID: String) -> String? {    
+    return String(randomUUID.split(separator: "-")[2])
 }
 
-private func getTimestampBase36() -> String? {
-    
-    let timestampBase36 = Date().millisecondsSince1970
-
-    return String(timestampBase36, radix: 36, uppercase: true)
+func getTimestampBase36(timeInMilliseconds: Int64) -> String? {
+    return String(timeInMilliseconds, radix: 36, uppercase: true)
 }
