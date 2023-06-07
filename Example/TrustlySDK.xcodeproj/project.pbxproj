@@ -14,7 +14,6 @@
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
-		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		6BACCDB4604ECDF537904C79 /* Pods_TrustlySDK_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4425929EEE562201E9CA4EEC /* Pods_TrustlySDK_Tests.framework */; };
 		A086097EF9B9D26BB68DDA77 /* Pods_TrustlySDK_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24C6055BF6640A73038BF66E /* Pods_TrustlySDK_Example.framework */; };
 /* End PBXBuildFile section */
@@ -47,7 +46,6 @@
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		607FACE51AFB9204008FA782 /* TrustlySDK_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrustlySDK_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		E4A893CD7E4194BD1860A4BF /* Pods-TrustlySDK_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrustlySDK_Example.debug.xcconfig"; path = "Target Support Files/Pods-TrustlySDK_Example/Pods-TrustlySDK_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		F6B3BBFE7E8396C2B1D558CB /* Pods-TrustlySDK_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrustlySDK_Example.release.xcconfig"; path = "Target Support Files/Pods-TrustlySDK_Example/Pods-TrustlySDK_Example.release.xcconfig"; sourceTree = "<group>"; };
 		F72862DF6A4016E58E06BEDD /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
@@ -120,7 +118,6 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				607FACEB1AFB9204008FA782 /* Tests.swift */,
 				1587AB902A2FE043006F6FC3 /* SessionManagerTests.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 			);
@@ -348,7 +345,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
 				1587AB912A2FE043006F6FC3 /* SessionManagerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
