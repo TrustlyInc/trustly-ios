@@ -1,6 +1,0 @@
-framework module trustly_ios {
-  umbrella header "trustly-ios-umbrella.h"
-
-  export *
-  module * { export * }
-}

@@ -8,35 +8,19 @@
 
 Pod::Spec.new do |s|
   s.name             = 'TrustlySDK'
-  s.version          = '0.1.0'
-  s.summary          = 'A short description of TrustlySDK.'
+  s.version          = '3.0.0'
+  s.summary          = 'This SDK help the merchants to integrate their solutions with Trustly Widget and LightBox.'
+  s.swift_version    = '5.0'
 
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!
+  s.description      = 'This cocoapods provides the ability to integrate your application with Trustly Widget and LightBox.'
 
-  s.description      = <<-DESC
-TODO: Add long description of the pod here.
-                       DESC
-
-  s.homepage         = 'https://github.com/Marcos Rivereto/TrustlySDK'
-  # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
+  s.homepage         = 'https://github.com/TrustlyInc/trustly-ios'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'Marcos Rivereto' => 'marcos.rivereto@trustly.com' }
-  s.source           = { :git => 'https://github.com/Marcos Rivereto/TrustlySDK.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.author           = { 'Author Name' => 'author_email@trustly.com' }
+  s.source           = { :git => 'https://github.com/TrustlyInc/trustly-ios.git', :tag => s.version.to_s }
 
-  s.ios.deployment_target = '10.0'
+  s.ios.deployment_target = '12.0'
 
-  s.source_files = 'TrustlySDK/Classes/**/*'
-  
-  # s.resource_bundles = {
-  #   'TrustlySDK' => ['TrustlySDK/Assets/*.png']
-  # }
+  s.source_files = 'Sources/TrustlySDK/**/*.swift'
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
 end
