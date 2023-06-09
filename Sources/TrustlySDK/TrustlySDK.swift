@@ -2,10 +2,9 @@
 //  TrustlySDK.swift
 //  Pods
 //
-//  Created by Marcos Rivereto on 30/03/23.
-//
 
 import Foundation
+import UIKit
 
 public typealias TrustlyCallback = (_ trustlyView: UIView, _ returnParameters: [AnyHashable : Any]) -> Void;
 public typealias ExternalUrlCallback = (_ request: NSURLRequest?) -> Void?;
