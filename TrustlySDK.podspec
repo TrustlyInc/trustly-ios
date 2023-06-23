@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
 
   s.homepage         = 'https://github.com/TrustlyInc/trustly-ios'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'Author Name' => 'author_email@trustly.com' }
+  s.author           = { 'Trustly' => 'amer.developer.experience@trustly.com' }
   s.source           = { :git => 'https://github.com/TrustlyInc/trustly-ios.git', :tag => s.version.to_s }
 
   s.ios.deployment_target = '12.0'
