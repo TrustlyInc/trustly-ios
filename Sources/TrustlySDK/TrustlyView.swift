@@ -141,6 +141,8 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         query["deviceType"] = deviceType
         query["grp"] = self.getGrp()
         query["dynamicWidget"] = "true"
+        query["sessionCid"] = sessionCid
+        query["cid"] = cid
         
         if establishData?["customer.address.country"] != nil {
             query["customer.address.country"]=establishData?["customer.address.country"]
