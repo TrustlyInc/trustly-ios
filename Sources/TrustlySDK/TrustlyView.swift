@@ -60,7 +60,8 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
     private var webSession: ASWebAuthenticationSession!
     private var baseUrls = ["paywithmybank.com", "trustly.one"]
     private let oauthLoginPath = "/oauth/login/"
-    private var sessionCid = "ios wrong cid"
+    private var sessionCid = "ios wrong sessionCid"
+    private var cid = "ios wrong cid"
 
     
     //Constructors
@@ -85,7 +86,8 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
     func initView() {
         self.createNotifications()
         
-        if let cid = generateCid() {
+        if let tempCid = generateCid() {
+            cid = tempCid
             sessionCid = getOrCreateSessionCid(cid)
         }
         
@@ -576,7 +578,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
     private func addSessionCid() {
         
         self.establishData?["sessionCid"] = sessionCid
-        self.establishData?["cid"] = sessionCid
+        self.establishData?["metadata.cid"] = cid
 
     }
     
