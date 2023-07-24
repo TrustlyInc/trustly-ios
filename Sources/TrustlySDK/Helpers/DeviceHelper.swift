@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 func getDeviceUUID () -> String? {
