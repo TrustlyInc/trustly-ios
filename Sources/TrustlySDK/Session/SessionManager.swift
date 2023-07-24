@@ -72,6 +72,6 @@ func getRandomKey(randomUUID: String) -> String? {
     return String(randomUUID.split(separator: "-")[2])
 }
 
-func getTimestampBase36(timeInMilliseconds: Int64) -> String? {
+func getTimestampBase36(timeInMilliseconds: Int) -> String? {
     return String(timeInMilliseconds, radix: 36, uppercase: true)
 }
