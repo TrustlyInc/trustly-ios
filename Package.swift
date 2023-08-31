@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "TrustlySDK",
-    platforms: [.iOS(.v12)],
+    platforms: [.iOS(.v16)],
     products: [
 
 
