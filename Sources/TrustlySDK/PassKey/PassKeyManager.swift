@@ -23,14 +23,14 @@ public class PassKeyManager: NSObject, ASAuthorizationControllerPresentationCont
         self.presentationAnchor = presentationAnchor
         
         do {
-            let response = try await APIRequest.doRequest(address: APIRequest.CHALLENGE_ADDRESS, httpMethod: "POST")
+            let response = try await APIRequest.doRequest(address: APIRequest.CHALLENGE_ADDRESS, httpMethod: "GET")
             
             guard let result = response else {
                 print("Login attempt failed")
                 return
             }
             
-            let publicKeyCredentialProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: result.rp!.name!)
+            let publicKeyCredentialProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: result.domain ?? "")
 
             let challenge = Data(result.challenge!.utf8)
 
@@ -92,9 +92,9 @@ public class PassKeyManager: NSObject, ASAuthorizationControllerPresentationCont
             let username = result.user!.username!
             let userId = Data(String(result.user!.id!).utf8)
                     
-            let platformProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: result.rp!.name!)
+            let platformProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: result.domain ?? "")
                     
-            let platformKeyRequest = platformProvider.createCredentialRegistrationRequest(challenge: challenge, name: username, userID:          userId)
+            let platformKeyRequest = platformProvider.createCredentialRegistrationRequest(challenge: challenge, name: username, userID: userId)
             let authController = ASAuthorizationController(authorizationRequests: [platformKeyRequest])
             authController.delegate = self
             authController.presentationContextProvider = self

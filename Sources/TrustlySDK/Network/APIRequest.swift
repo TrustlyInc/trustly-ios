@@ -64,17 +64,18 @@ struct RP: Codable, Hashable {
 
 struct PassKeyResult: Codable, Hashable {
     let status: String?
-    let message: String?
     let challenge: String?
+    let message: String?
+    
+    let domain: String?
     let user: User?
-    let rp: RP?
     
 }
 
 
 struct APIRequest {
     
-    private static let BASE_URL = "https://9f37-2804-14d-1289-9843-ad9a-7d5c-21b7-24cd.ngrok-free.app/passkey"
+    private static let BASE_URL = "https://shop-on-merchant.fly.dev/passkey"
     static let CHALLENGE_ADDRESS = "challenge"
     static let REGISTER_ADDRESS = "register"
     static let FINISH_ADDRESS = "finish"
