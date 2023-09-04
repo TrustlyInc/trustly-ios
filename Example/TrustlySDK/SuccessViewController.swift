@@ -23,7 +23,7 @@ class SuccessViewController: BaseViewController {
         
         if let email = email, !email.isEmpty {
             Task {
-                await super.getPassKeyManager().register(presentationAnchor:super.getWindow(), username: email)
+                await super.getPassKeyManager().register(username: email)
             }
         }
     }

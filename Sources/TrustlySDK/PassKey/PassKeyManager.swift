@@ -10,17 +10,17 @@ import Foundation
 import os
 
 
-public class PassKeyManager: NSObject, ASAuthorizationControllerPresentationContextProviding, ASAuthorizationControllerDelegate {
+public class PassKeyManager: NSObject, ASAuthorizationControllerDelegate {
     
-    var presentationAnchor: ASPresentationAnchor?
+//    var presentationAnchor: ASPresentationAnchor?
     var isPerformingModalReqest = false
     
-    public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        return presentationAnchor!
-    }
+//    public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+//        return presentationAnchor!
+//    }
     
-    public func login(presentationAnchor: ASPresentationAnchor, preferImmediatelyAvailableCredentials: Bool) async {
-        self.presentationAnchor = presentationAnchor
+    public func login(preferImmediatelyAvailableCredentials: Bool) async {
+//        self.presentationAnchor = presentationAnchor
         
         do {
             let response = try await APIRequest.doRequest(address: APIRequest.CHALLENGE_ADDRESS, httpMethod: "GET")
@@ -41,7 +41,7 @@ public class PassKeyManager: NSObject, ASAuthorizationControllerPresentationCont
 
             let authController = ASAuthorizationController(authorizationRequests: [ assertionRequest, passwordRequest ] )
             authController.delegate = self
-            authController.presentationContextProvider = self
+//            authController.presentationContextProvider = self
 //            authController.performRequests()
 
             if preferImmediatelyAvailableCredentials {
@@ -75,8 +75,8 @@ public class PassKeyManager: NSObject, ASAuthorizationControllerPresentationCont
 
     }
 
-    public func register(presentationAnchor: ASPresentationAnchor, username: String) async {
-        self.presentationAnchor = presentationAnchor
+    public func register(username: String) async {
+//        self.presentationAnchor = presentationAnchor
         let payload = APIPayload(username: username)
         
         
@@ -97,7 +97,7 @@ public class PassKeyManager: NSObject, ASAuthorizationControllerPresentationCont
             let platformKeyRequest = platformProvider.createCredentialRegistrationRequest(challenge: challenge, name: username, userID: userId)
             let authController = ASAuthorizationController(authorizationRequests: [platformKeyRequest])
             authController.delegate = self
-            authController.presentationContextProvider = self
+//            authController.presentationContextProvider = self
             authController.performRequests()
             
         } catch {
