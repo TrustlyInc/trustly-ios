@@ -20,16 +20,21 @@ class ViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default
+                          .addObserver(self,
+                                       selector: #selector(loginSuccess(_:)),
+                                       name: NSNotification.Name (super.getPassKeyManager().LOGIN_SUCCESS),                                           object: nil)
+        
         self.establishData = ["accessId": "A48B73F694C4C8EE6306",
                               "merchantId" : "110005514",
                               "currency" : "USD",
                               "amount" : "1.00",
-                              "merchantReference" : "cac73df7-52b4-47d7-89d3-9628d4cfb65e",
+                              "merchantReference" : "g:cac73df7-52b4-47d7-89d3-9628d4cfb65e",
                               "paymentType" : "Retrieval",
                               "returnUrl": "/returnUrl",
                               "cancelUrl": "/cancelUrl",
                               "requestSignature": "HT5mVOqBXa8ZlvgX2USmPeLns5o=",
-                              "customer.name": "John",
+                              "customer.name": "John IOS",
                               "customer.address.country": "US",
                               "metadata.urlScheme": "demoapp://",
                               "description": "First Data Mobile Test",
@@ -48,7 +53,7 @@ class ViewController: BaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         Task {
-            await super.getPassKeyManager().login(preferImmediatelyAvailableCredentials: true)
+            await super.getPassKeyManager().login( preferImmediatelyAvailableCredentials: true)
         }
     }
 
@@ -88,7 +93,7 @@ extension ViewController: TrustlyLightboxViewProtocol {
     
     func onReturnWithTransactionId(transactionId: String, controller: TrustlyLightBoxViewController) {
         controller.dismiss(animated: true)
-        self.showSuccessView()
+        self.showSuccessView(transactionId: transactionId)
     }
     
     func onCancelWithTransactionId(transactionId: String, controller: TrustlyLightBoxViewController) {
@@ -110,14 +115,20 @@ extension ViewController: TrustlyLightboxViewProtocol {
         self.present(dialogMessage, animated: true, completion: nil)
     }
     
-    private func showSuccessView(){
+    private func showSuccessView(transactionId: String){
         let successViewController = SuccessViewController(nibName: "SuccessViewController", bundle: nil)
         successViewController.email = self.establishData["customer.email"] as? String
+        successViewController.transactionId = transactionId
+        
         self.getWindow().rootViewController = successViewController
     }
     
     private func showFailureAlert(){
         self.showAlert(title: "Failure", message: "Failure when to try to process your payment. Try again later")
+    }
+    
+    @objc private func loginSuccess(_ notification: Notification){
+        print("loginSuccess: \(notification.object)")
     }
 
 }

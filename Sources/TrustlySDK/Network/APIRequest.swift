@@ -15,10 +15,12 @@ struct APIPayload: Codable, Hashable {
     let authenticatorData: String?
     let signature: String?
     let userID: String?
+    let transactionId: String?
 
 
-    init(username: String){
+    init(username: String, transactionId: String){
         self.username = username
+        self.transactionId = transactionId
         self.attestationObject = nil
         self.clientDataJSON = nil
         self.credentialID = nil
@@ -35,6 +37,7 @@ struct APIPayload: Codable, Hashable {
         self.authenticatorData = nil
         self.signature = nil
         self.userID = nil
+        self.transactionId = nil
     }
     
     init(clientDataJSON: String, credentialID: String, authenticatorData: String, signature: String, userID: String){
@@ -45,15 +48,17 @@ struct APIPayload: Codable, Hashable {
         self.userID = userID
         self.username = nil
         self.attestationObject = nil
+        self.transactionId = nil
     }
     
 }
 
-struct User: Codable, Hashable {
+public struct User: Codable, Hashable {
     let id: String?
     let username: String?
     let name: String?
     let email: String?
+    let lastTransactionAuth: String?
     
 }
 
@@ -62,7 +67,7 @@ struct RP: Codable, Hashable {
     
 }
 
-struct PassKeyResult: Codable, Hashable {
+public struct PassKeyResult: Codable, Hashable {
     let status: String?
     let challenge: String?
     let message: String?
@@ -75,7 +80,7 @@ struct PassKeyResult: Codable, Hashable {
 
 struct APIRequest {
     
-    private static let BASE_URL = "https://shop-on-merchant.fly.dev/passkey"
+    private static let BASE_URL = "https://23bb-2804-14d-1289-8652-8c1d-5d75-1d69-11cb.ngrok-free.app/passkey"
     static let CHALLENGE_ADDRESS = "challenge"
     static let REGISTER_ADDRESS = "register"
     static let FINISH_ADDRESS = "finish"

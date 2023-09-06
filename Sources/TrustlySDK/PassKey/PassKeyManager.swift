@@ -12,6 +12,8 @@ import os
 
 public class PassKeyManager: NSObject, ASAuthorizationControllerDelegate {
     
+    public let LOGIN_SUCCESS = "com.user.login.success"
+    public let REGISTRATION_SUCCESS = "com.user.registration.success"
 //    var presentationAnchor: ASPresentationAnchor?
     var isPerformingModalReqest = false
     
@@ -75,9 +77,9 @@ public class PassKeyManager: NSObject, ASAuthorizationControllerDelegate {
 
     }
 
-    public func register(username: String) async {
+    public func register(username: String, transactionId: String) async -> PassKeyResult? {
 //        self.presentationAnchor = presentationAnchor
-        let payload = APIPayload(username: username)
+        let payload = APIPayload(username: username, transactionId: transactionId)
         
         
         do {
@@ -85,7 +87,7 @@ public class PassKeyManager: NSObject, ASAuthorizationControllerDelegate {
             
             guard let result = response else {
                print("Register attempt failed")
-               return
+               return nil
             }
                     
             let challenge = Data(result.challenge!.utf8)
@@ -100,10 +102,13 @@ public class PassKeyManager: NSObject, ASAuthorizationControllerDelegate {
 //            authController.presentationContextProvider = self
             authController.performRequests()
             
+            return result
+            
         } catch {
             print("Request failed with error: \(error)")
         }
         
+        return nil
     }
 
     public func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
@@ -136,12 +141,9 @@ public class PassKeyManager: NSObject, ASAuthorizationControllerDelegate {
             let response = try await APIRequest.doRequest(address: APIRequest.FINISH_ADDRESS, httpMethod: "POST", bodyData: payload)
             
             if let result = response {
-                if result != nil {
-//                    NotificationCenter.default
-//                        .post(name: NSNotification.Name("com.user.login.success"),
-//                              object: nil)
-                }
-
+                NotificationCenter.default
+                    .post(name: NSNotification.Name(REGISTRATION_SUCCESS),
+                          object: result)
             }
 
         } catch {
@@ -169,11 +171,9 @@ public class PassKeyManager: NSObject, ASAuthorizationControllerDelegate {
             let response = try await APIRequest.doRequest(address: APIRequest.FINISH_ADDRESS, httpMethod: "POST", bodyData: payload)
             
             if let result = response {
-                if result != nil {
-//                    NotificationCenter.default
-//                        .post(name: NSNotification.Name("com.user.login.success"),
-//                              object: nil)
-                }
+                NotificationCenter.default
+                    .post(name: NSNotification.Name(LOGIN_SUCCESS),
+                          object: result)
             }
 
         } catch {

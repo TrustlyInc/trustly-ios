@@ -11,11 +11,16 @@ import UIKit
 class SuccessViewController: BaseViewController {
     
     var email: String?
+    var transactionId: String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        NotificationCenter.default
+                          .addObserver(self,
+                                       selector: #selector(registrationSuccess(_:)),
+                                       name: NSNotification.Name (super.getPassKeyManager().REGISTRATION_SUCCESS),                                           object: nil)
     }
 
     
@@ -23,9 +28,14 @@ class SuccessViewController: BaseViewController {
         
         if let email = email, !email.isEmpty {
             Task {
-                await super.getPassKeyManager().register(username: email)
+                let result = await super.getPassKeyManager().register(username: email, transactionId: transactionId ?? "")
+                print(result)
             }
         }
+    }
+    
+    @objc private func registrationSuccess(_ notification: Notification){
+        print("registrationSuccess")
     }
 
 
