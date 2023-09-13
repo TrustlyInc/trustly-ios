@@ -54,11 +54,11 @@ struct APIPayload: Codable, Hashable {
 }
 
 public struct User: Codable, Hashable {
-    let id: String?
-    let username: String?
-    let name: String?
-    let email: String?
-    let lastTransactionAuth: String?
+    public let id: String?
+    public let username: String?
+    public let name: String?
+    public let email: String?
+    public let lastTransactionAuth: String?
     
 }
 
@@ -73,7 +73,7 @@ public struct PassKeyResult: Codable, Hashable {
     let message: String?
     
     let domain: String?
-    let user: User?
+    public let user: User?
     
 }
 
