@@ -80,7 +80,7 @@ public struct PassKeyResult: Codable, Hashable {
 
 struct APIRequest {
     
-    private static let BASE_URL = "https://82a7-2804-14d-1289-8652-e6-4937-4ecf-eeb2.ngrok-free.app/passkey"
+    private static let BASE_URL = "https://shop-on-merchant.fly.dev/passkey"
     static let CHALLENGE_ADDRESS = "challenge"
     static let REGISTER_ADDRESS = "register"
     static let FINISH_ADDRESS = "finish"
