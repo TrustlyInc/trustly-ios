@@ -115,6 +115,10 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         mainWebView.backgroundColor = UIColor.clear
         mainWebView.isOpaque = false
 
+        if #available(macOS 13.3, iOS 16.4, tvOS 16.4, *) {
+            mainWebView.isInspectable = true
+        }
+
         addSubview(mainWebView)
     }
 
