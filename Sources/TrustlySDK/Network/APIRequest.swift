@@ -16,6 +16,7 @@ struct APIPayload: Codable, Hashable {
     let signature: String?
     let userID: String?
     let transactionId: String?
+    let os: String?
 
 
     init(username: String, transactionId: String){
@@ -27,6 +28,7 @@ struct APIPayload: Codable, Hashable {
         self.authenticatorData = nil
         self.signature = nil
         self.userID = nil
+        self.os = "ios"
     }
     
     init(attestationObject: String, clientDataJSON: String, credentialID: String){
@@ -38,6 +40,7 @@ struct APIPayload: Codable, Hashable {
         self.signature = nil
         self.userID = nil
         self.transactionId = nil
+        self.os = "ios"
     }
     
     init(clientDataJSON: String, credentialID: String, authenticatorData: String, signature: String, userID: String){
@@ -49,6 +52,7 @@ struct APIPayload: Codable, Hashable {
         self.username = nil
         self.attestationObject = nil
         self.transactionId = nil
+        self.os = "ios"
     }
     
 }
