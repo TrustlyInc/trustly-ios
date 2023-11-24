@@ -15,7 +15,7 @@ public class PassKeyManager: NSObject, ASAuthorizationControllerDelegate {
     public let LOGIN_SUCCESS = "com.user.login.success"
     public let REGISTRATION_SUCCESS = "com.user.registration.success"
 //    var presentationAnchor: ASPresentationAnchor?
-    var isPerformingModalReqest = false
+//    var isPerformingModalReqest = false
     
 //    public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
 //        return presentationAnchor!
@@ -59,7 +59,7 @@ public class PassKeyManager: NSObject, ASAuthorizationControllerDelegate {
                 authController.performRequests()
             }
 
-            isPerformingModalReqest = true
+//            isPerformingModalReqest = true
             
 //            let challenge = Data(result.challenge!.utf8)
 //
@@ -141,6 +141,8 @@ public class PassKeyManager: NSObject, ASAuthorizationControllerDelegate {
             let response = try await APIRequest.doRequest(address: APIRequest.FINISH_ADDRESS, httpMethod: "POST", bodyData: payload)
             
             if let result = response {
+                self.turnOnPasskey()
+
                 NotificationCenter.default
                     .post(name: NSNotification.Name(REGISTRATION_SUCCESS),
                           object: result)
@@ -171,6 +173,8 @@ public class PassKeyManager: NSObject, ASAuthorizationControllerDelegate {
             let response = try await APIRequest.doRequest(address: APIRequest.FINISH_ADDRESS, httpMethod: "POST", bodyData: payload)
             
             if let result = response {
+                self.turnOnPasskey()
+                
                 NotificationCenter.default
                     .post(name: NSNotification.Name(LOGIN_SUCCESS),
                           object: result)
@@ -179,5 +183,17 @@ public class PassKeyManager: NSObject, ASAuthorizationControllerDelegate {
         } catch {
             print("Error in finishLogin")
         }
+    }
+    
+    //MARK: User defaults
+    let defaults = UserDefaults.standard
+    let PASSKEY_FLAG = "PasskeyFlag"
+    
+    func turnOnPasskey() {
+        defaults.set(true, forKey: PASSKEY_FLAG)
+    }
+    
+    public func isPasskeyOn() -> Bool {
+        defaults.bool(forKey: PASSKEY_FLAG)
     }
 }
