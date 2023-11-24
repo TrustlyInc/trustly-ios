@@ -53,7 +53,9 @@ class ViewController: BaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         Task {
-            await super.getPassKeyManager().login( preferImmediatelyAvailableCredentials: true)
+            if(super.getPassKeyManager().isPasskeyOn()) {
+                await super.getPassKeyManager().login( preferImmediatelyAvailableCredentials: true)
+            }
         }
     }
 
