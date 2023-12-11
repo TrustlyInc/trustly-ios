@@ -35,7 +35,7 @@ let NavBarHeight:Int = 26
 let NavBarIconWidth:Int = 10
 let NavBarIconHeight:Int = 10
 
-let build = "3.1.0"
+let build = "3.1.1"
 
 let CloseIconBase64:String! = "iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAACxLAAAsSwGlPZapAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAG1SURBVHgB3diLTcNADAZgpxOUBVA6CYzQDdoRGMETABMAG8AEVUdggmaDdoMYn5KTQlSau8RnW/ySVUWyo/sa9XEH8E9SDS+IaM0vO647rmNVVUdwFF5feAlr3HLVXN+8xq9x047rQr/zAk4SEFwbrma0xhNXHZvqK4iYdzDODUTMITbu6XbMMAmIkHbV968n7re3wFD3mdhwhXe8Thl4pLSoYRKfRMxpOPhBaSmOyUS0XLvxDcwxmYgQ/OtGZhgxhCVGHGGBKYbQxBRHaGDUECUx6ogSGDOEJMYcIYFxg1iKcYWYi6Fuz9MkziBoJgPz6RYxA+MXIYxB8JCFGARPmYlB8JhMDIJQViAY6s6XHjJG7sFTKP8Xe5g38JCFCB8YIYQtRhhhg5mBQEr/NtPB0IK/4m4wtHA/wdeVOYaENkWmGBLe2ZlgqND2VBVDhffYKhhSOigoiiHl044iGDI6shHFkPG5kwjGGiGG8YBYjKHuaTSJgwgKycQ8x6Ft4gCCYjIw5ziACc0IBknEtLF56okgGCYB0w6bT9carBExExgcNtZch37xoc5cT+AoPeZ1ALhExA8NsASbTxPzlwAAAABJRU5ErkJggg=="
     
@@ -59,6 +59,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
     private var urlScheme = ""
     private var webSession: ASWebAuthenticationSession!
     private var baseUrls = ["paywithmybank.com", "trustly.one"]
+    private var isLocalEnvironment = false
     private let oauthLoginPath = "/oauth/login/"
     private var sessionCid = "ios wrong sessionCid"
     private var cid = "ios wrong cid"
@@ -492,10 +493,10 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         }
 
         if ("local" == env), let urlLocal = localUrl {
-            url = urlLocal+"/start/selectBank/"+fn+"?v="+build+"-ios-sdk"
+            url = "http://"+urlLocal+"/start/selectBank/"+fn+"?v="+build+"-ios-sdk"
             
             let cleanLocalUrl = urlLocal.components(separatedBy: ":")[0]
-            self.baseUrls.append(cleanLocalUrl)
+            isLocalEnvironment = true
             
         } else {
             url = "https://"+subDomain+"paywithmybank.com/start/selectBank/"+fn+"?v="+build+"-ios-sdk"
@@ -602,8 +603,8 @@ extension TrustlyView {
         let path = url.path
         
         //1.1: On the main view creates a new OAuth view (new WKWebview) and opens the URL there
-        if self.checkUrl(host: host) &&
-            path.contains(self.oauthLoginPath) {
+        if isLocalEnvironment || (self.checkUrl(host: host) &&
+            path.contains(self.oauthLoginPath)) {
 
             self.buildASWebAuthenticationSession(url: url, callbackURL: urlScheme)
 
