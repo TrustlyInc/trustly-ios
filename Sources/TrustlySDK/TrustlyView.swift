@@ -115,6 +115,10 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         mainWebView.scrollView.bounces = false
         mainWebView.backgroundColor = UIColor.clear
         mainWebView.isOpaque = false
+        
+        if #available(iOS 16.4, *) {
+            mainWebView.isInspectable = true
+        } 
 
         addSubview(mainWebView)
     }
