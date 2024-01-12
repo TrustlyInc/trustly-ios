@@ -4,7 +4,7 @@
 <dict>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>webcredentials:shop-on-merchant.fly.dev</string>
+		<string>webcredentials:hanko-integration-vue.vercel.app</string>
 	</array>
 </dict>
 </plist>

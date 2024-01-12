@@ -662,3 +662,102 @@ extension Notification.Name{
     @available(iOS 12.0, *)
     static let trustlyCloseWebview = Notification.Name(TrustlyView.trustlyCloseWebview)
 }
+
+extension TrustlyView: SFSafariViewControllerDelegate {
+    
+    public func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        print("SFSafari: Done pressed")
+    }
+    
+    public func safariViewController(_ controller: SFSafariViewController, didCompleteInitialLoad didLoadSuccessfully: Bool) {
+        print("SFSafari: Initial url loaded")
+    }
+    
+    public func safariViewController(_ controller: SFSafariViewController, initialLoadDidRedirectTo URL: URL) {
+        print("SFSafari: Initial url redirect")
+    }
+    
+    public func safariViewControllerWillOpenInBrowser(_ controller: SFSafariViewController) {
+        print("SFSafari: Will open the browser")
+    }
+    
+    
+    public func establishSFSafari(establishData eD: [AnyHashable : Any], onReturn: TrustlyCallback?, onCancel: TrustlyCallback?){
+        establishData = eD
+        
+        self.addSessionCid()
+
+        let deviceType = establishData?["deviceType"] ?? "mobile" + ":ios:native"
+        establishData?["deviceType"] = deviceType
+        if let lang = establishData?["metadata.lang"] as? String {
+            establishData?["lang"] = lang
+        }
+        
+        establishData?["metadata.sdkIOSVersion"] = build
+        
+        if establishData?.index(forKey: "metadata.integrationContext") == nil {
+            establishData?["metadata.integrationContext"] = inAppIntegrationContext
+        }
+        
+        
+        returnUrl = "msg://return"
+        establishData?["returnUrl"] = returnUrl
+        cancelUrl = "msg://cancel"
+        establishData?["cancelUrl"] = cancelUrl
+        establishData?["version"] = "2"
+        establishData?["grp"] = self.getGrp()
+
+        if establishData?["paymentProviderId"] != nil {
+            establishData?["widgetLoaded"] = "true"
+        }
+        
+        if let scheme = establishData?["metadata.urlScheme"] as? String {
+            self.urlScheme = scheme.components(separatedBy: ":")[0]
+        }
+        
+        returnHandler = onReturn
+        cancelHandler = onCancel
+        externalUrlHandler = nil
+
+        let url = getEndpointUrl(function: "index", establishData:establishData! as! [String:String])
+        var request = URLRequest(url: URL(string: url)!)
+
+        request.httpMethod = "POST"
+        request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField:"Content-Type")
+
+        let requestData = urlEncoded(establishData!).data(using: .utf8)
+
+        request.setValue(String(format:"%lu", requestData!.count), forHTTPHeaderField:"Content-Length")
+        request.httpBody = requestData
+        
+        let semaphore = DispatchSemaphore(value:0)
+        
+//        var httpData:Data?
+//        var response:URLResponse?
+//        var error:Error?
+//        URLSession.shared.dataTask(with: request) { (data, resp, err) in
+//            httpData = data
+//            response = resp
+//            error = err
+//            semaphore.signal()
+//        }.resume()
+//
+//        semaphore.wait()
+        
+//        if(error == nil){
+//            self.mainWebView?.load(httpData!, mimeType:"text/html", characterEncodingName:"UTF-8", baseURL: (response?.url)!)
+//        } else {
+//            self.cancelHandler!(self, [:])
+//        }
+        
+//        self.presentOnSFSafariViewController(URL(string: "https://hanko-integration-vue.vercel.app/")!)
+        let vc = SFSafariViewController(url: URL(string: "https://hanko-integration-vue.vercel.app/")!)
+        vc.delegate = self
+        
+        
+        if var rootViewController = UIApplication.shared.windows.first?.rootViewController {
+            rootViewController.present(vc, animated: true, completion: nil)
+       }
+    }
+}

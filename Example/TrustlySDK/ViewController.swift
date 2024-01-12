@@ -68,9 +68,6 @@ class ViewController: BaseViewController {
     
     @IBAction func pay(_ sender: Any) {
         
-        let trustlyLightboxViewController = TrustlyLightBoxViewController()
-        trustlyLightboxViewController.delegate = self
-
         if let amountText = amountTextView.text,
            let amount = Double(amountText) {
 
@@ -83,10 +80,22 @@ class ViewController: BaseViewController {
 
         }
 
-        trustlyLightboxViewController.establishData = establishData
-
-        self.present(trustlyLightboxViewController, animated: true)
+        self.openLightbox()
         
+    }
+    
+    private func openLightbox(){
+        let trustlyLightboxPanel = TrustlyView()
+        
+        trustlyLightboxPanel.establishSFSafari(establishData: establishData,
+                                                   onReturn: {(payWithMyBank, returnParameters)->Void in
+            let response = returnParameters as! [String:String]
+            
+        }, onCancel: {(payWithMyBank, returnParameters)->Void in
+            let response = returnParameters as! [String:String]
+
+        })
+            
     }
     
 }
