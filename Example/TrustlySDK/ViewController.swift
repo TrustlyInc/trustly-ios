@@ -36,7 +36,7 @@ class ViewController: BaseViewController {
                               "requestSignature": "HT5mVOqBXa8ZlvgX2USmPeLns5o=",
                               "customer.name": "John IOS",
                               "customer.address.country": "US",
-                              "metadata.urlScheme": "demoapp://",
+                              "metadata.urlScheme": "trustlysdk://",
                               "description": "First Data Mobile Test",
                               "env": "sandbox"]
         
@@ -80,14 +80,29 @@ class ViewController: BaseViewController {
 
         }
 
-        self.openLightbox()
+//        self.openLightboxSFSafari()
+        self.openLightboxASWebAuthentication()
         
     }
     
-    private func openLightbox(){
+    private func openLightboxSFSafari(){
         let trustlyLightboxPanel = TrustlyView()
         
         trustlyLightboxPanel.establishSFSafari(establishData: establishData,
+                                                   onReturn: {(payWithMyBank, returnParameters)->Void in
+            let response = returnParameters as! [String:String]
+            
+        }, onCancel: {(payWithMyBank, returnParameters)->Void in
+            let response = returnParameters as! [String:String]
+
+        })
+            
+    }
+    
+    private func openLightboxASWebAuthentication(){
+        let trustlyLightboxPanel = TrustlyView()
+        
+        trustlyLightboxPanel.establishASWebAuthentication(establishData: establishData,
                                                    onReturn: {(payWithMyBank, returnParameters)->Void in
             let response = returnParameters as! [String:String]
             
