@@ -164,6 +164,8 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
             isLocalEnvironment = environment.isLocal
             
             var request = URLRequest(url: environment.url)
+            let url = try URLUtils.buildEndpointUrl(function: "widget", establishData: establishData as! [String : String]) + "&" + urlEncoded(query) + "#" + urlEncoded(hash)
+            var request = URLRequest(url: URL(string: url)!)
 
             request.httpMethod = "GET"
             request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
@@ -172,6 +174,13 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
 
             self.mainWebView!.tag = WidgetView
             self.mainWebView!.load(request)
+            
+        } catch TrustlyURLError.missingLocalUrl {
+            print("Error: When env is local, you must provide the localUrl.")
+            
+        } catch {
+            print("Error: building url.")
+        }
 
         } catch {
             print("Unexpected error: \(error).")
