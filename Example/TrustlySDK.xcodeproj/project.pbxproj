@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1587AB912A2FE043006F6FC3 /* SessionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1587AB902A2FE043006F6FC3 /* SessionManagerTests.swift */; };
 		15987B0929DEF79D00D7A395 /* TrustlyLightBoxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15987B0829DEF79D00D7A395 /* TrustlyLightBoxViewController.swift */; };
+		15BB98602B68120100A9210B /* URLUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15BB985F2B68120100A9210B /* URLUtilsTests.swift */; };
 		15D5276929FBFCF4006BEAEC /* SuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D5276729FBFCF4006BEAEC /* SuccessViewController.swift */; };
 		15D5276A29FBFCF4006BEAEC /* SuccessViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15D5276829FBFCF4006BEAEC /* SuccessViewController.xib */; };
 		15D5276C29FC016B006BEAEC /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D5276B29FC016B006BEAEC /* BaseViewController.swift */; };
@@ -34,6 +35,7 @@
 /* Begin PBXFileReference section */
 		1587AB902A2FE043006F6FC3 /* SessionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManagerTests.swift; sourceTree = "<group>"; };
 		15987B0829DEF79D00D7A395 /* TrustlyLightBoxViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrustlyLightBoxViewController.swift; sourceTree = "<group>"; };
+		15BB985F2B68120100A9210B /* URLUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLUtilsTests.swift; sourceTree = "<group>"; };
 		15D5276029FAE84C006BEAEC /* TrustlySDK_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TrustlySDK_Example.entitlements; sourceTree = "<group>"; };
 		15D5276729FBFCF4006BEAEC /* SuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessViewController.swift; sourceTree = "<group>"; };
 		15D5276829FBFCF4006BEAEC /* SuccessViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SuccessViewController.xib; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				1587AB902A2FE043006F6FC3 /* SessionManagerTests.swift */,
+				15BB985F2B68120100A9210B /* URLUtilsTests.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 			);
 			path = Tests;
@@ -360,6 +363,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1587AB912A2FE043006F6FC3 /* SessionManagerTests.swift in Sources */,
+				15BB98602B68120100A9210B /* URLUtilsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
