@@ -29,7 +29,6 @@ struct URLUtils {
                     domain = localUrl
                     
                 } else {
-                    print("Error: When env is local, you must provide the localUrl.")
                     throw TrustlyURLError.missingLocalUrl
                 }
 
