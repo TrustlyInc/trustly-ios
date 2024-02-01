@@ -59,7 +59,6 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
     private var urlScheme = ""
     private var webSession: ASWebAuthenticationSession!
     private var baseUrls = ["paywithmybank.com", "trustly.one"]
-    private var isLocalEnvironment = false
     private let oauthLoginPath = "/oauth/login/"
     private var sessionCid = "ios wrong sessionCid"
     private var cid = "ios wrong cid"
@@ -508,7 +507,6 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
             url = "http://"+urlLocal+"/start/selectBank/"+fn+"?v="+build+"-ios-sdk"
             
             let cleanLocalUrl = urlLocal.components(separatedBy: ":")[0]
-            isLocalEnvironment = true
             
         } else {
             url = "https://"+subDomain+"paywithmybank.com/start/selectBank/"+fn+"?v="+build+"-ios-sdk"
@@ -615,7 +613,7 @@ extension TrustlyView {
         let path = url.path
         
         //1.1: On the main view creates a new OAuth view (new WKWebview) and opens the URL there
-        if isLocalEnvironment || (self.checkUrl(host: host) &&
+        if URLUtils.isLocalEnvironment || (self.checkUrl(host: host) &&
             path.contains(self.oauthLoginPath)) {
 
             self.buildASWebAuthenticationSession(url: url, callbackURL: urlScheme)
