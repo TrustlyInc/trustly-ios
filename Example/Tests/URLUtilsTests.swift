@@ -83,6 +83,23 @@ final class URLUtilsTests: XCTestCase {
         XCTAssertEqual(expectedUrl, urlBuiltForWidget)
         
     }
+    
+    func testBuildEndpointUrlIsLocalEnvironmentFlag() throws {
+        
+        self.establishData["env"] = "local"
+        self.establishData["localUrl"] = "192.168.0.15:8000"
+        
+        XCTAssertNoThrow(try URLUtils.buildEndpointUrl(function: "widget", establishData: self.establishData as! [String : String]))
+        
+        let expectedUrl = "http://192.168.0.15:8000/start/selectBank/widget?v=\(Constants.buildSDK)-ios-sdk"
+
+        
+        let urlBuiltForWidget = try? URLUtils.buildEndpointUrl(function: "widget", establishData: self.establishData as! [String : String])
+        
+        XCTAssertEqual(expectedUrl, urlBuiltForWidget)
+        XCTAssertEqual(true, URLUtils.isLocalEnvironment)
+        
+    }
 
 }
 

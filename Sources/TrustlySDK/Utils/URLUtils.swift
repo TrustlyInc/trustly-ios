@@ -12,6 +12,8 @@ enum TrustlyURLError: Error {
 }
 
 struct URLUtils {
+    
+    static var isLocalEnvironment = false
 
     static func buildEndpointUrl(function:String, establishData:[String:String]) throws -> String {
         
@@ -23,6 +25,7 @@ struct URLUtils {
         if let environment = establishData["env"], !environment.isEmpty {
             
             if environment == "local" {
+                isLocalEnvironment = true
                 httpProtocol = "http"
                 
                 if let localUrl = establishData["localUrl"], !localUrl.isEmpty {
@@ -33,6 +36,7 @@ struct URLUtils {
                 }
 
             } else {
+                isLocalEnvironment = false
                 httpProtocol = "https"
                 domain = "\(environment).\(domain)"
             }
