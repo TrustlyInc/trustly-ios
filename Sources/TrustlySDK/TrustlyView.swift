@@ -220,38 +220,49 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         returnHandler = onReturn
         cancelHandler = onCancel
         externalUrlHandler = nil
-
-        let url = getEndpointUrl(function: "index", establishData:establishData! as! [String:String])
-        var request = URLRequest(url: URL(string: url)!)
-
-        request.httpMethod = "POST"
-        request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
-        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField:"Content-Type")
-
-        let requestData = urlEncoded(establishData!).data(using: .utf8)
-
-        request.setValue(String(format:"%lu", requestData!.count), forHTTPHeaderField:"Content-Length")
-        request.httpBody = requestData
         
-        let semaphore = DispatchSemaphore(value:0)
-        
-        var httpData:Data?
-        var response:URLResponse?
-        var error:Error?
-        URLSession.shared.dataTask(with: request) { (data, resp, err) in
-            httpData = data
-            response = resp
-            error = err
-            semaphore.signal()
-        }.resume()
+        do {
+            let url = try URLUtils.buildEndpointUrl(function: "index", establishData: establishData as! [String : String])
+            
+            var request = URLRequest(url: URL(string: url)!)
 
-        semaphore.wait()
-        
-        if(error == nil){
-            self.mainWebView?.load(httpData!, mimeType:"text/html", characterEncodingName:"UTF-8", baseURL: (response?.url)!)
-        } else {
-            self.cancelHandler!(self, [:])
+            request.httpMethod = "POST"
+            request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
+            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField:"Content-Type")
+
+            let requestData = urlEncoded(establishData!).data(using: .utf8)
+
+            request.setValue(String(format:"%lu", requestData!.count), forHTTPHeaderField:"Content-Length")
+            request.httpBody = requestData
+            
+            let semaphore = DispatchSemaphore(value:0)
+            
+            var httpData:Data?
+            var response:URLResponse?
+            var error:Error?
+            URLSession.shared.dataTask(with: request) { (data, resp, err) in
+                httpData = data
+                response = resp
+                error = err
+                semaphore.signal()
+            }.resume()
+
+            semaphore.wait()
+            
+            if(error == nil){
+                self.mainWebView?.load(httpData!, mimeType:"text/html", characterEncodingName:"UTF-8", baseURL: (response?.url)!)
+            } else {
+                self.cancelHandler!(self, [:])
+            }
+            
+        } catch TrustlyURLError.missingLocalUrl {
+            print("Error: When env is local, you must provide the localUrl.")
+            
+        } catch {
+            print("Error: building url.")
         }
+
+
         return self
     }
 
