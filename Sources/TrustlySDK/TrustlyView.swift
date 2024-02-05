@@ -246,7 +246,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
             request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
             request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField:"Content-Type")
 
-            let requestData = urlEncoded(establishData!).data(using: .utf8)
+            let requestData = URLUtils.urlEncoded(establishData!).data(using: .utf8)
 
             request.setValue(String(format:"%lu", requestData!.count), forHTTPHeaderField:"Content-Length")
             request.httpBody = requestData
@@ -469,10 +469,10 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
                 //messages
                 switch(host){
                     case "push":
-                        let params = urlDecode(query).components(separatedBy: "|")
-                        if ("PayWithMyBank.createTransaction" == params[0]) && bankSelectedHandler != nil {
-                            if params.count > 1 {
-                                establishData?["paymentProviderId"] = params[1]
+                    let params = URLUtils.urlDecode(query)?.components(separatedBy: "|")
+                        if ("PayWithMyBank.createTransaction" == params?[0]) && bankSelectedHandler != nil {
+                            if params?.count ?? 0 > 1 {
+                                establishData?["paymentProviderId"] = params?[1]
                             }
                             
                             if let establishData = establishData {
