@@ -265,6 +265,57 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
 
         return self
     }
+    
+    public func establishASWebAuthentication(establishData eD: [AnyHashable : Any], onReturn: TrustlyCallback?, onCancel: TrustlyCallback?){
+         establishData = eD
+         
+         self.addSessionCid()
+
+         let deviceType = establishData?["deviceType"] ?? "mobile" + ":ios:native"
+         establishData?["deviceType"] = deviceType
+         if let lang = establishData?["metadata.lang"] as? String {
+             establishData?["lang"] = lang
+         }
+         
+         establishData?["metadata.sdkIOSVersion"] = build
+         
+         if establishData?.index(forKey: "metadata.integrationContext") == nil {
+             establishData?["metadata.integrationContext"] = inAppIntegrationContext
+         }
+         
+         
+         returnUrl = "msg://return"
+         establishData?["returnUrl"] = returnUrl
+         cancelUrl = "msg://cancel"
+         establishData?["cancelUrl"] = cancelUrl
+         establishData?["version"] = "2"
+         establishData?["grp"] = self.getGrp()
+
+         if establishData?["paymentProviderId"] != nil {
+             establishData?["widgetLoaded"] = "true"
+         }
+         
+         if let scheme = establishData?["metadata.urlScheme"] as? String {
+             self.urlScheme = scheme.components(separatedBy: ":")[0]
+         }
+         
+         returnHandler = onReturn
+         cancelHandler = onCancel
+         externalUrlHandler = nil
+        
+        do {
+            let url = try URLUtils.buildEndpointUrl(function: "index", establishData: establishData as! [String : String])
+
+            self.buildASWebAuthenticationSession(url: URL(string: "http://192.168.0.8:8000/start/lightbox?environment=sandbox&establishData=%7B%22accessId%22%3A%22A48B73F694C4C8EE6306%22%2C%22amount%22%3A%229.99%22%2C%22cancelUrl%22%3A%22trustlysdk%3A%2F%2Ffailure%22%2C%22currency%22%3A%22USD%22%2C%22customer%22%3A%7B%22address%22%3A%7B%22country%22%3A%22US%22%7D%2C%22name%22%3A%22John%20Doe%22%7D%2C%22merchantId%22%3A%22110005514%22%2C%22merchantReference%22%3A%22443446%22%2C%22paymentType%22%3A%22Deferred%22%2C%22returnUrl%22%3A%22trustlysdk%3A%2F%2Fsuccess%22%7D")!, callbackURL: "trustlyback")
+            
+        } catch TrustlyURLError.missingLocalUrl {
+            print("Error: When env is local, you must provide the localUrl.")
+            
+        } catch {
+            print("Error: building url.")
+        }
+
+     }
 
     public func hybrid(url address : String, returnUrl: String, onReturn: TrustlyCallback?, cancelUrl: String, onCancel: TrustlyCallback?)  -> UIView? {
         guard let url = URL(string:address)  else {
