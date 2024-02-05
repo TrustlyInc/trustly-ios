@@ -15,6 +15,7 @@ struct URLUtils {
     
     static var isLocalEnvironment = false
 
+    // MARK: Build url
     static func buildEndpointUrl(function:String, establishData:[String:String]) throws -> String {
         
         var httpProtocol = "https"
@@ -54,6 +55,37 @@ struct URLUtils {
 
     private static func buildStringUrl(httpProtocol: String, domain: String, resource: String, build: String) -> String{
         return "\(httpProtocol)://\(domain)/start/selectBank/\(resource)?v=\(build)-ios-sdk"
+    }
+    
+    
+    // MARK: Encode url and parameters
+    static func urlEncoded(_ data:[AnyHashable : Any?]) -> String! {
+        var parts = [String]()
+        for (key,value) in data {
+            let part = String(format:"%@=%@", urlEncode(key)!, urlEncode(value)!)
+            parts.append(part)
+         }
+        return parts.joined(separator: "&")
+    }
+    
+    private static func urlEncode(_ object: Any?) -> String? {
+        let str = toString(object)
+        let set = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ0123456789-._~")
+
+        return str?.addingPercentEncoding(withAllowedCharacters: set)
+    }
+
+    static func urlDecode(_ object: Any?) -> String? {
+        let string = toString(object)
+
+        return string?.removingPercentEncoding
+    }
+    
+    private static func toString(_ object: Any?) -> String? {
+        if let object = object {
+            return "\(object)"
+        }
+        return nil
     }
     
 }

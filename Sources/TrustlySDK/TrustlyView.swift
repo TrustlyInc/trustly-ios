@@ -163,7 +163,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         bankSelectedHandler = onBankSelected
 
         do {
-            let url = try URLUtils.buildEndpointUrl(function: "widget", establishData: establishData as! [String : String]) + "&" + urlEncoded(query) + "#" + urlEncoded(hash)
+            let url = try URLUtils.buildEndpointUrl(function: "widget", establishData: establishData as! [String : String]) + "&" + URLUtils.urlEncoded(query) + "#" + URLUtils.urlEncoded(hash)
             var request = URLRequest(url: URL(string: url)!)
 
             request.httpMethod = "GET"
@@ -230,7 +230,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
             request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
             request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField:"Content-Type")
 
-            let requestData = urlEncoded(establishData!).data(using: .utf8)
+            let requestData = URLUtils.urlEncoded(establishData!).data(using: .utf8)
 
             request.setValue(String(format:"%lu", requestData!.count), forHTTPHeaderField:"Content-Length")
             request.httpBody = requestData
@@ -445,7 +445,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
                 //messages
                 switch(host){
                     case "push":
-                        let params = self.urlDecode(query)?.components(separatedBy: "|")
+                    let params = URLUtils.urlDecode(query)?.components(separatedBy: "|")
                         if ("PayWithMyBank.createTransaction" == params?[0]) && bankSelectedHandler != nil {
                             if params?.count ?? 0 > 1 {
                                 establishData?["paymentProviderId"] = params?[1]
@@ -569,35 +569,35 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         return grp
     }
     
-    private func toString(_ object: Any?) -> String? {
-        if let object = object {
-            return "\(object)"
-        }
-        return nil
-    }
-
-    private func urlEncode(_ object: Any?) -> String? {
-        let str = toString(object)
-        let set = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ0123456789-._~")
-
-        return str?.addingPercentEncoding(withAllowedCharacters: set)
-    }
-
-    private func urlDecode(_ object: Any?) -> String? {
-        let string = toString(object)
-
-        return string?.removingPercentEncoding
-    }
-
-
-    func urlEncoded(_ data:[AnyHashable : Any?]) -> String! {
-        var parts = [String]()
-        for (key,value) in data {
-            let part = String(format:"%@=%@", urlEncode(key)!, urlEncode(value)!)
-            parts.append(part)
-         }
-        return parts.joined(separator: "&")
-    }
+//    private func toString(_ object: Any?) -> String? {
+//        if let object = object {
+//            return "\(object)"
+//        }
+//        return nil
+//    }
+//
+//    private func urlEncode(_ object: Any?) -> String? {
+//        let str = toString(object)
+//        let set = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ0123456789-._~")
+//
+//        return str?.addingPercentEncoding(withAllowedCharacters: set)
+//    }
+//
+//    private func urlDecode(_ object: Any?) -> String? {
+//        let string = toString(object)
+//
+//        return string?.removingPercentEncoding
+//    }
+//
+//
+//    func urlEncoded(_ data:[AnyHashable : Any?]) -> String! {
+//        var parts = [String]()
+//        for (key,value) in data {
+//            let part = String(format:"%@=%@", urlEncode(key)!, urlEncode(value)!)
+//            parts.append(part)
+//         }
+//        return parts.joined(separator: "&")
+//    }
     
     private func addSessionCid() {
         
