@@ -16,18 +16,19 @@ struct URLUtils {
     static var isLocalEnvironment = false
 
     // MARK: Build url
-    static func buildEndpointUrl(function:String, establishData:[String:String]) throws -> String {
+    static func buildEndpointUrl(resourceUrl:ResourceUrls, establishData:[String:String]) throws -> String {
         
         var httpProtocol = "https"
         var domain = Constants.baseDomain
         var resource = function
         
+        var resource = resourceUrl
         
         if let environment = establishData["env"], !environment.isEmpty {
             
-            if environment == "local" {
+            if environment == "local" || environment == "dynamic" {
                 isLocalEnvironment = true
-                httpProtocol = "http"
+                httpProtocol = environment == "local" ? "http" : "https"
                 
                 if let localUrl = establishData["localUrl"], !localUrl.isEmpty {
                     domain = localUrl
@@ -35,7 +36,7 @@ struct URLUtils {
                 } else {
                     throw TrustlyURLError.missingLocalUrl
                 }
-
+                
             } else {
                 isLocalEnvironment = false
                 httpProtocol = "https"
@@ -43,18 +44,21 @@ struct URLUtils {
             }
         }
         
-        if  "index" == resource &&
-            "Verification" != establishData["paymentType"] &&
-            establishData["paymentType"] != nil {
-            resource = "selectBank"
+        switch resourceUrl {
+        case .index:
+            if "Verification" != establishData["paymentType"] &&
+                establishData["paymentType"] != nil{
+                resource = .selectBank
+            }
+        default:
+            break;
         }
         
-
         return buildStringUrl(httpProtocol: httpProtocol, domain: domain, resource: resource, build: Constants.buildSDK)
     }
 
-    private static func buildStringUrl(httpProtocol: String, domain: String, resource: String, build: String) -> String{
-        return "\(httpProtocol)://\(domain)/start/selectBank/\(resource)?v=\(build)-ios-sdk"
+    private static func buildStringUrl(httpProtocol: String, domain: String, resource: ResourceUrls, build: String) -> String{
+        return "\(httpProtocol)://\(domain)/start/selectBank/\(resource.rawValue)?v=\(build)-ios-sdk"
     }
     
     
