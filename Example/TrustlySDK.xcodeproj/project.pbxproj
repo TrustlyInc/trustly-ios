@@ -13,6 +13,7 @@
 		15D5276929FBFCF4006BEAEC /* SuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D5276729FBFCF4006BEAEC /* SuccessViewController.swift */; };
 		15D5276A29FBFCF4006BEAEC /* SuccessViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15D5276829FBFCF4006BEAEC /* SuccessViewController.xib */; };
 		15D5276C29FC016B006BEAEC /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D5276B29FC016B006BEAEC /* BaseViewController.swift */; };
+		15E049852B7510BA0084B71A /* JsonUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15E049842B7510BA0084B71A /* JsonUtilsTests.swift */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
@@ -40,6 +41,7 @@
 		15D5276729FBFCF4006BEAEC /* SuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessViewController.swift; sourceTree = "<group>"; };
 		15D5276829FBFCF4006BEAEC /* SuccessViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SuccessViewController.xib; sourceTree = "<group>"; };
 		15D5276B29FC016B006BEAEC /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		15E049842B7510BA0084B71A /* JsonUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonUtilsTests.swift; sourceTree = "<group>"; };
 		2416E32056EECA07B4C86E1B /* TrustlySDK.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = TrustlySDK.podspec; path = ../TrustlySDK.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		24C6055BF6640A73038BF66E /* Pods_TrustlySDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TrustlySDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		38845E178FF73A019452105E /* Pods-TrustlySDK_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrustlySDK_Tests.debug.xcconfig"; path = "Target Support Files/Pods-TrustlySDK_Tests/Pods-TrustlySDK_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 				1587AB902A2FE043006F6FC3 /* SessionManagerTests.swift */,
 				15BB985F2B68120100A9210B /* URLUtilsTests.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
+				15E049842B7510BA0084B71A /* JsonUtilsTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -362,6 +365,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				15E049852B7510BA0084B71A /* JsonUtilsTests.swift in Sources */,
 				1587AB912A2FE043006F6FC3 /* SessionManagerTests.swift in Sources */,
 				15BB98602B68120100A9210B /* URLUtilsTests.swift in Sources */,
 			);
