@@ -68,6 +68,19 @@ final class URLUtilsTests: XCTestCase {
         }
     }
     
+    func testBuildEndpointUrlIsAppLocation() throws {
+        
+        self.establishData["env"] = "sandbox"
+        
+        let expectedUrl = "https://sandbox.\(Constants.baseDomain)/start/app/establish?v=\(Constants.buildSDK)-ios-sdk"
+
+        
+        let urlBuiltForWidget = try? URLUtils.buildEndpointUrl(resourceUrl: .establish, establishData: self.establishData as! [String : String], isAppLocation: true)
+        
+        XCTAssertEqual(expectedUrl, urlBuiltForWidget)
+        
+    }
+    
     func testBuildEndpointUrlLocalEnvironment() throws {
         
         self.establishData["env"] = "local"
