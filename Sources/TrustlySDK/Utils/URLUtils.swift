@@ -16,12 +16,10 @@ struct URLUtils {
     static var isLocalEnvironment = false
 
     // MARK: Build url
-    static func buildEndpointUrl(resourceUrl:ResourceUrls, establishData:[String:String]) throws -> String {
+    static func buildEndpointUrl(resourceUrl:ResourceUrls, establishData:[String:String], isAppLocation: Bool = false) throws -> String {
         
         var httpProtocol = "https"
         var domain = Constants.baseDomain
-        var resource = function
-        
         var resource = resourceUrl
         
         if let environment = establishData["env"], !environment.isEmpty {
@@ -54,11 +52,15 @@ struct URLUtils {
             break;
         }
         
-        return buildStringUrl(httpProtocol: httpProtocol, domain: domain, resource: resource, build: Constants.buildSDK)
+        return buildStringUrl(httpProtocol: httpProtocol, domain: domain, resource: resource, build: Constants.buildSDK, isAppLocation)
     }
 
-    private static func buildStringUrl(httpProtocol: String, domain: String, resource: ResourceUrls, build: String) -> String{
-        return "\(httpProtocol)://\(domain)/start/selectBank/\(resource.rawValue)?v=\(build)-ios-sdk"
+    private static func buildStringUrl(httpProtocol: String, domain: String, resource: ResourceUrls, build: String, _ isAppLocation: Bool) -> String {
+        var location = isAppLocation ? "app" : "selectBank"
+                
+        return "\(httpProtocol)://\(domain)/start/\(location)/\(resource.rawValue)?v=\(build)-ios-sdk"
+        // http://192.168.0.118:8000/start/app/establish?accessId=A48B73F694C4C8EE6306&token=ewo[…]2tEZFU5eHNrUUt0T3NIL3BNPSIsCiAgICAibGFuZyI6ICJlbl9VUyIKfQ==
+        // https://sandbox.paywithmybank.com/start/selectBank/widget?v=3.1.1-ios-sdk
     }
     
     
