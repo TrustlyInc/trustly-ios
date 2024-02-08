@@ -19,6 +19,14 @@ import WebKit
 import AuthenticationServices
 import SafariServices
 
+enum ResourceUrls: String {
+    case index = "index"
+    case widget = "widget"
+    case establish = "establish"
+    case selectBank = "selectBank"
+    
+}
+
 func Rgb2UIColor(_ r: CGFloat, _ g: CGFloat, _ b: CGFloat) -> UIColor {
     UIColor(red: r / 255.0, green: g / 255.0, blue: b / 255.0, alpha: 1.0)
 }
@@ -163,7 +171,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         bankSelectedHandler = onBankSelected
 
         do {
-            let url = try URLUtils.buildEndpointUrl(function: "widget", establishData: establishData as! [String : String]) + "&" + URLUtils.urlEncoded(query) + "#" + URLUtils.urlEncoded(hash)
+            let url = try URLUtils.buildEndpointUrl(resourceUrl: .widget, establishData: establishData as! [String : String]) + "&" + URLUtils.urlEncoded(query) + "#" + URLUtils.urlEncoded(hash)
             var request = URLRequest(url: URL(string: url)!)
 
             request.httpMethod = "GET"
@@ -222,7 +230,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         externalUrlHandler = nil
         
         do {
-            let url = try URLUtils.buildEndpointUrl(function: "index", establishData: establishData as! [String : String])
+            let url = try URLUtils.buildEndpointUrl(resourceUrl: .index, establishData: establishData as! [String : String])
             
             var request = URLRequest(url: URL(string: url)!)
 
@@ -304,7 +312,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
          externalUrlHandler = nil
         
         do {
-            let url = try URLUtils.buildEndpointUrl(function: "index", establishData: establishData as! [String : String])
+            let url = try URLUtils.buildEndpointUrl(resourceUrl: .index, establishData: establishData as! [String : String])
 
             self.buildASWebAuthenticationSession(url: URL(string: "http://192.168.0.8:8000/start/lightbox?environment=sandbox&establishData=%7B%22accessId%22%3A%22A48B73F694C4C8EE6306%22%2C%22amount%22%3A%229.99%22%2C%22cancelUrl%22%3A%22trustlysdk%3A%2F%2Ffailure%22%2C%22currency%22%3A%22USD%22%2C%22customer%22%3A%7B%22address%22%3A%7B%22country%22%3A%22US%22%7D%2C%22name%22%3A%22John%20Doe%22%7D%2C%22merchantId%22%3A%22110005514%22%2C%22merchantReference%22%3A%22443446%22%2C%22paymentType%22%3A%22Deferred%22%2C%22returnUrl%22%3A%22trustlysdk%3A%2F%2Fsuccess%22%7D")!, callbackURL: "trustlyback")
             
