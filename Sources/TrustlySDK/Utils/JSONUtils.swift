@@ -9,7 +9,7 @@ import Foundation
 
 struct JSONUtils {
     
-    static private func getJsonDataFrom(dicticionary: [AnyHashable : Any]) -> Data? {
+    static private func getJsonDataFrom(dicticionary: [String : AnyHashable]) -> Data? {
         
         do {
 
@@ -24,7 +24,7 @@ struct JSONUtils {
         return nil
     }
     
-    static func getJsonStringFrom(dicticionary: [AnyHashable : Any]) -> String? {
+    static func getJsonStringFrom(dicticionary: [String : AnyHashable]) -> String? {
         
         guard let jsonData = getJsonDataFrom(dicticionary: dicticionary) else { return nil }
 
@@ -34,7 +34,7 @@ struct JSONUtils {
             
     }
     
-    static func getJsonBase64From(dicticionary: [AnyHashable : Any]) -> String? {
+    static func getJsonBase64From(dicticionary: [String : AnyHashable]) -> String? {
         
         guard let jsonData = getJsonDataFrom(dicticionary: dicticionary) else { return nil }
         let jsonBase64 = jsonData.base64EncodedString()
