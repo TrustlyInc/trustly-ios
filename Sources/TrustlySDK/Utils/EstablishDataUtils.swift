@@ -84,4 +84,25 @@ struct EstablishDataUtils {
             
         return (mainKey: firstKey, complementKey: secondKey)
     }
+    
+    // MARK: buildEstablishFrom
+    
+    /// Convert url string with parameter to a normalized establish
+    ///
+    /// - Parameters:
+    ///     - urlWithParameters
+    /// - Returns: [String : AnyHashable]
+    static func buildEstablishFrom(urlWithParameters: String) -> [String : AnyHashable] {
+        var establish: [String : AnyHashable] = [:]
+        
+        let parameters = urlWithParameters.split(separator: "?")[1]
+        
+        for parameter in parameters.split(separator: "&") {
+            let keyAndValue = parameter.split(separator: "=")
+            
+            establish[String(keyAndValue[0])] = String(keyAndValue[1])
+        }
+        
+        return normalizeEstablishWithDotNotation(establish: establish)
+    }
 }
