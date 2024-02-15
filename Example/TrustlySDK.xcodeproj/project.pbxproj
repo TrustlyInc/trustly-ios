@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		152541E62B7E74B20029F149 /* EstablishDataUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152541E52B7E74B20029F149 /* EstablishDataUtilsTests.swift */; };
 		1587AB912A2FE043006F6FC3 /* SessionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1587AB902A2FE043006F6FC3 /* SessionManagerTests.swift */; };
 		15987B0929DEF79D00D7A395 /* TrustlyLightBoxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15987B0829DEF79D00D7A395 /* TrustlyLightBoxViewController.swift */; };
 		15BEC9B42C383FB900050FB9 /* ValidationHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15BEC9B32C383FB900050FB9 /* ValidationHelperTests.swift */; };
@@ -40,6 +41,7 @@
 		06A59A0ECC7F2C369392E6A5 /* Pods-TrustlySDK_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrustlySDK_Example.release.xcconfig"; path = "Target Support Files/Pods-TrustlySDK_Example/Pods-TrustlySDK_Example.release.xcconfig"; sourceTree = "<group>"; };
 		080249A29F70B36248BD8984 /* Pods-TrustlySDK_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrustlySDK_Example.debug.xcconfig"; path = "Target Support Files/Pods-TrustlySDK_Example/Pods-TrustlySDK_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		10C7972A664657BB9F51ED82 /* Pods-TrustlySDK_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrustlySDK_Tests.release.xcconfig"; path = "Target Support Files/Pods-TrustlySDK_Tests/Pods-TrustlySDK_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		152541E52B7E74B20029F149 /* EstablishDataUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EstablishDataUtilsTests.swift; sourceTree = "<group>"; };
 		1587AB902A2FE043006F6FC3 /* SessionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManagerTests.swift; sourceTree = "<group>"; };
 		15987B0829DEF79D00D7A395 /* TrustlyLightBoxViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrustlyLightBoxViewController.swift; sourceTree = "<group>"; };
 		15BEC9B32C383FB900050FB9 /* ValidationHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationHelperTests.swift; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 				15BB985F2B68120100A9210B /* URLUtilsTests.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 				15E049842B7510BA0084B71A /* JsonUtilsTests.swift */,
+				152541E52B7E74B20029F149 /* EstablishDataUtilsTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -375,6 +378,7 @@
 			files = (
 				15BEC9B42C383FB900050FB9 /* ValidationHelperTests.swift in Sources */,
 				15E049852B7510BA0084B71A /* JsonUtilsTests.swift in Sources */,
+				152541E62B7E74B20029F149 /* EstablishDataUtilsTests.swift in Sources */,
 				1587AB912A2FE043006F6FC3 /* SessionManagerTests.swift in Sources */,
 				15D96FB32C46E6B700296BC4 /* NetworkHelperTests.swift in Sources */,
 				15BB98602B68120100A9210B /* URLUtilsTests.swift in Sources */,
