@@ -31,7 +31,12 @@ final class EstablishDataUtilsTests: XCTestCase {
             "metadata" : ["urlScheme": "demoapp://"]
         ]
         
-        let jsonString = EstablishDataUtils.normalizeEstablishWithDotNotation(establish: self.establishData)
+        let normalizedEstablish = EstablishDataUtils.normalizeEstablishWithDotNotation(establish: self.establishData)
+        
+        XCTAssertEqual(expectedEstablishData, normalizedEstablish)
+                
+    }
+    
         
         XCTAssertEqual(expectedEstablishData, jsonString)
                 
