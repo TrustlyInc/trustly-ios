@@ -10,6 +10,8 @@ import Foundation
 
 struct EstablishDataUtils {
     
+    // MARK: normalizeEstablishWithDotNotation
+    
     /// Transform the establish removing the dot notation. Example: from ["customer.address.country": "US"] to ["customer":  ["address": [country": "US"]]]
     ///
     /// - Parameter establish: An establish to be transformed
