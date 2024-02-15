@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="vXZ-lx-hvc">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -39,10 +39,42 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Sh-Ok-y02">
-                                <rect key="frame" x="34" y="729" width="324" height="35"/>
+                                <rect key="frame" x="34" y="717" width="324" height="35"/>
                                 <color key="backgroundColor" red="0.38340717549999997" green="0.80894964930000002" blue="0.0064765461719999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="35" id="riI-rr-kPl"/>
+                                    <constraint firstAttribute="height" constant="35" id="sWW-eC-Rku"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Pay with AESWebAuth">
+                                    <color key="titleColor" systemColor="secondarySystemBackgroundColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="payWituAESWebAuth:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="LyG-e4-6SZ"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Amount:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8wC-Jb-puF">
+                                <rect key="frame" x="16" y="173" width="361" height="20.333333333333343"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20.329999999999998" id="Eg4-f0-ndf"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="10.0" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="M8H-fq-r5J">
+                                <rect key="frame" x="16" y="212" width="361" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="34" id="U4n-sG-Fgo"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WfQ-1e-DhH">
+                                <rect key="frame" x="34" y="760" width="324" height="35"/>
+                                <color key="backgroundColor" red="0.38340717549999997" green="0.80894964930000002" blue="0.0064765461719999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="zvL-q0-xKE"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -50,24 +82,33 @@
                                     <color key="titleColor" systemColor="secondarySystemBackgroundColor"/>
                                 </state>
                                 <connections>
-                                    <action selector="pay:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="eGD-FN-iNW"/>
+                                    <action selector="pay:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="P3e-C9-kYa"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="d2S-eh-Amc" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="18T-cK-yHm"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="0Sh-Ok-y02" secondAttribute="trailing" constant="19" id="3uk-R0-Kvj"/>
-                            <constraint firstItem="d2S-eh-Amc" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="33" id="CLB-OS-U7y"/>
-                            <constraint firstItem="Iqf-hK-a3I" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="H0V-BQ-Lay"/>
-                            <constraint firstItem="guD-xS-eey" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="VYK-Je-scg"/>
-                            <constraint firstItem="0Sh-Ok-y02" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="18" id="Xwh-E0-YHt"/>
-                            <constraint firstItem="0Sh-Ok-y02" firstAttribute="top" secondItem="guD-xS-eey" secondAttribute="bottom" constant="27" id="awA-UY-YyB"/>
-                            <constraint firstItem="Iqf-hK-a3I" firstAttribute="top" secondItem="d2S-eh-Amc" secondAttribute="bottom" constant="18.670000000000002" id="lIo-WE-mb5"/>
-                            <constraint firstItem="d2S-eh-Amc" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="oCH-KA-wnX"/>
-                            <constraint firstItem="guD-xS-eey" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="qQ8-i9-t3q"/>
-                            <constraint firstItem="guD-xS-eey" firstAttribute="top" secondItem="Iqf-hK-a3I" secondAttribute="bottom" constant="14" id="tBw-Ev-NIo"/>
-                            <constraint firstItem="Iqf-hK-a3I" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="vby-FM-ZyQ"/>
+                            <constraint firstItem="guD-xS-eey" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="1Sw-33-j3Y"/>
+                            <constraint firstItem="WfQ-1e-DhH" firstAttribute="top" secondItem="0Sh-Ok-y02" secondAttribute="bottom" constant="8" symbolic="YES" id="4O3-BJ-ZQY"/>
+                            <constraint firstItem="0Sh-Ok-y02" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="18" id="4z5-Vd-dis"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="WfQ-1e-DhH" secondAttribute="trailing" constant="19" id="5EM-hN-oBL"/>
+                            <constraint firstItem="d2S-eh-Amc" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="5hE-Ar-mLc"/>
+                            <constraint firstItem="WfQ-1e-DhH" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="18" id="7GL-aS-rh3"/>
+                            <constraint firstItem="Iqf-hK-a3I" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="8xq-Ad-N71"/>
+                            <constraint firstItem="Iqf-hK-a3I" firstAttribute="top" secondItem="d2S-eh-Amc" secondAttribute="bottom" constant="18" id="Ewe-Hy-Tbh"/>
+                            <constraint firstItem="0Sh-Ok-y02" firstAttribute="top" secondItem="guD-xS-eey" secondAttribute="bottom" constant="15" id="Hjf-M3-PN8"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="0Sh-Ok-y02" secondAttribute="trailing" constant="19" id="IEo-jX-GEF"/>
+                            <constraint firstItem="d2S-eh-Amc" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="M4f-uP-FW7"/>
+                            <constraint firstItem="Iqf-hK-a3I" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="Nms-1K-6cr"/>
+                            <constraint firstItem="M8H-fq-r5J" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="aWW-Et-PGs"/>
+                            <constraint firstItem="d2S-eh-Amc" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="33" id="dE6-KI-qEn"/>
+                            <constraint firstItem="8wC-Jb-puF" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="enD-qM-9zH"/>
+                            <constraint firstItem="guD-xS-eey" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="ged-rQ-7NX"/>
+                            <constraint firstItem="M8H-fq-r5J" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="ibf-Tz-2BB"/>
+                            <constraint firstItem="guD-xS-eey" firstAttribute="top" secondItem="M8H-fq-r5J" secondAttribute="bottom" constant="18" id="lCy-GJ-uz0"/>
+                            <constraint firstItem="8wC-Jb-puF" firstAttribute="top" secondItem="Iqf-hK-a3I" secondAttribute="bottom" constant="8" symbolic="YES" id="pUy-hp-See"/>
+                            <constraint firstItem="M8H-fq-r5J" firstAttribute="top" secondItem="8wC-Jb-puF" secondAttribute="bottom" constant="18.670000000000002" id="tPS-x2-SH1"/>
+                            <constraint firstItem="8wC-Jb-puF" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="vVz-8K-9cA"/>
                         </constraints>
                     </view>
                     <connections>
@@ -82,7 +123,7 @@
     </scenes>
     <resources>
         <systemColor name="secondarySystemBackgroundColor">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

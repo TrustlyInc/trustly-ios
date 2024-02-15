@@ -55,9 +55,6 @@ class ViewController: UIViewController {
     // MARK: - IBActions
     
     @IBAction func pay(_ sender: Any) {
-        
-        let trustlyLightboxViewController = TrustlyLightBoxViewController()
-        trustlyLightboxViewController.delegate = self
 
         if let amountText = amountTextView.text,
            let amount = Double(amountText) {
@@ -67,8 +64,63 @@ class ViewController: UIViewController {
             
             self.present(trustlyLightboxViewController, animated: true)
         }
+
+        if let emailText = emailTextView.text, !emailText.isEmpty {
+
+            establishData["customer.email"] = emailText
+
+        }
+
+        self.openLightbox()
         
     }
+    
+    @IBAction func payWituAESWebAuth(_ sender: Any) {
+
+        if let amountText = amountTextView.text,
+           let amount = Double(amountText) {
+
+            establishData["amount"] = String(format: "%.2f", amount)
+        }
+
+        if let emailText = emailTextView.text, !emailText.isEmpty {
+
+            establishData["customer.email"] = emailText
+
+        }
+
+        self.openLightboxASWebAuthentication()
+        
+    }
+    
+    private func openLightbox(){
+        let trustlyLightboxViewController = TrustlyLightBoxViewController()
+        trustlyLightboxViewController.delegate = self
+        
+        trustlyLightboxViewController.establishData = self.establishData
+
+        self.present(trustlyLightboxViewController, animated: true)
+        
+    }
+    
+    private func openLightboxASWebAuthentication(){
+        let trustlyLightboxPanel = TrustlyView()
+        
+        trustlyLightboxPanel.establishASWebAuthentication(establishData: establishData,
+                                                   onReturn: {(trustlyView, returnParameters)->Void in
+            if let transactionId = returnParameters["transactionId"] {
+                self.showSuccessView(transactionId: transactionId as! String)
+            } else {
+                self.showFailureAlert()
+            }
+            
+        }, onCancel: {(payWithMyBank, returnParameters)->Void in
+            let response = returnParameters as! [String:String]
+            self.showFailureAlert()
+        })
+            
+    }
+    
 }
 
 extension ViewController: TrustlyLightboxViewProtocol {
