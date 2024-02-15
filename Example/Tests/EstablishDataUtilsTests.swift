@@ -12,6 +12,7 @@ import XCTest
 final class EstablishDataUtilsTests: XCTestCase {
     
     var establishData:Dictionary<String, String> = [:]
+    var urlWithParamters: String = ""
     
     override func setUp() {
         super.setUp()
@@ -20,6 +21,8 @@ final class EstablishDataUtilsTests: XCTestCase {
                                 "customer.address.country" : "US",
                                 "customer.address.street" : "ABC Avenue",
                                 "metadata.urlScheme": "demoapp://"]
+        
+        self.urlWithParamters = "demoapp://?transactionId=1003151780&transactionType=1&merchantReference=g:cac73df7-52b4-47d7-89d3-9628d4cfb65e&payment.paymentProvider.type=1&requestSignature=E0rbmsl4KOORibvsHoDvfqIqlaQ%3D"
         
     }
     
@@ -37,8 +40,19 @@ final class EstablishDataUtilsTests: XCTestCase {
                 
     }
     
+    func testConvertUrlWithParameterToNormalizedEstablish() throws {
         
-        XCTAssertEqual(expectedEstablishData, jsonString)
+        let expectedEstablishData: [String : AnyHashable] = [
+            "transactionId": "1003151780",
+            "transactionType": "1",
+            "merchantReference": "g:cac73df7-52b4-47d7-89d3-9628d4cfb65e",
+            "payment": ["paymentProvider": ["type" : "1"]],
+            "requestSignature": "E0rbmsl4KOORibvsHoDvfqIqlaQ%3D"
+        ]
+        
+        let normalizedEstablish = EstablishDataUtils.buildEstablishFrom(urlWithParameters: self.urlWithParamters)
+        
+        XCTAssertEqual(expectedEstablishData, normalizedEstablish)
                 
     }
 
