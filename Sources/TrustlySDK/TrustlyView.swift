@@ -325,6 +325,8 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
          
          if let scheme = establishData?["metadata.urlScheme"] as? String {
              self.urlScheme = scheme.components(separatedBy: ":")[0]
+             establishData?["returnUrl"] = scheme
+             establishData?["cancelUrl"] = scheme
          }
          
          returnHandler = onReturn
@@ -332,9 +334,15 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
          externalUrlHandler = nil
         
         do {
-            let url = try URLUtils.buildEndpointUrl(resourceUrl: .index, establishData: establishData as! [String : String])
-
-            self.buildASWebAuthenticationSession(url: URL(string: "http://192.168.0.8:8000/start/lightbox?environment=sandbox&establishData=%7B%22accessId%22%3A%22A48B73F694C4C8EE6306%22%2C%22amount%22%3A%229.99%22%2C%22cancelUrl%22%3A%22trustlysdk%3A%2F%2Ffailure%22%2C%22currency%22%3A%22USD%22%2C%22customer%22%3A%7B%22address%22%3A%7B%22country%22%3A%22US%22%7D%2C%22name%22%3A%22John%20Doe%22%7D%2C%22merchantId%22%3A%22110005514%22%2C%22merchantReference%22%3A%22443446%22%2C%22paymentType%22%3A%22Deferred%22%2C%22returnUrl%22%3A%22trustlysdk%3A%2F%2Fsuccess%22%7D")!, callbackURL: "trustlyback")
+            var url = try URLUtils.buildEndpointUrl(resourceUrl: .establish, establishData: establishData as! [String : String], isAppLocation: true)
+            
+            let normalizedEstablish:[String : AnyHashable] = EstablishDataUtils.normalizeEstablishWithDotNotation(establish: establishData as! [String : AnyHashable])
+            
+            if let token = JSONUtils.getJsonBase64From(dicticionary: normalizedEstablish) {
+                url = "\(url)&accessId=\(establishData!["accessId"]!)&token=\(token)"
+                
+                self.buildASWebAuthenticationSession(url: URL(string: url)!, callbackURL: urlScheme, onReturn: onReturn, onCancel: onCancel)
+            }
             
         } catch TrustlyURLError.missingLocalUrl {
             print("Error: When env is local, you must provide the localUrl.")
@@ -671,6 +679,26 @@ extension TrustlyView {
         webSession.start()
     }
     
+    private func buildASWebAuthenticationSession(url: URL, callbackURL: String, onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) {
+        webSession = ASWebAuthenticationSession(url: url, callbackURLScheme: callbackURL, completionHandler: { (url, error) in
+            if let stringUrl = url?.absoluteString {
+                let returnedEstablish = EstablishDataUtils.buildEstablishFrom(urlWithParameters: stringUrl)
+                
+                onReturn?(self, returnedEstablish)
+                
+            } else {
+                onCancel?(self, [:])
+            }
+        })
+        
+        if #available(iOS 13, *) {
+            webSession.prefersEphemeralWebBrowserSession = true
+            webSession.presentationContextProvider = self
+        }
+
+        webSession.start()
+    }
+
     private func proceedToChooseAccount(){
         self.mainWebView.evaluateJavaScript("window.Trustly.proceedToChooseAccount();", completionHandler: nil)
     }
