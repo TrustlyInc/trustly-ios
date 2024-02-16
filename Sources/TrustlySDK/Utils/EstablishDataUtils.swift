@@ -94,6 +94,7 @@ struct EstablishDataUtils {
     /// - Returns: [String : AnyHashable]
     static func buildEstablishFrom(urlWithParameters: String) -> [String : AnyHashable] {
         var establish: [String : AnyHashable] = [:]
+        establish["url"] = urlWithParameters
         
         let parameters = urlWithParameters.split(separator: "?")[1]
         
