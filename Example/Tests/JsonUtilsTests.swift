@@ -26,7 +26,7 @@ final class JsonUtilsTests: XCTestCase {
         let expectedString = "{\"merchantId\":\"110005514\",\"accessId\":\"A48B73F694C4C8EE6306\"}".hash
 
         
-        let jsonString = JSONUtils.getJsonStringFrom(dicticionary: self.establishData)!
+        let jsonString = JSONUtils.getJsonStringFrom(dictionary: self.establishData)!
         
         XCTAssertEqual(expectedString, jsonString.hash)
                 
@@ -34,7 +34,7 @@ final class JsonUtilsTests: XCTestCase {
     
     func testBuildJsonBase64() throws {
         
-        let jsonStringBase64 = JSONUtils.getJsonBase64From(dicticionary: self.establishData)!
+        let jsonStringBase64 = JSONUtils.getJsonBase64From(dictionary: self.establishData)!
         let newDictionary = JSONUtils.getDictionaryFrom(jsonStringBase64: jsonStringBase64)!
         
         

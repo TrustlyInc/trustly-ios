@@ -50,7 +50,7 @@
                                     <color key="titleColor" systemColor="secondarySystemBackgroundColor"/>
                                 </state>
                                 <connections>
-                                    <action selector="payWituAESWebAuth:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="LyG-e4-6SZ"/>
+                                    <action selector="payWithAESWebAuth:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="ftc-Wa-7LA"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Amount:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8wC-Jb-puF">
@@ -123,7 +123,7 @@
     </scenes>
     <resources>
         <systemColor name="secondarySystemBackgroundColor">
-            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

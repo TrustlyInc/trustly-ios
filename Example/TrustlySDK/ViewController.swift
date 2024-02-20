@@ -75,7 +75,7 @@ class ViewController: UIViewController {
         
     }
     
-    @IBAction func payWituAESWebAuth(_ sender: Any) {
+    @IBAction func payWithAESWebAuth(_ sender: Any) {
 
         if let amountText = amountTextView.text,
            let amount = Double(amountText) {

@@ -338,7 +338,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
             
             let normalizedEstablish:[String : AnyHashable] = EstablishDataUtils.normalizeEstablishWithDotNotation(establish: establishData as! [String : AnyHashable])
             
-            if let token = JSONUtils.getJsonBase64From(dicticionary: normalizedEstablish) {
+            if let token = JSONUtils.getJsonBase64From(dictionary: normalizedEstablish) {
                 url = "\(url)&accessId=\(establishData!["accessId"]!)&token=\(token)"
                 
                 self.buildASWebAuthenticationSession(url: URL(string: url)!, callbackURL: urlScheme, onReturn: onReturn, onCancel: onCancel)

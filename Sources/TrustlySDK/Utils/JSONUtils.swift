@@ -9,11 +9,11 @@ import Foundation
 
 struct JSONUtils {
     
-    static private func getJsonDataFrom(dicticionary: [String : AnyHashable]) -> Data? {
+    static private func getJsonDataFrom(dictionary: [String : AnyHashable]) -> Data? {
         
         do {
 
-            let jsonData:Data = try JSONSerialization.data(withJSONObject: dicticionary)
+            let jsonData:Data = try JSONSerialization.data(withJSONObject: dictionary)
 
             return jsonData
             
@@ -24,9 +24,9 @@ struct JSONUtils {
         return nil
     }
     
-    static func getJsonStringFrom(dicticionary: [String : AnyHashable]) -> String? {
+    static func getJsonStringFrom(dictionary: [String : AnyHashable]) -> String? {
         
-        guard let jsonData = getJsonDataFrom(dicticionary: dicticionary) else { return nil }
+        guard let jsonData = getJsonDataFrom(dictionary: dictionary) else { return nil }
 
         let jsonString:String = String(data: jsonData, encoding: .utf8)!
         
@@ -34,9 +34,9 @@ struct JSONUtils {
             
     }
     
-    static func getJsonBase64From(dicticionary: [String : AnyHashable]) -> String? {
+    static func getJsonBase64From(dictionary: [String : AnyHashable]) -> String? {
         
-        guard let jsonData = getJsonDataFrom(dicticionary: dicticionary) else { return nil }
+        guard let jsonData = getJsonDataFrom(dictionary: dictionary) else { return nil }
         let jsonBase64 = jsonData.base64EncodedString()
         
         return jsonBase64

@@ -36,10 +36,10 @@ struct EstablishDataUtils {
         
     }
     
-    /// Responsible to parse the dot notation key, in a clena dictionary key. Example: from ["customer.address.country": "US"] to ["customer":  ["address": [country": "US"]]]
+    /// Responsible to parse the dot notation key, in a clean dictionary key. Example: from ["customer.address.country": "US"] to ["customer":  ["address": [country": "US"]]]
     ///
     /// - Parameters:
-    ///     - origin: The origin dicitionary
+    ///     - origin: The origin dictionary
     ///     - key: The key with dot notation
     ///     - value: The value of the key
     static private func parseData(origin: inout [String : AnyHashable], key: String, value: AnyHashable ) {
@@ -47,21 +47,21 @@ struct EstablishDataUtils {
         if key.contains(".") {
             origin.removeValue(forKey: key)
             
-            let splitedKeys = splitDotNotationKeys(key)
+            let splitKeys = splitDotNotationKeys(key)
 
             var newObject: [String : AnyHashable]
             
-            if let object = origin[splitedKeys.mainKey] {
+            if let object = origin[splitKeys.mainKey] {
 
                 newObject = object as! [String : AnyHashable]
-                newObject[splitedKeys.complementKey] = value
+                newObject[splitKeys.complementKey] = value
                 
             } else {
-                newObject = [splitedKeys.complementKey: value]
+                newObject = [splitKeys.complementKey: value]
             }
             
-            parseData(origin: &newObject, key: splitedKeys.complementKey, value: value)
-            origin[splitedKeys.mainKey] = newObject
+            parseData(origin: &newObject, key: splitKeys.complementKey, value: value)
+            origin[splitKeys.mainKey] = newObject
             
         } else {
             origin[key] = value
@@ -69,7 +69,7 @@ struct EstablishDataUtils {
         }
     }
     
-    /// Split the dot notation key oin 2 parts, mainKey and complementKey. Example: from "customer.address.country" to (mainKey: customer, complementKey: address.country)
+    /// Split the dot notation key in 2 parts, mainKey and complementKey. Example: from "customer.address.country" to (mainKey: customer, complementKey: address.country)
     ///
     /// - Parameters:
     ///     - key: The key with dot notation
