@@ -19,6 +19,14 @@ import WebKit
 import AuthenticationServices
 import SafariServices
 
+enum ResourceUrls: String {
+    case index = "index"
+    case widget = "widget"
+    case establish = "establish"
+    case selectBank = "selectBank"
+    
+}
+
 func Rgb2UIColor(_ r: CGFloat, _ g: CGFloat, _ b: CGFloat) -> UIColor {
     UIColor(red: r / 255.0, green: g / 255.0, blue: b / 255.0, alpha: 1.0)
 }
@@ -59,7 +67,6 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
     private var urlScheme = ""
     private var webSession: ASWebAuthenticationSession!
     private var baseUrls = ["paywithmybank.com", "trustly.one"]
-    private var isLocalEnvironment = false
     private let oauthLoginPath = "/oauth/login/"
     private var sessionCid = "ios wrong sessionCid"
     private var cid = "ios wrong cid"
@@ -163,16 +170,24 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         
         bankSelectedHandler = onBankSelected
 
-        let url = getEndpointUrl(function: "widget", establishData:establishData as! [String : String]) + "&" + urlEncoded(query) + "#" + urlEncoded(hash)
-        var request = URLRequest(url: URL(string: url)!)
+        do {
+            let url = try URLUtils.buildEndpointUrl(resourceUrl: .widget, establishData: establishData as! [String : String]) + "&" + URLUtils.urlEncoded(query) + "#" + URLUtils.urlEncoded(hash)
+            var request = URLRequest(url: URL(string: url)!)
 
-        request.httpMethod = "GET"
-        request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
+            request.httpMethod = "GET"
+            request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
 
-        self.notifyEvent("widget", "loading")
+            self.notifyEvent("widget", "loading")
 
-        self.mainWebView!.tag = WidgetView
-        self.mainWebView!.load(request)
+            self.mainWebView!.tag = WidgetView
+            self.mainWebView!.load(request)
+            
+        } catch TrustlyURLError.missingLocalUrl {
+            print("Error: When env is local, you must provide the localUrl.")
+            
+        } catch {
+            print("Error: building url.")
+        }
 
         return self
     }
@@ -213,40 +228,110 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         returnHandler = onReturn
         cancelHandler = onCancel
         externalUrlHandler = nil
-
-        let url = getEndpointUrl(function: "index", establishData:establishData! as! [String:String])
-        var request = URLRequest(url: URL(string: url)!)
-
-        request.httpMethod = "POST"
-        request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
-        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField:"Content-Type")
-
-        let requestData = urlEncoded(establishData!).data(using: .utf8)
-
-        request.setValue(String(format:"%lu", requestData!.count), forHTTPHeaderField:"Content-Length")
-        request.httpBody = requestData
         
-        let semaphore = DispatchSemaphore(value:0)
-        
-        var httpData:Data?
-        var response:URLResponse?
-        var error:Error?
-        URLSession.shared.dataTask(with: request) { (data, resp, err) in
-            httpData = data
-            response = resp
-            error = err
-            semaphore.signal()
-        }.resume()
+        do {
+            let url = try URLUtils.buildEndpointUrl(resourceUrl: .index, establishData: establishData as! [String : String])
+            
+            var request = URLRequest(url: URL(string: url)!)
 
-        semaphore.wait()
-        
-        if(error == nil){
-            self.mainWebView?.load(httpData!, mimeType:"text/html", characterEncodingName:"UTF-8", baseURL: (response?.url)!)
-        } else {
-            self.cancelHandler!(self, [:])
+            request.httpMethod = "POST"
+            request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
+            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField:"Content-Type")
+
+            let requestData = URLUtils.urlEncoded(establishData!).data(using: .utf8)
+
+            request.setValue(String(format:"%lu", requestData!.count), forHTTPHeaderField:"Content-Length")
+            request.httpBody = requestData
+            
+            let semaphore = DispatchSemaphore(value:0)
+            
+            var httpData:Data?
+            var response:URLResponse?
+            var error:Error?
+            URLSession.shared.dataTask(with: request) { (data, resp, err) in
+                httpData = data
+                response = resp
+                error = err
+                semaphore.signal()
+            }.resume()
+
+            semaphore.wait()
+            
+            if(error == nil){
+                self.mainWebView?.load(httpData!, mimeType:"text/html", characterEncodingName:"UTF-8", baseURL: (response?.url)!)
+            } else {
+                self.cancelHandler!(self, [:])
+            }
+            
+        } catch TrustlyURLError.missingLocalUrl {
+            print("Error: When env is local, you must provide the localUrl.")
+            
+        } catch {
+            print("Error: building url.")
         }
+
+
         return self
     }
+    
+    public func establishASWebAuthentication(establishData eD: [AnyHashable : Any], onReturn: TrustlyCallback?, onCancel: TrustlyCallback?){
+         establishData = eD
+         
+         self.addSessionCid()
+
+         let deviceType = establishData?["deviceType"] ?? "mobile" + ":ios:native"
+         establishData?["deviceType"] = deviceType
+         if let lang = establishData?["metadata.lang"] as? String {
+             establishData?["lang"] = lang
+         }
+         
+         establishData?["metadata.sdkIOSVersion"] = build
+         
+         if establishData?.index(forKey: "metadata.integrationContext") == nil {
+             establishData?["metadata.integrationContext"] = inAppIntegrationContext
+         }
+         
+         
+         returnUrl = "msg://return"
+         establishData?["returnUrl"] = returnUrl
+         cancelUrl = "msg://cancel"
+         establishData?["cancelUrl"] = cancelUrl
+         establishData?["version"] = "2"
+         establishData?["grp"] = self.getGrp()
+
+         if establishData?["paymentProviderId"] != nil {
+             establishData?["widgetLoaded"] = "true"
+         }
+         
+         if let scheme = establishData?["metadata.urlScheme"] as? String {
+             self.urlScheme = scheme.components(separatedBy: ":")[0]
+             establishData?["returnUrl"] = scheme
+             establishData?["cancelUrl"] = scheme
+         }
+         
+         returnHandler = onReturn
+         cancelHandler = onCancel
+         externalUrlHandler = nil
+        
+        do {
+            var url = try URLUtils.buildEndpointUrl(resourceUrl: .establish, establishData: establishData as! [String : String], isAppLocation: true)
+            
+            let normalizedEstablish:[String : AnyHashable] = EstablishDataUtils.normalizeEstablishWithDotNotation(establish: establishData as! [String : AnyHashable])
+            
+            if let token = JSONUtils.getJsonBase64From(dictionary: normalizedEstablish) {
+                url = "\(url)&accessId=\(establishData!["accessId"]!)&token=\(token)"
+                
+                self.buildASWebAuthenticationSession(url: URL(string: url)!, callbackURL: urlScheme, onReturn: onReturn, onCancel: onCancel)
+            }
+            
+        } catch TrustlyURLError.missingLocalUrl {
+            print("Error: When env is local, you must provide the localUrl.")
+            
+        } catch {
+            print("Error: building url.")
+        }
+
+     }
 
     public func hybrid(url address : String, returnUrl: String, onReturn: TrustlyCallback?, cancelUrl: String, onCancel: TrustlyCallback?)  -> UIView? {
         guard let url = URL(string:address)  else {
@@ -427,7 +512,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
                 //messages
                 switch(host){
                     case "push":
-                        let params = self.urlDecode(query)?.components(separatedBy: "|")
+                    let params = URLUtils.urlDecode(query)?.components(separatedBy: "|")
                         if ("PayWithMyBank.createTransaction" == params?[0]) && bankSelectedHandler != nil {
                             if params?.count ?? 0 > 1 {
                                 establishData?["paymentProviderId"] = params?[1]
@@ -479,35 +564,6 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         }
     }
 
-    func getEndpointUrl(function:String, establishData:[String:String]) -> String {
-        var fn = function
-        let env = establishData["env"]
-        let localUrl = establishData["localUrl"]
-        var subDomain = ""
-        var url:String
-
-        if env != nil && env!.count > 0 {
-            subDomain = String(format:"%@.", env!)
-        }
-
-        if  "index" == fn &&
-            "Verification" != establishData["paymentType"] &&
-            establishData["paymentType"] != nil {
-            fn = "selectBank"
-        }
-
-        if ("local" == env), let urlLocal = localUrl {
-            url = "http://"+urlLocal+"/start/selectBank/"+fn+"?v="+build+"-ios-sdk"
-            
-            let cleanLocalUrl = urlLocal.components(separatedBy: ":")[0]
-            isLocalEnvironment = true
-            
-        } else {
-            url = "https://"+subDomain+"paywithmybank.com/start/selectBank/"+fn+"?v="+build+"-ios-sdk"
-        }
-        return url
-    }
-
     func parametersForUrl(_ url:URL) -> [AnyHashable : Any] {
         let absoluteString = url.absoluteString
         var queryStringDictionary = [String : String]()
@@ -552,36 +608,6 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         return grp
     }
     
-    private func toString(_ object: Any?) -> String? {
-        if let object = object {
-            return "\(object)"
-        }
-        return nil
-    }
-
-    private func urlEncode(_ object: Any?) -> String? {
-        let str = toString(object)
-        let set = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ0123456789-._~")
-
-        return str?.addingPercentEncoding(withAllowedCharacters: set)
-    }
-
-    private func urlDecode(_ object: Any?) -> String? {
-        let string = toString(object)
-
-        return string?.removingPercentEncoding
-    }
-
-
-    func urlEncoded(_ data:[AnyHashable : Any?]) -> String! {
-        var parts = [String]()
-        for (key,value) in data {
-            let part = String(format:"%@=%@", urlEncode(key)!, urlEncode(value)!)
-            parts.append(part)
-         }
-        return parts.joined(separator: "&")
-    }
-    
     private func addSessionCid() {
         
         self.establishData?["sessionCid"] = sessionCid
@@ -607,7 +633,7 @@ extension TrustlyView {
         let path = url.path
         
         //1.1: On the main view creates a new OAuth view (new WKWebview) and opens the URL there
-        if isLocalEnvironment || (self.checkUrl(host: host) &&
+        if URLUtils.isLocalEnvironment || (self.checkUrl(host: host) &&
             path.contains(self.oauthLoginPath)) {
 
             self.buildASWebAuthenticationSession(url: url, callbackURL: urlScheme)
@@ -629,6 +655,26 @@ extension TrustlyView {
         webSession.start()
     }
     
+    private func buildASWebAuthenticationSession(url: URL, callbackURL: String, onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) {
+        webSession = ASWebAuthenticationSession(url: url, callbackURLScheme: callbackURL, completionHandler: { (url, error) in
+            if let stringUrl = url?.absoluteString {
+                let returnedEstablish = EstablishDataUtils.buildEstablishFrom(urlWithParameters: stringUrl)
+                
+                onReturn?(self, returnedEstablish)
+                
+            } else {
+                onCancel?(self, [:])
+            }
+        })
+        
+        if #available(iOS 13, *) {
+            webSession.prefersEphemeralWebBrowserSession = true
+            webSession.presentationContextProvider = self
+        }
+
+        webSession.start()
+    }
+
     private func proceedToChooseAccount(){
         self.mainWebView.evaluateJavaScript("window.Trustly.proceedToChooseAccount();", completionHandler: nil)
     }
