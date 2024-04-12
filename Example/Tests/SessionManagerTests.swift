@@ -45,7 +45,7 @@ final class SessionManagerTests: XCTestCase {
         let timeBase36 = getTimestampBase36(timeInMilliseconds: expectedDate.millisecondsReferenceDate)
         let convertedDate = Date(milliseconds: Int(timeBase36!, radix: 36)!)
         
-        XCTAssertEqualWithAccuracy(expectedDate.timeIntervalSinceReferenceDate, convertedDate.timeIntervalSinceReferenceDate, accuracy: 0.001)
+        XCTAssertEqual(expectedDate.timeIntervalSinceReferenceDate, convertedDate.timeIntervalSinceReferenceDate, accuracy: 0.001)
 
     }
 
