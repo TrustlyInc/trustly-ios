@@ -30,7 +30,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		15369A722BDBE3F10050FDAD /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		15369A722BDBE3F10050FDAD /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = ../PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		1587AB902A2FE043006F6FC3 /* SessionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManagerTests.swift; sourceTree = "<group>"; };
 		15987B0829DEF79D00D7A395 /* TrustlyLightBoxViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrustlyLightBoxViewController.swift; sourceTree = "<group>"; };
 		2416E32056EECA07B4C86E1B /* TrustlySDK.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = TrustlySDK.podspec; path = ../TrustlySDK.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
