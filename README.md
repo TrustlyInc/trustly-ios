@@ -58,6 +58,7 @@ ___
 
 | VERSION   | DESCRIPTION   | BRANCH |
 | :-------: | :-----------  | :----------- |
+3.2.0     | Add PrivacyInfo.xcprivacy | *main*
 3.1.1     | Fix minor bug when use the SDK in local environment | *main*
 3.1.0     | Add SessionCid to to distinct widget impressions and transactions | *main*
 3.0.0     | Add cocoapods, and swift package manager support | *main*
