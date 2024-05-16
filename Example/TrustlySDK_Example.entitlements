@@ -4,7 +4,7 @@
 <dict>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>webcredentials:shop-on-merchant.fly.dev</string>
+		<string>webcredentials:alpha-merchant.tools.devent.trustly.one</string>
 	</array>
 </dict>
 </plist>

@@ -84,7 +84,7 @@ public struct PassKeyResult: Codable, Hashable {
 
 struct APIRequest {
     
-    private static let BASE_URL = "https://shop-on-merchant.fly.dev/passkey"
+    private static let BASE_URL = "https://alpha-merchant.tools.devent.trustly.one/passkey"
     static let CHALLENGE_ADDRESS = "challenge"
     static let REGISTER_ADDRESS = "register"
     static let FINISH_ADDRESS = "finish"
