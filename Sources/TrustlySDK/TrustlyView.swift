@@ -482,7 +482,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
     func getEndpointUrl(function:String, establishData:[String:String]) -> String {
         var fn = function
         let env = establishData["env"]
-        let localUrl = establishData["localUrl"]
+        let envHost = establishData["envHost"]
         var subDomain = ""
         var url:String
 
@@ -496,12 +496,13 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
             fn = "selectBank"
         }
 
-        if ("local" == env), let urlLocal = localUrl {
-            url = "http://"+urlLocal+"/start/selectBank/"+fn+"?v="+build+"-ios-sdk"
-            
-            let cleanLocalUrl = urlLocal.components(separatedBy: ":")[0]
+        if (env == "local") {
+            let domain = envHost ?? "localhost"
+            url = "http://"+domain+":8000/start/selectBank/"+fn+"?v="+build+"-ios-sdk"
             isLocalEnvironment = true
-            
+        } else if (env == "dynamic") {
+            let subDomain = envHost ?? ""
+            url = "https://"+subDomain+".int.trustly.one/start/selectBank/"+fn+"?v="+build+"-ios-sdk"
         } else {
             url = "https://"+subDomain+"paywithmybank.com/start/selectBank/"+fn+"?v="+build+"-ios-sdk"
         }
