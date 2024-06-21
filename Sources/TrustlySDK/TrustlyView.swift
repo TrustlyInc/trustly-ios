@@ -210,7 +210,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         cancelHandler = onCancel
         externalUrlHandler = nil
 
-        let url = getEndpointUrl(function: "index", establishData:establishData! as! [String:String])
+        let url = getEndpointUrl(function: "index", establishData:establishData! as! [String:Any])
         var request = URLRequest(url: URL(string: url)!)
 
         request.httpMethod = "POST"
@@ -475,10 +475,10 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         }
     }
 
-    func getEndpointUrl(function:String, establishData:[String:String]) -> String {
+    func getEndpointUrl(function:String, establishData:[String:Any]) -> String {
         var fn = function
-        let env = establishData["env"]
-        let localUrl = establishData["localUrl"]
+        let env = establishData["env"] as? String
+        let localUrl = establishData["localUrl"] as? String
         var subDomain = ""
         var url:String
 
@@ -486,9 +486,10 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
             subDomain = String(format:"%@.", env!)
         }
 
+        let paymentType: String? = establishData["paymentType"] as? String;
         if  "index" == fn &&
-            "Verification" != establishData["paymentType"] &&
-            establishData["paymentType"] != nil {
+            "Verification" != paymentType &&
+            paymentType != nil {
             fn = "selectBank"
         }
 
