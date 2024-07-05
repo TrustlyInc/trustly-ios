@@ -372,23 +372,28 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         if webView.tag == WidgetView {
             self.notifyEvent("widget","load")
         }
-
-        let regex = try? NSRegularExpression(pattern: "[0-9]+", options:NSRegularExpression.Options.caseInsensitive)
-
-        let theTitle:String! = webView.title
         
-        let matches = regex!.matches(in: theTitle, options:[], range: NSMakeRange(0, theTitle.count))
-
-        for match in matches {
-            let value = Int(theTitle[Range(match.range,in: theTitle)!])! / 100
-            if value == 4 || value == 5 {
-                if (self.cancelHandler != nil) {
-                    self.cancelHandler!(self, [:])
-                }
-                break
+        if let theTitle = webView.title, !theTitle.isEmpty {
+            let matches = ValidationHelper.findMatchesForErrorCode(content: theTitle)
+            
+            if let cancelHandler = self.cancelHandler, ValidationHelper.isErrorCodePage(matches: matches, content: theTitle) {
+                cancelHandler(self, [:])
             }
-         }
-
+            
+        } else {
+           
+            if let url = webView.url, url.absoluteString.contains("/undefined") {
+                webView.evaluateJavaScript("document.title", completionHandler: { result, error in
+                    guard let dataHtml = result as? String else { return }
+                    
+                    let matches = ValidationHelper.findMatchesForErrorCode(content: dataHtml)
+                    
+                    if let cancelHandler = self.cancelHandler, ValidationHelper.isErrorCodePage(matches: matches, content: dataHtml) {
+                        cancelHandler(self, [:])
+                    }
+                })
+            }
+        }
     }
 
     public func webView(webView:WKWebView!, didFailNavigation error:NSError!) {
