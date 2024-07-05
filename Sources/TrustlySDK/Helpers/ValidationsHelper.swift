@@ -11,12 +11,15 @@ import WebKit
 
 class ValidationHelper {
     
+    static let HTTP_400_STATUS_CODE = 4
+    static let HTTP_500_STATUS_CODE = 5
+    
     static func isErrorCodePage(matches: [NSTextCheckingResult], content: String) -> Bool {
         for match in matches {
 
             let value = (Int(content[Range(match.range,in: content)!]) ?? 0) / 100
 
-            if value == 4 || value == 5 {
+            if value == HTTP_400_STATUS_CODE || value == HTTP_500_STATUS_CODE {
                 return true
             }
         }
