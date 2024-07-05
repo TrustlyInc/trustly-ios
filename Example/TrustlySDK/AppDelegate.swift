@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import TrustlySDK
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+
         return true
     }
 
@@ -39,6 +41,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    }
+    
+    func application(_ application: UIApplication,
+                     open url: URL,
+                     options: [UIApplication.OpenURLOptionsKey : Any] = [:] ) -> Bool {
+
+
+        // Determine who sent the URL.
+        if url.absoluteString == "demoapp://" {
+            NotificationCenter.default.post(name: Notification.Name(TrustlyView.trustlyCloseWebview), object: nil)
+            
+            return true
+        }
+        
+        return false
     }
 
 
