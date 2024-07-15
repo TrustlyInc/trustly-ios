@@ -35,7 +35,7 @@ let NavBarHeight:Int = 26
 let NavBarIconWidth:Int = 10
 let NavBarIconHeight:Int = 10
 
-let build = "3.2.1"
+let build = "3.2.2"
 
 let CloseIconBase64:String! = "iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAACxLAAAsSwGlPZapAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAG1SURBVHgB3diLTcNADAZgpxOUBVA6CYzQDdoRGMETABMAG8AEVUdggmaDdoMYn5KTQlSau8RnW/ySVUWyo/sa9XEH8E9SDS+IaM0vO647rmNVVUdwFF5feAlr3HLVXN+8xq9x047rQr/zAk4SEFwbrma0xhNXHZvqK4iYdzDODUTMITbu6XbMMAmIkHbV968n7re3wFD3mdhwhXe8Thl4pLSoYRKfRMxpOPhBaSmOyUS0XLvxDcwxmYgQ/OtGZhgxhCVGHGGBKYbQxBRHaGDUECUx6ogSGDOEJMYcIYFxg1iKcYWYi6Fuz9MkziBoJgPz6RYxA+MXIYxB8JCFGARPmYlB8JhMDIJQViAY6s6XHjJG7sFTKP8Xe5g38JCFCB8YIYQtRhhhg5mBQEr/NtPB0IK/4m4wtHA/wdeVOYaENkWmGBLe2ZlgqND2VBVDhffYKhhSOigoiiHl044iGDI6shHFkPG5kwjGGiGG8YBYjKHuaTSJgwgKycQ8x6Ft4gCCYjIw5ziACc0IBknEtLF56okgGCYB0w6bT9carBExExgcNtZch37xoc5cT+AoPeZ1ALhExA8NsASbTxPzlwAAAABJRU5ErkJggg=="
     
@@ -115,6 +115,11 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         mainWebView.scrollView.bounces = false
         mainWebView.backgroundColor = UIColor.clear
         mainWebView.isOpaque = false
+        if #available(iOS 16.4, *) {
+            mainWebView.isInspectable = true
+        } else {
+            // Fallback on earlier versions
+        }
 
         addSubview(mainWebView)
     }
@@ -367,23 +372,28 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         if webView.tag == WidgetView {
             self.notifyEvent("widget","load")
         }
-
-        let regex = try? NSRegularExpression(pattern: "[0-9]+", options:NSRegularExpression.Options.caseInsensitive)
-
-        let theTitle:String! = webView.title
         
-        let matches = regex!.matches(in: theTitle, options:[], range: NSMakeRange(0, theTitle.count))
-
-        for match in matches {
-            let value = Int(theTitle[Range(match.range,in: theTitle)!])! / 100
-            if value == 4 || value == 5 {
-                if (self.cancelHandler != nil) {
-                    self.cancelHandler!(self, [:])
-                }
-                break
+        if let theTitle = webView.title, !theTitle.isEmpty {
+            let matches = ValidationHelper.findMatchesForErrorCode(content: theTitle)
+            
+            if let cancelHandler = self.cancelHandler, ValidationHelper.isErrorCodePage(matches: matches, content: theTitle) {
+                cancelHandler(self, [:])
             }
-         }
-
+            
+        } else {
+           
+            if let url = webView.url, url.absoluteString.contains("/undefined") {
+                webView.evaluateJavaScript("document.title", completionHandler: { result, error in
+                    guard let dataHtml = result as? String else { return }
+                    
+                    let matches = ValidationHelper.findMatchesForErrorCode(content: dataHtml)
+                    
+                    if let cancelHandler = self.cancelHandler, ValidationHelper.isErrorCodePage(matches: matches, content: dataHtml) {
+                        cancelHandler(self, [:])
+                    }
+                })
+            }
+        }
     }
 
     public func webView(webView:WKWebView!, didFailNavigation error:NSError!) {

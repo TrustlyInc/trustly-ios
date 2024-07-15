@@ -58,6 +58,7 @@ ___
 
 | VERSION   | DESCRIPTION   | BRANCH |
 | :-------: | :-----------  | :----------- |
+3.2.2     | Fix a bug when we try to check if the sdk is loading a error page(400 and 500) | *main*
 3.2.1     | Prepare the sdk to support Buck build system | *main*
 3.2.0     | Add PrivacyInfo.xcprivacy | *main*
 3.1.1     | Fix minor bug when use the SDK in local environment | *main*

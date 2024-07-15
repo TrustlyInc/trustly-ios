@@ -30,7 +30,7 @@ class TrustlyLightBoxViewController: UIViewController {
                 
             }, onCancel: {(payWithMyBank, returnParameters)->Void in
                 let response = returnParameters as! [String:String]
-                self.delegate?.onCancelWithTransactionId(transactionId: response["transactionId"]!, controller: self)
+                self.delegate?.onCancelWithTransactionId(transactionId: response["transactionId"] ?? "No Transaction ID", controller: self)
             })
             
         } else {
