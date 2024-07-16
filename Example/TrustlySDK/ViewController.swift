@@ -40,7 +40,7 @@ class ViewController: UIViewController {
             print("onChangeListener: \(eventName) \(attributes)")
         }
 
-        self.trustlyView.selectBankWidget(establishData: establishData) { (view, data) in
+        let _ = self.trustlyView.selectBankWidget(establishData: establishData) { (view, data) in
             print("returnParameters:\(data)")
             self.establishData = data
         }
