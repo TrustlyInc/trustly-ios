@@ -164,17 +164,31 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         
         bankSelectedHandler = onBankSelected
 
-        let url = getEndpointUrl(function: "widget", establishData:establishData as! [String : String]) + "&" + urlEncoded(query) + "#" + urlEncoded(hash)
-        var request = URLRequest(url: URL(string: url)!)
+        do {
+            let environment = try buildEnvironment(
+                function: "widget",
+                environment: (eD["env"] ?? "") as! String,
+                localUrl: (eD["localUrl"] ?? "") as! String,
+                paymentType: (eD["paymentType"] ?? "") as! String,
+                build: build
+            )
+            
+            isLocalEnvironment = environment.isLocal
+            
+            var request = URLRequest(url: environment.url)
 
-        request.httpMethod = "GET"
-        request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
+            request.httpMethod = "GET"
+            request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
 
-        self.notifyEvent("widget", "loading")
+            self.notifyEvent("widget", "loading")
 
-        self.mainWebView!.tag = WidgetView
-        self.mainWebView!.load(request)
+            self.mainWebView!.tag = WidgetView
+            self.mainWebView!.load(request)
 
+        } catch {
+            print("Unexpected error: \(error).")
+        }
+        
         return self
     }
 
@@ -214,38 +228,52 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         returnHandler = onReturn
         cancelHandler = onCancel
         externalUrlHandler = nil
-
-        let url = getEndpointUrl(function: "index", establishData:establishData! as! [String:String])
-        var request = URLRequest(url: URL(string: url)!)
-
-        request.httpMethod = "POST"
-        request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
-        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField:"Content-Type")
-
-        let requestData = urlEncoded(establishData!).data(using: .utf8)
-
-        request.setValue(String(format:"%lu", requestData!.count), forHTTPHeaderField:"Content-Length")
-        request.httpBody = requestData
         
-        let semaphore = DispatchSemaphore(value:0)
-        
-        var httpData:Data?
-        var response:URLResponse?
-        var error:Error?
-        URLSession.shared.dataTask(with: request) { (data, resp, err) in
-            httpData = data
-            response = resp
-            error = err
-            semaphore.signal()
-        }.resume()
+        do {
+            let environment = try buildEnvironment(
+                function: "index",
+                environment: (eD["env"] ?? "") as! String,
+                localUrl: (eD["localUrl"] ?? "") as! String,
+                paymentType: (eD["paymentType"] ?? "") as! String,
+                build: build
+            )
+            
+            isLocalEnvironment = environment.isLocal
+            
+            var request = URLRequest(url: environment.url)
 
-        semaphore.wait()
-        
-        if(error == nil){
-            self.mainWebView?.load(httpData!, mimeType:"text/html", characterEncodingName:"UTF-8", baseURL: (response?.url)!)
-        } else {
-            self.cancelHandler!(self, [:])
+            request.httpMethod = "POST"
+            request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
+            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField:"Content-Type")
+
+            let requestData = urlEncoded(establishData!).data(using: .utf8)
+
+            request.setValue(String(format:"%lu", requestData!.count), forHTTPHeaderField:"Content-Length")
+            request.httpBody = requestData
+            
+            let semaphore = DispatchSemaphore(value:0)
+            
+            var httpData:Data?
+            var response:URLResponse?
+            var error:Error?
+            URLSession.shared.dataTask(with: request) { (data, resp, err) in
+                httpData = data
+                response = resp
+                error = err
+                semaphore.signal()
+            }.resume()
+
+            semaphore.wait()
+            
+            if(error == nil){
+                self.mainWebView?.load(httpData!, mimeType:"text/html", characterEncodingName:"UTF-8", baseURL: (response?.url)!)
+            } else {
+                self.cancelHandler!(self, [:])
+            }
+        } catch {
+            print("Unexpected error: \(error).")
         }
+
         return self
     }
 
@@ -483,33 +511,6 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
               topController.present(vc, animated: true, completion: nil)
            }
         }
-    }
-
-    func getEndpointUrl(function:String, establishData:[String:String]) -> String {
-        var fn = function
-        let env = establishData["env"]
-        let localUrl = establishData["localUrl"]
-        var subDomain = ""
-        var url:String
-
-        if env != nil && env!.count > 0 {
-            subDomain = String(format:"%@.", env!)
-        }
-
-        if  "index" == fn &&
-            "Verification" != establishData["paymentType"] &&
-            establishData["paymentType"] != nil {
-            fn = "selectBank"
-        }
-
-        if ("local" == env), let urlLocal = localUrl {
-            url = "http://"+urlLocal+"/start/selectBank/"+fn+"?v="+build+"-ios-sdk"
-            isLocalEnvironment = true
-            
-        } else {
-            url = "https://"+subDomain+"paywithmybank.com/start/selectBank/"+fn+"?v="+build+"-ios-sdk"
-        }
-        return url
     }
 
     func parametersForUrl(_ url:URL) -> [AnyHashable : Any] {
