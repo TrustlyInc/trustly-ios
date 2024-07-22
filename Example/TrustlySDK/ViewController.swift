@@ -40,7 +40,7 @@ class ViewController: UIViewController {
             print("onChangeListener: \(eventName) \(attributes)")
         }
 
-        self.trustlyView.selectBankWidget(establishData: establishData) { (view, data) in
+        let _ = self.trustlyView.selectBankWidget(establishData: establishData) { (view, data) in
             print("returnParameters:\(data)")
             self.establishData = data
         }
@@ -85,7 +85,7 @@ extension ViewController: TrustlyLightboxViewProtocol {
     
     // MARK: - Alert functions
     private func showAlert(title: String, message: String){
-        var dialogMessage = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let dialogMessage = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
         // Create OK button with action handler
         let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in

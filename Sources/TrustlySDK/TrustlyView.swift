@@ -35,7 +35,7 @@ let NavBarHeight:Int = 26
 let NavBarIconWidth:Int = 10
 let NavBarIconHeight:Int = 10
 
-let build = "3.2.2"
+let build = "3.2.3"
 
 let CloseIconBase64:String! = "iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAACxLAAAsSwGlPZapAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAG1SURBVHgB3diLTcNADAZgpxOUBVA6CYzQDdoRGMETABMAG8AEVUdggmaDdoMYn5KTQlSau8RnW/ySVUWyo/sa9XEH8E9SDS+IaM0vO647rmNVVUdwFF5feAlr3HLVXN+8xq9x047rQr/zAk4SEFwbrma0xhNXHZvqK4iYdzDODUTMITbu6XbMMAmIkHbV968n7re3wFD3mdhwhXe8Thl4pLSoYRKfRMxpOPhBaSmOyUS0XLvxDcwxmYgQ/OtGZhgxhCVGHGGBKYbQxBRHaGDUECUx6ogSGDOEJMYcIYFxg1iKcYWYi6Fuz9MkziBoJgPz6RYxA+MXIYxB8JCFGARPmYlB8JhMDIJQViAY6s6XHjJG7sFTKP8Xe5g38JCFCB8YIYQtRhhhg5mBQEr/NtPB0IK/4m4wtHA/wdeVOYaENkWmGBLe2ZlgqND2VBVDhffYKhhSOigoiiHl044iGDI6shHFkPG5kwjGGiGG8YBYjKHuaTSJgwgKycQ8x6Ft4gCCYjIw5ziACc0IBknEtLF56okgGCYB0w6bT9carBExExgcNtZch37xoc5cT+AoPeZ1ALhExA8NsASbTxPzlwAAAABJRU5ErkJggg=="
     
@@ -164,17 +164,33 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         
         bankSelectedHandler = onBankSelected
 
-        let url = getEndpointUrl(function: "widget", establishData:establishData as! [String : String]) + "&" + urlEncoded(query) + "#" + urlEncoded(hash)
-        var request = URLRequest(url: URL(string: url)!)
+        do {
+            let environment = try buildEnvironment(
+                function: "widget",
+                environment: (eD["env"] ?? "") as! String,
+                localUrl: (eD["localUrl"] ?? "") as! String,
+                paymentType: (eD["paymentType"] ?? "") as! String,
+                build: build,
+                query: query,
+                hash: hash
+            )
+            
+            isLocalEnvironment = environment.isLocal
+            
+            var request = URLRequest(url: environment.url)
 
-        request.httpMethod = "GET"
-        request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
+            request.httpMethod = "GET"
+            request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
 
-        self.notifyEvent("widget", "loading")
+            self.notifyEvent("widget", "loading")
 
-        self.mainWebView!.tag = WidgetView
-        self.mainWebView!.load(request)
+            self.mainWebView!.tag = WidgetView
+            self.mainWebView!.load(request)
 
+        } catch {
+            print("Unexpected error: \(error).")
+        }
+        
         return self
     }
 
@@ -214,38 +230,52 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         returnHandler = onReturn
         cancelHandler = onCancel
         externalUrlHandler = nil
-
-        let url = getEndpointUrl(function: "index", establishData:establishData! as! [String:String])
-        var request = URLRequest(url: URL(string: url)!)
-
-        request.httpMethod = "POST"
-        request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
-        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField:"Content-Type")
-
-        let requestData = urlEncoded(establishData!).data(using: .utf8)
-
-        request.setValue(String(format:"%lu", requestData!.count), forHTTPHeaderField:"Content-Length")
-        request.httpBody = requestData
         
-        let semaphore = DispatchSemaphore(value:0)
-        
-        var httpData:Data?
-        var response:URLResponse?
-        var error:Error?
-        URLSession.shared.dataTask(with: request) { (data, resp, err) in
-            httpData = data
-            response = resp
-            error = err
-            semaphore.signal()
-        }.resume()
+        do {
+            let environment = try buildEnvironment(
+                function: "index",
+                environment: (eD["env"] ?? "") as! String,
+                localUrl: (eD["localUrl"] ?? "") as! String,
+                paymentType: (eD["paymentType"] ?? "") as! String,
+                build: build
+            )
+            
+            isLocalEnvironment = environment.isLocal
+            
+            var request = URLRequest(url: environment.url)
 
-        semaphore.wait()
-        
-        if(error == nil){
-            self.mainWebView?.load(httpData!, mimeType:"text/html", characterEncodingName:"UTF-8", baseURL: (response?.url)!)
-        } else {
-            self.cancelHandler!(self, [:])
+            request.httpMethod = "POST"
+            request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
+            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField:"Content-Type")
+
+            let requestData = urlEncoded(establishData!).data(using: .utf8)
+
+            request.setValue(String(format:"%lu", requestData!.count), forHTTPHeaderField:"Content-Length")
+            request.httpBody = requestData
+            
+            let semaphore = DispatchSemaphore(value:0)
+            
+            var httpData:Data?
+            var response:URLResponse?
+            var error:Error?
+            URLSession.shared.dataTask(with: request) { (data, resp, err) in
+                httpData = data
+                response = resp
+                error = err
+                semaphore.signal()
+            }.resume()
+
+            semaphore.wait()
+            
+            if(error == nil){
+                self.mainWebView?.load(httpData!, mimeType:"text/html", characterEncodingName:"UTF-8", baseURL: (response?.url)!)
+            } else {
+                self.cancelHandler!(self, [:])
+            }
+        } catch {
+            print("Unexpected error: \(error).")
         }
+
         return self
     }
 
@@ -410,7 +440,6 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         let request = navigationAction.request
         let targetFrame = navigationAction.targetFrame;
         let host = request.url?.host
-        //let relative = request.url?.relativePath ?? ""
         let query = request.url?.query ?? ""
         let scheme = request.url?.scheme ?? ""
         let absolute = request.url?.absoluteString
@@ -433,10 +462,10 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
                 //messages
                 switch(host){
                     case "push":
-                        let params = self.urlDecode(query)?.components(separatedBy: "|")
-                        if ("PayWithMyBank.createTransaction" == params?[0]) && bankSelectedHandler != nil {
-                            if params?.count ?? 0 > 1 {
-                                establishData?["paymentProviderId"] = params?[1]
+                        let params = urlDecode(query).components(separatedBy: "|")
+                        if ("PayWithMyBank.createTransaction" == params[0]) && bankSelectedHandler != nil {
+                            if params.count > 1 {
+                                establishData?["paymentProviderId"] = params[1]
                             }
                             
                             if let establishData = establishData {
@@ -485,33 +514,6 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         }
     }
 
-    func getEndpointUrl(function:String, establishData:[String:String]) -> String {
-        var fn = function
-        let env = establishData["env"]
-        let localUrl = establishData["localUrl"]
-        var subDomain = ""
-        var url:String
-
-        if env != nil && env!.count > 0 {
-            subDomain = String(format:"%@.", env!)
-        }
-
-        if  "index" == fn &&
-            "Verification" != establishData["paymentType"] &&
-            establishData["paymentType"] != nil {
-            fn = "selectBank"
-        }
-
-        if ("local" == env), let urlLocal = localUrl {
-            url = "http://"+urlLocal+"/start/selectBank/"+fn+"?v="+build+"-ios-sdk"
-            isLocalEnvironment = true
-            
-        } else {
-            url = "https://"+subDomain+"paywithmybank.com/start/selectBank/"+fn+"?v="+build+"-ios-sdk"
-        }
-        return url
-    }
-
     func parametersForUrl(_ url:URL) -> [AnyHashable : Any] {
         let absoluteString = url.absoluteString
         var queryStringDictionary = [String : String]()
@@ -554,36 +556,6 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         let grpInt:Int = Int(arc4random_uniform(100))
         grp = String(format:"%d", grpInt)
         return grp
-    }
-    
-    private func toString(_ object: Any?) -> String? {
-        if let object = object {
-            return "\(object)"
-        }
-        return nil
-    }
-
-    private func urlEncode(_ object: Any?) -> String? {
-        let str = toString(object)
-        let set = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ0123456789-._~")
-
-        return str?.addingPercentEncoding(withAllowedCharacters: set)
-    }
-
-    private func urlDecode(_ object: Any?) -> String? {
-        let string = toString(object)
-
-        return string?.removingPercentEncoding
-    }
-
-
-    func urlEncoded(_ data:[AnyHashable : Any?]) -> String! {
-        var parts = [String]()
-        for (key,value) in data {
-            let part = String(format:"%@=%@", urlEncode(key)!, urlEncode(value)!)
-            parts.append(part)
-         }
-        return parts.joined(separator: "&")
     }
     
     private func addSessionCid() {
