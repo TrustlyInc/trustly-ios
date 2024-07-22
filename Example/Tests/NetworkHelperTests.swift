@@ -130,4 +130,27 @@ final class NetworkHelperTests: XCTestCase {
         XCTAssertEqual(expectedIsLocal, environment.isLocal)
         XCTAssertEqual(expectedUrl, environment.url)
     }
+    
+    func testUrlEncoded() throws {
+        
+        let data:[AnyHashable : Any] = [
+            "param1": "\nvalue1"
+        ]
+        
+        let expectedResult = "param1=%0Avalue1"
+        let result = urlEncoded(data)
+        
+        XCTAssertEqual(expectedResult, result)
+    }
+    
+    func testUrlDecoded() throws {
+        
+        let content = "%0Avalue1"
+        
+        let result = urlDecode(content)
+        
+        let expectedResult = "\nvalue1"
+        
+        XCTAssertEqual(expectedResult, result)
+    }
 }

@@ -60,3 +60,38 @@ func buildEnvironment(function: String, environment: String, localUrl: String, p
 func isLocalUrl(environment: String) -> Bool {
     return !environment.isEmpty && "local" == environment
 }
+
+/** @abstract Merge, format and encode all parameters.
+ @param data:[AnyHashable : Any]
+ @result String
+ */
+func urlEncoded(_ data:[AnyHashable : Any]) -> String {
+    var parts = [String]()
+    for (key,value) in data {
+        let part = String(format:"%@=%@", urlEncode(key), urlEncode(value))
+        parts.append(part)
+     }
+    return parts.joined(separator: "&")
+}
+
+/** @abstract Remove all Percent encoding.
+ @param object: Any
+ @result String
+ */
+func urlDecode(_ object: Any) -> String {
+    guard let str = object as? String else { return "" }
+
+    return str.removingPercentEncoding ?? ""
+}
+
+/** @abstract Add all Percent encoding.
+ @param object: Any
+ @result String
+ */
+private func urlEncode(_ object: Any) -> String {
+    guard let str = object as? String else { return "" }
+    
+    let set = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ0123456789-._~")
+
+    return str.addingPercentEncoding(withAllowedCharacters: set) ?? ""
+}

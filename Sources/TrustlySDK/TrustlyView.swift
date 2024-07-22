@@ -461,10 +461,10 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
                 //messages
                 switch(host){
                     case "push":
-                        let params = self.urlDecode(query)?.components(separatedBy: "|")
-                        if ("PayWithMyBank.createTransaction" == params?[0]) && bankSelectedHandler != nil {
-                            if params?.count ?? 0 > 1 {
-                                establishData?["paymentProviderId"] = params?[1]
+                        let params = urlDecode(query).components(separatedBy: "|")
+                        if ("PayWithMyBank.createTransaction" == params[0]) && bankSelectedHandler != nil {
+                            if params.count > 1 {
+                                establishData?["paymentProviderId"] = params[1]
                             }
                             
                             if let establishData = establishData {
@@ -555,36 +555,6 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         let grpInt:Int = Int(arc4random_uniform(100))
         grp = String(format:"%d", grpInt)
         return grp
-    }
-    
-    private func toString(_ object: Any?) -> String? {
-        if let object = object {
-            return "\(object)"
-        }
-        return nil
-    }
-
-    private func urlEncode(_ object: Any?) -> String? {
-        let str = toString(object)
-        let set = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ0123456789-._~")
-
-        return str?.addingPercentEncoding(withAllowedCharacters: set)
-    }
-
-    private func urlDecode(_ object: Any?) -> String? {
-        let string = toString(object)
-
-        return string?.removingPercentEncoding
-    }
-
-
-    func urlEncoded(_ data:[AnyHashable : Any?]) -> String! {
-        var parts = [String]()
-        for (key,value) in data {
-            let part = String(format:"%@=%@", urlEncode(key)!, urlEncode(value)!)
-            parts.append(part)
-         }
-        return parts.joined(separator: "&")
     }
     
     private func addSessionCid() {
