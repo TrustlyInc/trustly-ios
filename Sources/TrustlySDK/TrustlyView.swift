@@ -170,7 +170,9 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
                 environment: (eD["env"] ?? "") as! String,
                 localUrl: (eD["localUrl"] ?? "") as! String,
                 paymentType: (eD["paymentType"] ?? "") as! String,
-                build: build
+                build: build,
+                query: query,
+                hash: hash
             )
             
             isLocalEnvironment = environment.isLocal

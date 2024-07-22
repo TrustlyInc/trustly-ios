@@ -20,7 +20,7 @@ enum NetworkError: Error {
  @throws NetworkError.invalidUrl
  @result (url: URL, isLocal: Bool)
  */
-func buildEnvironment(function: String, environment: String, localUrl: String, paymentType: String, build: String) throws -> (url: URL, isLocal: Bool)  {
+func buildEnvironment(function: String, environment: String, localUrl: String, paymentType: String, build: String, query: [String : Any]? = nil, hash: [String : Any]? = nil) throws -> (url: URL, isLocal: Bool)  {
     var fn = function
     var subDomain = ""
     var urlString = ""
@@ -43,6 +43,14 @@ func buildEnvironment(function: String, environment: String, localUrl: String, p
 
     } else {
         urlString = "https://\(subDomain)paywithmybank.com/start/selectBank/\(fn)?v=\(build)-ios-sdk"
+    }
+    
+    if let query = query {
+        urlString = "\(urlString)&\(urlEncoded(query))"
+    }
+    
+    if let hash = hash {
+        urlString = "\(urlString)#\(urlEncoded(hash))"
     }
     
     guard let url = URL(string: urlString) else {
