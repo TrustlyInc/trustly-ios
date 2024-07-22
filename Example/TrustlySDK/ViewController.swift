@@ -85,7 +85,7 @@ extension ViewController: TrustlyLightboxViewProtocol {
     
     // MARK: - Alert functions
     private func showAlert(title: String, message: String){
-        var dialogMessage = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let dialogMessage = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
         // Create OK button with action handler
         let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
