@@ -438,7 +438,6 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         let request = navigationAction.request
         let targetFrame = navigationAction.targetFrame;
         let host = request.url?.host
-        //let relative = request.url?.relativePath ?? ""
         let query = request.url?.query ?? ""
         let scheme = request.url?.scheme ?? ""
         let absolute = request.url?.absoluteString
