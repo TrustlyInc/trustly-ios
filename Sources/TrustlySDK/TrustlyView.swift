@@ -54,8 +54,8 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
     private var changeListenerHandler:TrustlyListenerCallback?
     private var establishData:[AnyHashable : Any]?
     private var mainWebView:WKWebView!
-    private var returnUrl = "msg://return"
-    private var cancelUrl = "msg://cancel"
+    private var returnUrl = Constants.RETURN_URL
+    private var cancelUrl = Constants.CANCEL_URL
     private var urlScheme = ""
     private var webSession: ASWebAuthenticationSession!
     private var baseUrls = ["paywithmybank.com", "trustly.one"]
@@ -199,8 +199,9 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         
         self.addSessionCid()
 
-        let deviceType = establishData?["deviceType"] ?? "mobile" + ":ios:native"
+        let deviceType = "\(establishData?["deviceType"] ?? Constants.DEVICE_TYPE):\(Constants.DEVICE_PLATFORM)"
         establishData?["deviceType"] = deviceType
+        
         if let lang = establishData?["metadata.lang"] as? String {
             establishData?["lang"] = lang
         }
@@ -212,11 +213,11 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         }
         
         
-        returnUrl = "msg://return"
+        returnUrl = Constants.RETURN_URL
         establishData?["returnUrl"] = returnUrl
-        cancelUrl = "msg://cancel"
+        cancelUrl = Constants.CANCEL_URL
         establishData?["cancelUrl"] = cancelUrl
-        establishData?["version"] = "2"
+        establishData?["version"] = Constants.ESTABLISH_VERSION
         establishData?["grp"] = self.getGrp()
 
         if establishData?["paymentProviderId"] != nil {
@@ -298,7 +299,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
     
     public func verify(verifyData:[AnyHashable : Any], onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) -> UIView? {
         var mutableDictionary = verifyData
-        mutableDictionary["paymentType"] = "Verification"
+        mutableDictionary["paymentType"] = Constants.PAYMENTTYPE_VERIFICATION
         
         return establish(establishData: mutableDictionary, onReturn:onReturn, onCancel:onCancel)
     }
