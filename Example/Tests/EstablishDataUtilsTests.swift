@@ -47,7 +47,8 @@ final class EstablishDataUtilsTests: XCTestCase {
             "transactionType": "1",
             "merchantReference": "g:cac73df7-52b4-47d7-89d3-9628d4cfb65e",
             "payment": ["paymentProvider": ["type" : "1"]],
-            "requestSignature": "E0rbmsl4KOORibvsHoDvfqIqlaQ%3D"
+            "requestSignature": "E0rbmsl4KOORibvsHoDvfqIqlaQ%3D",
+            "url": self.urlWithParamters
         ]
         
         let normalizedEstablish = EstablishDataUtils.buildEstablishFrom(urlWithParameters: self.urlWithParamters)

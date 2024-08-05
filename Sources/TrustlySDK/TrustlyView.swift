@@ -208,7 +208,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
             establishData?["lang"] = lang
         }
         
-        establishData?["metadata.sdkIOSVersion"] = build
+        establishData?["metadata.sdkIOSVersion"] = Constants.buildSDK
         
         if establishData?.index(forKey: "metadata.integrationContext") == nil {
             establishData?["metadata.integrationContext"] = inAppIntegrationContext
@@ -305,7 +305,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
              establishData?["lang"] = lang
          }
          
-         establishData?["metadata.sdkIOSVersion"] = build
+         establishData?["metadata.sdkIOSVersion"] = Constants.buildSDK
          
          if establishData?.index(forKey: "metadata.integrationContext") == nil {
              establishData?["metadata.integrationContext"] = inAppIntegrationContext

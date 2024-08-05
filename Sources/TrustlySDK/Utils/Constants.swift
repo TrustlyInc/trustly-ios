@@ -9,7 +9,14 @@ import Foundation
 
 
 struct Constants {
-    static let buildSDK = "3.1.1"
+    static let buildSDK = "3.2.2"
     static let baseDomain = "paywithmybank.com"
+    
+    static let RETURN_URL = "msg://return"
+    static let CANCEL_URL = "msg://cancel"
+    static let ESTABLISH_VERSION = "2"
+    static let DEVICE_TYPE = "mobile"
+    static let DEVICE_PLATFORM = "ios:native"
+    static let PAYMENTTYPE_VERIFICATION = "Verification"
     
 }

@@ -56,11 +56,9 @@ struct URLUtils {
     }
 
     private static func buildStringUrl(httpProtocol: String, domain: String, resource: ResourceUrls, build: String, _ isAppLocation: Bool) -> String {
-        var location = isAppLocation ? "app" : "selectBank"
+        let location = isAppLocation ? "app" : "selectBank"
                 
         return "\(httpProtocol)://\(domain)/start/\(location)/\(resource.rawValue)?v=\(build)-ios-sdk"
-        // http://192.168.0.118:8000/start/app/establish?accessId=A48B73F694C4C8EE6306&token=ewo[…]2tEZFU5eHNrUUt0T3NIL3BNPSIsCiAgICAibGFuZyI6ICJlbl9VUyIKfQ==
-        // https://sandbox.paywithmybank.com/start/selectBank/widget?v=3.1.1-ios-sdk
     }
     
     
