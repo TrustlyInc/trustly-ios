@@ -87,9 +87,6 @@ class ViewController: UIViewController {
             establishData["customer.email"] = emailText
 
         }
-
-        self.openLightboxASWebAuthentication()
-        
     }
     
     private func openLightbox(){
