@@ -25,7 +25,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="14" translatesAutoresizingMaskIntoConstraints="NO" id="89n-Hd-53n">
-                                        <rect key="frame" x="20" y="20" width="361" height="785.66666666666663"/>
+                                        <rect key="frame" x="20" y="20" width="361" height="736.66666666666663"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Amount:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d2S-eh-Amc">
                                                 <rect key="frame" x="0.0" y="0.0" width="361" height="20.333333333333332"/>
@@ -62,23 +62,8 @@
                                                     <constraint firstAttribute="height" constant="523" id="EoN-h3-Uwt"/>
                                                 </constraints>
                                             </view>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Sh-Ok-y02">
-                                                <rect key="frame" x="0.0" y="701.66666666666663" width="361" height="35"/>
-                                                <color key="backgroundColor" red="0.38340717549999997" green="0.80894964930000002" blue="0.0064765461719999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="35" id="sWW-eC-Rku"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                <state key="normal" title="Pay with AESWebAuth">
-                                                    <color key="titleColor" systemColor="secondarySystemBackgroundColor"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="payWithAESWebAuth:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="ftc-Wa-7LA"/>
-                                                </connections>
-                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WfQ-1e-DhH">
-                                                <rect key="frame" x="0.0" y="750.66666666666663" width="361" height="35"/>
+                                                <rect key="frame" x="0.0" y="701.66666666666663" width="361" height="35"/>
                                                 <color key="backgroundColor" red="0.38340717549999997" green="0.80894964930000002" blue="0.0064765461719999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="35" id="zvL-q0-xKE"/>

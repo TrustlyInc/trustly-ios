@@ -100,26 +100,7 @@ class ViewController: UIViewController {
 
         self.present(trustlyLightboxViewController, animated: true)
         
-    }
-    
-    private func openLightboxASWebAuthentication(){
-        let trustlyLightboxPanel = TrustlyView()
-        
-        trustlyLightboxPanel.establishASWebAuthentication(establishData: establishData,
-                                                   onReturn: {(trustlyView, returnParameters)->Void in
-            if let transactionId = returnParameters["transactionId"] {
-                self.showSuccessView(transactionId: transactionId as! String)
-            } else {
-                self.showFailureAlert()
-            }
-            
-        }, onCancel: {(payWithMyBank, returnParameters)->Void in
-            _ = returnParameters as! [String:String]
-            self.showFailureAlert()
-        })
-            
-    }
-    
+    }    
 }
 
 extension ViewController: TrustlyLightboxViewProtocol {
