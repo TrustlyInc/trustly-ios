@@ -32,6 +32,10 @@ struct APIRequest {
         return "https://\(Constants.baseDomain)/\(address)"
     }
     
+    /** @abstract Returns all configuration that sdk should considerer to run.
+     @param address: TrustlyAddress
+     @param completionHandler: @escaping(TrustlyConfig?) -> Void
+     */
     static func getTrustlyConfig(address: TrustlyAddress, completionHandler: @escaping(TrustlyConfig?) -> Void) {
 // TODO: Uncomment these lines when the backend is ready
 //        let session = URLSession.shared

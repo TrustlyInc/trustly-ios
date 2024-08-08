@@ -49,6 +49,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
     private var sessionCid = "ios wrong sessionCid"
     private var cid = "ios wrong cid"
     private var isLocalEnvironment = false
+    private var trustlyConfig: TrustlyConfig? = nil
 
     
     //Constructors
@@ -71,6 +72,8 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
     }
 
     func initView() {
+        self.getTrustlyConfig()
+        
         self.createNotifications()
         
         if let tempCid = generateCid() {
@@ -182,8 +185,24 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         
         return self
     }
-
+    
+    /** @abstract This function is responsible to open the lightbox, according to TrustlyConfig service. If the context of the lightbox is `web view`, this function will
+     return a UIView instance with a WebView embedded, in case the context valeu be `in-app-browser`, this function will return a empty UIView, andwill open the
+     lightbox in an ASWebAuthentication instance.
+     @param establishData eD: [AnyHashable : Any]
+     @param onReturn: TrustlyCallback?
+     @param onCancel: TrustlyCallback?
+     */
     public func establish(establishData eD: [AnyHashable : Any], onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) -> UIView? {
+        
+        if let settings = trustlyConfig?.settings, settings.lightbox.context == Constants.LIGHTBOX_CONTEXT_INAPP {
+            return self.establishASWebAuthentication(establishData: eD, onReturn: onReturn, onCancel: onCancel)
+        }
+        
+        return self.establishWebView(establishData: eD, onReturn: onReturn, onCancel: onCancel)
+    }
+
+    private func establishWebView(establishData eD: [AnyHashable : Any], onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) -> UIView? {
         establishData = eD
         
         self.addSessionCid()
@@ -273,7 +292,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         return self
     }
     
-    public func establishASWebAuthentication(establishData eD: [AnyHashable : Any], onReturn: TrustlyCallback?, onCancel: TrustlyCallback?){
+    private func establishASWebAuthentication(establishData eD: [AnyHashable : Any], onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) -> UIView? {
          establishData = eD
          
          self.addSessionCid()
@@ -341,6 +360,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
             print("Error: building url.")
         }
 
+        return UIView()
      }
 
     public func hybrid(url address : String, returnUrl: String, onReturn: TrustlyCallback?, cancelUrl: String, onCancel: TrustlyCallback?)  -> UIView? {
@@ -715,6 +735,12 @@ extension TrustlyView {
         }
         
         return false
+    }
+    
+    private func getTrustlyConfig() {
+        APIRequest.getTrustlyConfig(address: .trustlyConfig) { trustlyConfig in
+            self.trustlyConfig = trustlyConfig
+        }
     }
 }
 
