@@ -17,26 +17,11 @@ final class NetworkHelperTests: XCTestCase {
     override func tearDownWithError() throws {
         
     }
-
-    func testIsLocalEnvironment() throws {
-        
-        var expectedResult = true
-        
-        var result = isLocalUrl(environment: "local")
-
-        XCTAssertEqual(expectedResult, result)
-        
-        expectedResult = false
-        
-        result = isLocalUrl(environment: "sandbox")
-
-        XCTAssertEqual(expectedResult, result)
-    }
     
     func testThrowsInvalidUrlError() throws {
         
         XCTAssertThrowsError(try buildEnvironment(
-            function: "widget",
+            resourceUrl: .widget,
             environment: "<sandbox>",
             localUrl: "",
             paymentType: "Retrieval",
@@ -49,7 +34,7 @@ final class NetworkHelperTests: XCTestCase {
     func testBuildLocalEnvironment() throws {
         
         let environment = try buildEnvironment(
-            function: "widget",
+            resourceUrl: .widget,
             environment: "local",
             localUrl: "192.168.0.1",
             paymentType: "Retrieval",
@@ -66,7 +51,7 @@ final class NetworkHelperTests: XCTestCase {
     func testBuildLocalHostEnvironment() throws {
         
         let environment = try buildEnvironment(
-            function: "widget",
+            resourceUrl: .widget,
             environment: "local",
             localUrl: "",
             paymentType: "Retrieval",
@@ -83,7 +68,7 @@ final class NetworkHelperTests: XCTestCase {
     func testBuildDynamicEnvironment() throws {
         
         let environment = try buildEnvironment(
-            function: "widget",
+            resourceUrl: .widget,
             environment: "dynamic",
             localUrl: "trustlyTest",
             paymentType: "Retrieval",
@@ -100,7 +85,7 @@ final class NetworkHelperTests: XCTestCase {
     func testBuildSandboxEnvironment() throws {
         
         let environment = try buildEnvironment(
-            function: "widget",
+            resourceUrl: .widget,
             environment: "sandbox",
             localUrl: "",
             paymentType: "Retrieval",
@@ -117,7 +102,7 @@ final class NetworkHelperTests: XCTestCase {
     func testBuildProductionEnvironment() throws {
         
         let environment = try buildEnvironment(
-            function: "widget",
+            resourceUrl: .widget,
             environment: "",
             localUrl: "",
             paymentType: "Retrieval",
@@ -130,27 +115,5 @@ final class NetworkHelperTests: XCTestCase {
         XCTAssertEqual(expectedIsLocal, environment.isLocal)
         XCTAssertEqual(expectedUrl, environment.url)
     }
-    
-    func testUrlEncoded() throws {
-        
-        let data:[AnyHashable : Any] = [
-            "param1": "\nvalue1"
-        ]
-        
-        let expectedResult = "param1=%0Avalue1"
-        let result = urlEncoded(data)
-        
-        XCTAssertEqual(expectedResult, result)
-    }
-    
-    func testUrlDecoded() throws {
-        
-        let content = "%0Avalue1"
-        
-        let result = urlDecode(content)
-        
-        let expectedResult = "\nvalue1"
-        
-        XCTAssertEqual(expectedResult, result)
-    }
+
 }

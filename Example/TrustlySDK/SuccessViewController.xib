@@ -47,7 +47,7 @@
                     <buttonConfiguration key="configuration" style="plain" title="New transaction"/>
                     <connections>
                         <action selector="newTransaction:" destination="-2" eventType="touchUpInside" id="FrB-QY-8uQ"/>
-                        <action selector="newTransaction:" destination="-1" eventType="touchUpInside" id="u8Q-7S-pms"/>
+                        <action selector="newTransaction:" destination="-1" eventType="touchUpInside" id="qzF-6K-FMi"/>
                     </connections>
                 </button>
             </subviews>

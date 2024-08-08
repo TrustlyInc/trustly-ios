@@ -10,14 +10,13 @@
 		152541E62B7E74B20029F149 /* EstablishDataUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152541E52B7E74B20029F149 /* EstablishDataUtilsTests.swift */; };
 		1587AB912A2FE043006F6FC3 /* SessionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1587AB902A2FE043006F6FC3 /* SessionManagerTests.swift */; };
 		15987B0929DEF79D00D7A395 /* TrustlyLightBoxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15987B0829DEF79D00D7A395 /* TrustlyLightBoxViewController.swift */; };
-		15BEC9B42C383FB900050FB9 /* ValidationHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15BEC9B32C383FB900050FB9 /* ValidationHelperTests.swift */; };
-		15D96FB32C46E6B700296BC4 /* NetworkHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D96FB22C46E6B700296BC4 /* NetworkHelperTests.swift */; };
-		340657DFE7244067A8F33A0D /* Pods_TrustlySDK_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C63286550C0E975AC9573DF /* Pods_TrustlySDK_Example.framework */; };
 		15BB98602B68120100A9210B /* URLUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15BB985F2B68120100A9210B /* URLUtilsTests.swift */; };
 		15BEC9B42C383FB900050FB9 /* ValidationHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15BEC9B32C383FB900050FB9 /* ValidationHelperTests.swift */; };
 		15C29FB62C6165480037C239 /* SuccessViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15C29FB52C6165480037C239 /* SuccessViewController.xib */; };
 		15C29FB82C6165570037C239 /* SuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C29FB72C6165570037C239 /* SuccessViewController.swift */; };
+		15D96FB32C46E6B700296BC4 /* NetworkHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D96FB22C46E6B700296BC4 /* NetworkHelperTests.swift */; };
 		15E049852B7510BA0084B71A /* JsonUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15E049842B7510BA0084B71A /* JsonUtilsTests.swift */; };
+		340657DFE7244067A8F33A0D /* Pods_TrustlySDK_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C63286550C0E975AC9573DF /* Pods_TrustlySDK_Example.framework */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
@@ -44,12 +43,11 @@
 		152541E52B7E74B20029F149 /* EstablishDataUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EstablishDataUtilsTests.swift; sourceTree = "<group>"; };
 		1587AB902A2FE043006F6FC3 /* SessionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManagerTests.swift; sourceTree = "<group>"; };
 		15987B0829DEF79D00D7A395 /* TrustlyLightBoxViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrustlyLightBoxViewController.swift; sourceTree = "<group>"; };
-		15BEC9B32C383FB900050FB9 /* ValidationHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationHelperTests.swift; sourceTree = "<group>"; };
-		15D96FB22C46E6B700296BC4 /* NetworkHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkHelperTests.swift; sourceTree = "<group>"; };
 		15BB985F2B68120100A9210B /* URLUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLUtilsTests.swift; sourceTree = "<group>"; };
 		15BEC9B32C383FB900050FB9 /* ValidationHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationHelperTests.swift; sourceTree = "<group>"; };
 		15C29FB52C6165480037C239 /* SuccessViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SuccessViewController.xib; sourceTree = "<group>"; };
 		15C29FB72C6165570037C239 /* SuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessViewController.swift; sourceTree = "<group>"; };
+		15D96FB22C46E6B700296BC4 /* NetworkHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkHelperTests.swift; sourceTree = "<group>"; };
 		15E049842B7510BA0084B71A /* JsonUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonUtilsTests.swift; sourceTree = "<group>"; };
 		2416E32056EECA07B4C86E1B /* TrustlySDK.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = TrustlySDK.podspec; path = ../TrustlySDK.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		4225824F0F3C24EF9803BCD1 /* Pods_TrustlySDK_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TrustlySDK_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -108,6 +106,24 @@
 			name = Views;
 			sourceTree = "<group>";
 		};
+		15C29FBC2C6533520037C239 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				152541E52B7E74B20029F149 /* EstablishDataUtilsTests.swift */,
+				15E049842B7510BA0084B71A /* JsonUtilsTests.swift */,
+				15BB985F2B68120100A9210B /* URLUtilsTests.swift */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
+		15C29FBD2C65336B0037C239 /* Session */ = {
+			isa = PBXGroup;
+			children = (
+				1587AB902A2FE043006F6FC3 /* SessionManagerTests.swift */,
+			);
+			name = Session;
+			sourceTree = "<group>";
+		};
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
@@ -154,11 +170,9 @@
 			isa = PBXGroup;
 			children = (
 				15BEC9B22C383F3600050FB9 /* Helpers */,
-				1587AB902A2FE043006F6FC3 /* SessionManagerTests.swift */,
-				15BB985F2B68120100A9210B /* URLUtilsTests.swift */,
+				15C29FBC2C6533520037C239 /* Utils */,
+				15C29FBD2C65336B0037C239 /* Session */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
-				15E049842B7510BA0084B71A /* JsonUtilsTests.swift */,
-				152541E52B7E74B20029F149 /* EstablishDataUtilsTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -267,10 +281,9 @@
 			};
 			buildConfigurationList = 607FACCB1AFB9204008FA782 /* Build configuration list for PBXProject "TrustlySDK" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				Base,
 			);

@@ -19,14 +19,6 @@ import WebKit
 import AuthenticationServices
 import SafariServices
 
-enum ResourceUrls: String {
-    case index = "index"
-    case widget = "widget"
-    case establish = "establish"
-    case selectBank = "selectBank"
-    
-}
-
 func Rgb2UIColor(_ r: CGFloat, _ g: CGFloat, _ b: CGFloat) -> UIColor {
     UIColor(red: r / 255.0, green: g / 255.0, blue: b / 255.0, alpha: 1.0)
 }
@@ -56,6 +48,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
     private let oauthLoginPath = "/oauth/login/"
     private var sessionCid = "ios wrong sessionCid"
     private var cid = "ios wrong cid"
+    private var isLocalEnvironment = false
 
     
     //Constructors
@@ -159,11 +152,11 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
 
         do {
             let environment = try buildEnvironment(
-                function: "widget",
+                resourceUrl: .widget,
                 environment: (eD["env"] ?? "") as! String,
                 localUrl: (eD["localUrl"] ?? "") as! String,
                 paymentType: (eD["paymentType"] ?? "") as! String,
-                build: build,
+                build: Constants.buildSDK,
                 query: query,
                 hash: hash
             )
@@ -171,8 +164,6 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
             isLocalEnvironment = environment.isLocal
             
             var request = URLRequest(url: environment.url)
-            let url = try URLUtils.buildEndpointUrl(function: "widget", establishData: establishData as! [String : String]) + "&" + urlEncoded(query) + "#" + urlEncoded(hash)
-            var request = URLRequest(url: URL(string: url)!)
 
             request.httpMethod = "GET"
             request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
@@ -182,13 +173,9 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
             self.mainWebView!.tag = WidgetView
             self.mainWebView!.load(request)
             
-        } catch TrustlyURLError.missingLocalUrl {
-            print("Error: When env is local, you must provide the localUrl.")
+        } catch NetworkError.invalidUrl {
+            print("Error: Invalid url.")
             
-        } catch {
-            print("Error: building url.")
-        }
-
         } catch {
             print("Unexpected error: \(error).")
         }
@@ -236,19 +223,16 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         
         do {
             let environment = try buildEnvironment(
-                function: "index",
+                resourceUrl: .index,
                 environment: (eD["env"] ?? "") as! String,
                 localUrl: (eD["localUrl"] ?? "") as! String,
                 paymentType: (eD["paymentType"] ?? "") as! String,
-                build: build
+                build: Constants.buildSDK
             )
             
             isLocalEnvironment = environment.isLocal
             
             var request = URLRequest(url: environment.url)
-            let url = try URLUtils.buildEndpointUrl(function: "index", establishData: establishData as! [String : String])
-            
-            var request = URLRequest(url: URL(string: url)!)
 
             request.httpMethod = "POST"
             request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
@@ -278,16 +262,11 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
             } else {
                 self.cancelHandler!(self, [:])
             }
+        } catch NetworkError.invalidUrl {
+            print("Error: Invalid url.")
+            
         } catch {
             print("Unexpected error: \(error).")
-        }
-
-            
-        } catch TrustlyURLError.missingLocalUrl {
-            print("Error: When env is local, you must provide the localUrl.")
-            
-        } catch {
-            print("Error: building url.")
         }
 
 
@@ -334,7 +313,18 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
          externalUrlHandler = nil
         
         do {
-            var url = try URLUtils.buildEndpointUrl(resourceUrl: .establish, establishData: establishData as! [String : String], isAppLocation: true)
+            let environment = try buildEnvironment(
+                resourceUrl: .establish,
+                environment: (eD["env"] ?? "") as! String,
+                localUrl: (eD["localUrl"] ?? "") as! String,
+                paymentType: (eD["paymentType"] ?? "") as! String,
+                build: Constants.buildSDK,
+                path: .app
+            )
+            
+            isLocalEnvironment = environment.isLocal
+            
+            var url = environment.url.absoluteString
             
             let normalizedEstablish:[String : AnyHashable] = EstablishDataUtils.normalizeEstablishWithDotNotation(establish: establishData as! [String : AnyHashable])
             
@@ -344,8 +334,8 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
                 self.buildASWebAuthenticationSession(url: URL(string: url)!, callbackURL: urlScheme, onReturn: onReturn, onCancel: onCancel)
             }
             
-        } catch TrustlyURLError.missingLocalUrl {
-            print("Error: When env is local, you must provide the localUrl.")
+        } catch NetworkError.invalidUrl {
+            print("Error: Invalid url.")
             
         } catch {
             print("Error: building url.")
@@ -536,10 +526,10 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
                 //messages
                 switch(host){
                     case "push":
-                    let params = URLUtils.urlDecode(query)?.components(separatedBy: "|")
-                        if ("PayWithMyBank.createTransaction" == params?[0]) && bankSelectedHandler != nil {
-                            if params?.count ?? 0 > 1 {
-                                establishData?["paymentProviderId"] = params?[1]
+                    let params = URLUtils.urlDecode(query).components(separatedBy: "|")
+                    if ("PayWithMyBank.createTransaction" == params[0]) && bankSelectedHandler != nil {
+                        if params.count > 1 {
+                            establishData?["paymentProviderId"] = params[1]
                             }
                             
                             if let establishData = establishData {
@@ -657,7 +647,7 @@ extension TrustlyView {
         let path = url.path
         
         //1.1: On the main view creates a new OAuth view (new WKWebview) and opens the URL there
-        if URLUtils.isLocalEnvironment || (self.checkUrl(host: host) &&
+        if self.isLocalEnvironment || (self.checkUrl(host: host) &&
             path.contains(self.oauthLoginPath)) {
 
             self.buildASWebAuthenticationSession(url: url, callbackURL: urlScheme)
