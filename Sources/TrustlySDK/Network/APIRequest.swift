@@ -70,7 +70,7 @@ struct APIRequest {
 //        }
 
 // TODO: Delete all code bellow when the backend is ready
-        
+        sleep(4)
         let stringJson = """
                     {
                       "settings": {
@@ -80,7 +80,7 @@ struct APIRequest {
                       }
                     }
         """
-        
+        print(stringJson)
         do {
             let data = Data(stringJson.utf8)
             let trustlyConfig = try JSONDecoder().decode(TrustlyConfig.self, from: data)

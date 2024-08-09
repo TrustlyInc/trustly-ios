@@ -20,6 +20,26 @@ class TrustlyLightBoxViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        let trustlyLightboxPanel = TrustlyView()
+//        
+//        if let establishData = self.establishData {
+//            self.view = trustlyLightboxPanel.establish(establishData: establishData,
+//                                                       onReturn: {(payWithMyBank, returnParameters)->Void in
+//                let response = returnParameters as! [String:String]
+//                self.delegate?.onReturnWithTransactionId(transactionId: response["transactionId"]!, controller: self)
+//                
+//            }, onCancel: {(payWithMyBank, returnParameters)->Void in
+//                let response = returnParameters as! [String:String]
+//                self.delegate?.onCancelWithTransactionId(transactionId: response["transactionId"] ?? "No Transaction ID", controller: self)
+//            })
+//            
+//        } else {
+//            self.delegate?.onCancelWithTransactionId(transactionId: "Empty establishData", controller: self)
+//        }
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
         let trustlyLightboxPanel = TrustlyView()
         
         if let establishData = self.establishData {
@@ -36,6 +56,5 @@ class TrustlyLightBoxViewController: UIViewController {
         } else {
             self.delegate?.onCancelWithTransactionId(transactionId: "Empty establishData", controller: self)
         }
-        
     }
 }
