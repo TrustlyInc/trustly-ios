@@ -12,10 +12,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var trustlyView: TrustlyView!
     @IBOutlet weak var amountTextView: UITextField!
     @IBOutlet weak var emailTextView: UITextField!
-    var enrollmentId: String?
+
     var alertObj:UIAlertController?
     var establishData:Dictionary<AnyHashable,Any> = [:]
-    var trustlyPanel = TrustlyView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
