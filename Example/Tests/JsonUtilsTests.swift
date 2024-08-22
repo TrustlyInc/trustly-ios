@@ -16,8 +16,8 @@ final class JsonUtilsTests: XCTestCase {
     override func setUp() {
         super.setUp()
         
-        self.establishData = ["accessId": "A48B73F694C4C8EE6306",
-                                "merchantId" : "110005514"]
+        self.establishData = ["accessId": "FakeAccessId",
+                                "merchantId" : "8827389273"]
         
     }
 
