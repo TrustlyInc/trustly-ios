@@ -10,6 +10,7 @@ import Foundation
 
 enum StorageHelper: String {
     case session_cid = "SESSION_CID"
+    case settings = "SETTINGS"
 }
 
 

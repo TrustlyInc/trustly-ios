@@ -22,4 +22,6 @@ struct Constants {
     static let LIGHTBOX_CONTEXT_INAPP = "in-app-browser"
     static let LIGHTBOX_CONTEXT_WEBVIEW = "web view"
     
+    static let SETTINGS_CACHE_TIME_LIMIT = 15 // minutes
+    
 }

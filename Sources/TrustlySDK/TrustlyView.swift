@@ -738,7 +738,8 @@ extension TrustlyView {
     }
     
     private func getTrustlyConfig(establish: [AnyHashable : Any]) {
-        APIRequest.getTrustlyConfigWith(establish: establish) { trustlyConfig in
+
+        getTrustlySettingsWith(establish: establish) { trustlyConfig in
             self.trustlyConfig = trustlyConfig
         }
     }

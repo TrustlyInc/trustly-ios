@@ -13,6 +13,22 @@ enum TrustlyAddress: String {
 
 struct TrustlyConfig: Codable, Hashable {
     let settings: Settings
+    var createdDateTime: Date?
+    
+    func isValid() -> Bool {
+        let dateNow = Date()
+        
+        if let createdTime = createdDateTime {
+            
+            let diffs = Calendar.current.dateComponents([.minute], from: createdTime, to: dateNow)
+            
+            if let minutes = diffs.minute {
+                return minutes < Constants.SETTINGS_CACHE_TIME_LIMIT
+            }
+        }
+        
+        return false
+    }
 }
 
 struct Settings: Codable, Hashable {
@@ -25,8 +41,6 @@ struct Lightbox: Codable, Hashable {
 
 
 struct APIRequest {
-    
-    static let TRUSTLY_CONFIG_ADDRESS = "trustlyConfig"
     
     private static func getUrl(address: String) -> String {
         return "https://\(Constants.baseDomain)/\(address)"
