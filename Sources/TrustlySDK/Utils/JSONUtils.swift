@@ -24,7 +24,7 @@ struct JSONUtils {
         return nil
     }
     
-    static func getJsonStringFrom(dictionary: [String : AnyHashable]) -> String? {
+    static private func getJsonStringFrom(dictionary: [String : AnyHashable]) -> String? {
         
         guard let jsonData = getJsonDataFrom(dictionary: dictionary) else { return nil }
 

@@ -22,15 +22,13 @@ final class JsonUtilsTests: XCTestCase {
     }
 
     
-    func testBuildJsonBase64() throws {
+    func testConvertDictionaryToJsonBase64AndJsonBase64ToDictionary() throws {
         
         let jsonStringBase64 = JSONUtils.getJsonBase64From(dictionary: self.establishData)!
         let newDictionary = JSONUtils.getDictionaryFrom(jsonStringBase64: jsonStringBase64)!
         
-        
         XCTAssertEqual(newDictionary, self.establishData)
                 
     }
-
 
 }
