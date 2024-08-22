@@ -72,8 +72,6 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
     }
 
     func initView() {
-        self.getTrustlyConfig()
-        
         self.createNotifications()
         
         if let tempCid = generateCid() {
@@ -194,6 +192,8 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
      @param onCancel: TrustlyCallback?
      */
     public func establish(establishData eD: [AnyHashable : Any], onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) -> UIView? {
+        
+        self.getTrustlyConfig(establish: eD)
         
         if let settings = trustlyConfig?.settings, settings.lightbox.context == Constants.LIGHTBOX_CONTEXT_INAPP {
             return self.establishASWebAuthentication(establishData: eD, onReturn: onReturn, onCancel: onCancel)
@@ -737,8 +737,8 @@ extension TrustlyView {
         return false
     }
     
-    private func getTrustlyConfig() {
-        APIRequest.getTrustlyConfig(address: .trustlyConfig) { trustlyConfig in
+    private func getTrustlyConfig(establish: [AnyHashable : Any]) {
+        APIRequest.getTrustlyConfigWith(establish: establish) { trustlyConfig in
             self.trustlyConfig = trustlyConfig
         }
     }
