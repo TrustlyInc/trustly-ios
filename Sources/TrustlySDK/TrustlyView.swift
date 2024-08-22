@@ -49,7 +49,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
     private var sessionCid = "ios wrong sessionCid"
     private var cid = "ios wrong cid"
     private var isLocalEnvironment = false
-    private var trustlyConfig: TrustlyConfig? = nil
+    private var trustlySettings: TrustlySettings? = nil
 
     
     //Constructors
@@ -184,7 +184,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         return self
     }
     
-    /** @abstract This function is responsible to open the lightbox, according to TrustlyConfig service. If the context of the lightbox is `web view`, this function will
+    /** @abstract This function is responsible to open the lightbox, according to TrustlySettings service. If the context of the lightbox is `web view`, this function will
      return a UIView instance with a WebView embedded, in case the context valeu be `in-app-browser`, this function will return a empty UIView, andwill open the
      lightbox in an ASWebAuthentication instance.
      @param establishData eD: [AnyHashable : Any]
@@ -193,9 +193,9 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
      */
     public func establish(establishData eD: [AnyHashable : Any], onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) -> UIView? {
         
-        self.getTrustlyConfig(establish: eD)
+        self.getTrustlySettings(establish: eD)
         
-        if let settings = trustlyConfig?.settings, settings.lightbox.context == Constants.LIGHTBOX_CONTEXT_INAPP {
+        if let settings = trustlySettings?.settings, settings.lightbox.context == Constants.LIGHTBOX_CONTEXT_INAPP {
             return self.establishASWebAuthentication(establishData: eD, onReturn: onReturn, onCancel: onCancel)
         }
         
@@ -737,10 +737,10 @@ extension TrustlyView {
         return false
     }
     
-    private func getTrustlyConfig(establish: [AnyHashable : Any]) {
+    private func getTrustlySettings(establish: [AnyHashable : Any]) {
 
-        getTrustlySettingsWith(establish: establish) { trustlyConfig in
-            self.trustlyConfig = trustlyConfig
+        getTrustlySettingsWith(establish: establish) { trustlySettings in
+            self.trustlySettings = trustlySettings
         }
     }
 }

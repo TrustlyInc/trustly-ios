@@ -8,35 +8,7 @@
 import Foundation
 
 enum TrustlyAddress: String {
-    case trustlyConfig = "settings"
-}
-
-struct TrustlyConfig: Codable, Hashable {
-    let settings: Settings
-    var createdDateTime: Date?
-    
-    func isValid() -> Bool {
-        let dateNow = Date()
-        
-        if let createdTime = createdDateTime {
-            
-            let diffs = Calendar.current.dateComponents([.minute], from: createdTime, to: dateNow)
-            
-            if let minutes = diffs.minute {
-                return minutes < Constants.SETTINGS_CACHE_TIME_LIMIT
-            }
-        }
-        
-        return false
-    }
-}
-
-struct Settings: Codable, Hashable {
-    let lightbox: Lightbox
-}
-
-struct Lightbox: Codable, Hashable {
-    let context: String
+    case trustlySettings = "settings"
 }
 
 
@@ -46,11 +18,11 @@ struct APIRequest {
         return "https://\(Constants.baseDomain)/\(address)"
     }
     
-    /** @abstract Returns all configuration that sdk should considerer to run.
+    /** @abstract Returns all settings that sdk should considerer to run.
      @param address: TrustlyAddress
-     @param completionHandler: @escaping(TrustlyConfig?) -> Void
+     @param completionHandler: @escaping(TrustlySettings?) -> Void
      */
-    static func getTrustlyConfigWith(establish: [AnyHashable : Any], completionHandler: @escaping(TrustlyConfig?) -> Void) {
+    static func getTrustlySettingsWith(establish: [AnyHashable : Any], completionHandler: @escaping(TrustlySettings?) -> Void) {
 // TODO: Uncomment these lines when the backend is ready
 //        let session = URLSession.shared
 //        
@@ -97,8 +69,8 @@ struct APIRequest {
         print(stringJson)
         do {
             let data = Data(stringJson.utf8)
-            let trustlyConfig = try JSONDecoder().decode(TrustlyConfig.self, from: data)
-            completionHandler(trustlyConfig)
+            let trustlySettings = try JSONDecoder().decode(TrustlySettings.self, from: data)
+            completionHandler(trustlySettings)
 
         } catch {
             print("Error parsing JSON: \(error)")
