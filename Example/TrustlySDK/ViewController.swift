@@ -11,7 +11,6 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var trustlyView: TrustlyView!
     @IBOutlet weak var amountTextView: UITextField!
-    @IBOutlet weak var emailTextView: UITextField!
 
     var alertObj:UIAlertController?
     var establishData:Dictionary<AnyHashable,Any> = [:]
@@ -19,22 +18,21 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.establishData = [
-                        "accessId": "A48B73F694C4C8EE6306",
-                        "merchantId" : "110005514",
-                        "currency" : "USD",
-                        "amount" : "1.00",
-                          "merchantReference" : "cac73df7-52b4-47d7-89d3-9628d4cfb65e",
-                          "paymentType" : "Retrieval",
-                          "returnUrl": "/returnUrl",
-                          "cancelUrl": "/cancelUrl",
-                          "requestSignature": "HT5mVOqBXa8ZlvgX2USmPeLns5o=",
-                          "customer.name": "John",
-                          "customer.address.country": "US",
-                          "metadata.urlScheme": "demoapp://",
-                          "description": "First Data Mobile Test",
-                          "env": "sandbox",
-                          "localUrl": "192.168.0.13:8000"]
+        self.establishData = ["accessId": "<ACCESS_ID>",
+                              "merchantId" : "<MERCHANT_ID>",
+                              "currency" : "USD",
+                              "amount" : "1.00",
+                              "merchantReference" : "<MERCHANT_REFERENCE>",
+                              "paymentType" : "Retrieval",
+                              "returnUrl": "/returnUrl",
+                              "cancelUrl": "/cancelUrl",
+                              "requestSignature": "<REQUEST_SIGNATURE>",
+                              "customer.name": "John",
+                              "customer.address.country": "US",
+                              "metadata.urlScheme": "demoapp://",
+                              "description": "First Data Mobile Test",
+                              "env": "<[int, sandbox, local]>",
+                              "localUrl": "<YOUR LOCAL URL WHEN `ENV` PROPERTY IS `LOCAL` (ex: 192.168.0.30:8000)>"]
 
         
         self.trustlyView.onChangeListener { (eventName, attributes) in
@@ -44,6 +42,8 @@ class ViewController: UIViewController {
         let _ = self.trustlyView.selectBankWidget(establishData: establishData) { (view, data) in
             print("returnParameters:\(data)")
             self.establishData = data
+            
+            self.openLightbox()
         }
 
     }
@@ -52,43 +52,16 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-    // MARK: - IBActions
     
-    @IBAction func pay(_ sender: Any) {
-
+    private func openLightbox(){
         if let amountText = amountTextView.text,
            let amount = Double(amountText) {
             
             establishData["amount"] = String(format: "%.2f", amount)
+        } else {
+            establishData["amount"] = "0.00"
         }
-
-        if let emailText = emailTextView.text, !emailText.isEmpty {
-
-            establishData["customer.email"] = emailText
-
-        }
-
-        self.openLightbox()
         
-    }
-    
-    @IBAction func payWithAESWebAuth(_ sender: Any) {
-
-        if let amountText = amountTextView.text,
-           let amount = Double(amountText) {
-
-            establishData["amount"] = String(format: "%.2f", amount)
-        }
-
-        if let emailText = emailTextView.text, !emailText.isEmpty {
-
-            establishData["customer.email"] = emailText
-
-        }
-    }
-    
-    private func openLightbox(){
         let trustlyLightboxViewController = TrustlyLightBoxViewController()
         trustlyLightboxViewController.delegate = self
         

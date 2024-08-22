@@ -25,7 +25,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="14" translatesAutoresizingMaskIntoConstraints="NO" id="89n-Hd-53n">
-                                        <rect key="frame" x="20" y="20" width="361" height="736.66666666666663"/>
+                                        <rect key="frame" x="20" y="20" width="361" height="605.33333333333337"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Amount:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d2S-eh-Amc">
                                                 <rect key="frame" x="0.0" y="0.0" width="361" height="20.333333333333332"/>
@@ -38,45 +38,13 @@
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
                                             </textField>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8wC-Jb-puF">
-                                                <rect key="frame" x="0.0" y="82.333333333333343" width="361" height="20.333333333333329"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="20.329999999999998" id="Eg4-f0-ndf"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="M8H-fq-r5J">
-                                                <rect key="frame" x="0.0" y="116.66666666666666" width="361" height="34"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="34" id="U4n-sG-Fgo"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits" textContentType="email"/>
-                                            </textField>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="guD-xS-eey" customClass="TrustlyView" customModule="TrustlySDK">
-                                                <rect key="frame" x="0.0" y="164.66666666666669" width="361" height="523"/>
+                                                <rect key="frame" x="0.0" y="82.333333333333371" width="361" height="523"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="523" id="EoN-h3-Uwt"/>
                                                 </constraints>
                                             </view>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WfQ-1e-DhH">
-                                                <rect key="frame" x="0.0" y="701.66666666666663" width="361" height="35"/>
-                                                <color key="backgroundColor" red="0.38340717549999997" green="0.80894964930000002" blue="0.0064765461719999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="35" id="zvL-q0-xKE"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                <state key="normal" title="Pay">
-                                                    <color key="titleColor" systemColor="secondarySystemBackgroundColor"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="pay:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="P3e-C9-kYa"/>
-                                                </connections>
-                                            </button>
                                         </subviews>
                                     </stackView>
                                 </subviews>
@@ -95,7 +63,6 @@
                     </view>
                     <connections>
                         <outlet property="amountTextView" destination="Iqf-hK-a3I" id="g7Q-KP-B1p"/>
-                        <outlet property="emailTextView" destination="M8H-fq-r5J" id="Ee5-4P-MXj"/>
                         <outlet property="trustlyView" destination="guD-xS-eey" id="YxX-cB-xV5"/>
                     </connections>
                 </viewController>
@@ -105,9 +72,6 @@
         </scene>
     </scenes>
     <resources>
-        <systemColor name="secondarySystemBackgroundColor">
-            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
