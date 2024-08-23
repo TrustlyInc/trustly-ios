@@ -183,185 +183,6 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         
         return self
     }
-    
-    /** @abstract This function is responsible to open the lightbox, according to TrustlySettings service. If the context of the lightbox is `web view`, this function will
-     return a UIView instance with a WebView embedded, in case the context valeu be `in-app-browser`, this function will return a empty UIView, andwill open the
-     lightbox in an ASWebAuthentication instance.
-     @param establishData eD: [AnyHashable : Any]
-     @param onReturn: TrustlyCallback?
-     @param onCancel: TrustlyCallback?
-     */
-    public func establish(establishData eD: [AnyHashable : Any], onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) -> UIView? {
-        
-        self.getTrustlySettings(establish: eD)
-        
-        if let settings = trustlySettings?.settings, settings.lightbox.context == Constants.LIGHTBOX_CONTEXT_INAPP {
-            return self.establishASWebAuthentication(establishData: eD, onReturn: onReturn, onCancel: onCancel)
-        }
-        
-        return self.establishWebView(establishData: eD, onReturn: onReturn, onCancel: onCancel)
-    }
-
-    private func establishWebView(establishData eD: [AnyHashable : Any], onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) -> UIView? {
-        establishData = eD
-        
-        self.addSessionCid()
-
-        let deviceType = "\(establishData?["deviceType"] ?? Constants.DEVICE_TYPE):\(Constants.DEVICE_PLATFORM)"
-        establishData?["deviceType"] = deviceType
-        
-        if let lang = establishData?["metadata.lang"] as? String {
-            establishData?["lang"] = lang
-        }
-        
-        establishData?["metadata.sdkIOSVersion"] = Constants.buildSDK
-        
-        if establishData?.index(forKey: "metadata.integrationContext") == nil {
-            establishData?["metadata.integrationContext"] = inAppIntegrationContext
-        }
-        
-        
-        returnUrl = Constants.RETURN_URL
-        establishData?["returnUrl"] = returnUrl
-        cancelUrl = Constants.CANCEL_URL
-        establishData?["cancelUrl"] = cancelUrl
-        establishData?["version"] = Constants.ESTABLISH_VERSION
-        establishData?["grp"] = self.getGrp()
-
-        if establishData?["paymentProviderId"] != nil {
-            establishData?["widgetLoaded"] = "true"
-        }
-        
-        if let scheme = establishData?["metadata.urlScheme"] as? String {
-            self.urlScheme = scheme.components(separatedBy: ":")[0]
-        }
-        
-        returnHandler = onReturn
-        cancelHandler = onCancel
-        externalUrlHandler = nil
-        
-        do {
-            let environment = try buildEnvironment(
-                resourceUrl: .index,
-                environment: (eD["env"] ?? "") as! String,
-                localUrl: (eD["localUrl"] ?? "") as! String,
-                paymentType: (eD["paymentType"] ?? "") as! String,
-                build: Constants.buildSDK
-            )
-            
-            isLocalEnvironment = environment.isLocal
-            
-            var request = URLRequest(url: environment.url)
-
-            request.httpMethod = "POST"
-            request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
-            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField:"Content-Type")
-
-            let requestData = URLUtils.urlEncoded(establishData!).data(using: .utf8)
-
-            request.setValue(String(format:"%lu", requestData!.count), forHTTPHeaderField:"Content-Length")
-            request.httpBody = requestData
-            
-            let semaphore = DispatchSemaphore(value:0)
-            
-            var httpData:Data?
-            var response:URLResponse?
-            var error:Error?
-            URLSession.shared.dataTask(with: request) { (data, resp, err) in
-                httpData = data
-                response = resp
-                error = err
-                semaphore.signal()
-            }.resume()
-
-            semaphore.wait()
-            
-            if(error == nil){
-                self.mainWebView?.load(httpData!, mimeType:"text/html", characterEncodingName:"UTF-8", baseURL: (response?.url)!)
-            } else {
-                self.cancelHandler!(self, [:])
-            }
-        } catch NetworkError.invalidUrl {
-            print("Error: Invalid url.")
-            
-        } catch {
-            print("Unexpected error: \(error).")
-        }
-
-
-        return self
-    }
-    
-    private func establishASWebAuthentication(establishData eD: [AnyHashable : Any], onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) -> UIView? {
-         establishData = eD
-         
-         self.addSessionCid()
-
-         let deviceType = establishData?["deviceType"] ?? "mobile" + ":ios:native"
-         establishData?["deviceType"] = deviceType
-         if let lang = establishData?["metadata.lang"] as? String {
-             establishData?["lang"] = lang
-         }
-         
-         establishData?["metadata.sdkIOSVersion"] = Constants.buildSDK
-         
-         if establishData?.index(forKey: "metadata.integrationContext") == nil {
-             establishData?["metadata.integrationContext"] = inAppIntegrationContext
-         }
-         
-         
-         returnUrl = "msg://return"
-         establishData?["returnUrl"] = returnUrl
-         cancelUrl = "msg://cancel"
-         establishData?["cancelUrl"] = cancelUrl
-         establishData?["version"] = "2"
-         establishData?["grp"] = self.getGrp()
-
-         if establishData?["paymentProviderId"] != nil {
-             establishData?["widgetLoaded"] = "true"
-         }
-         
-         if let scheme = establishData?["metadata.urlScheme"] as? String {
-             self.urlScheme = scheme.components(separatedBy: ":")[0]
-             establishData?["returnUrl"] = scheme
-             establishData?["cancelUrl"] = scheme
-         }
-         
-         returnHandler = onReturn
-         cancelHandler = onCancel
-         externalUrlHandler = nil
-        
-        do {
-            let environment = try buildEnvironment(
-                resourceUrl: .establish,
-                environment: (eD["env"] ?? "") as! String,
-                localUrl: (eD["localUrl"] ?? "") as! String,
-                paymentType: (eD["paymentType"] ?? "") as! String,
-                build: Constants.buildSDK,
-                path: .app
-            )
-            
-            isLocalEnvironment = environment.isLocal
-            
-            var url = environment.url.absoluteString
-            
-            let normalizedEstablish:[String : AnyHashable] = EstablishDataUtils.normalizeEstablishWithDotNotation(establish: establishData as! [String : AnyHashable])
-            
-            if let token = JSONUtils.getJsonBase64From(dictionary: normalizedEstablish) {
-                url = "\(url)&accessId=\(establishData!["accessId"]!)&token=\(token)"
-                
-                self.buildASWebAuthenticationSession(url: URL(string: url)!, callbackURL: urlScheme, onReturn: onReturn, onCancel: onCancel)
-            }
-            
-        } catch NetworkError.invalidUrl {
-            print("Error: Invalid url.")
-            
-        } catch {
-            print("Error: building url.")
-        }
-
-        return UIView()
-     }
 
     public func hybrid(url address : String, returnUrl: String, onReturn: TrustlyCallback?, cancelUrl: String, onCancel: TrustlyCallback?)  -> UIView? {
         guard let url = URL(string:address)  else {
@@ -735,6 +556,168 @@ extension TrustlyView {
         }
         
         return false
+    }
+}
+
+// MARK: Establish
+extension TrustlyView {
+
+    /** @abstract This function is responsible to open the lightbox, according to TrustlySettings service. If the context of the lightbox is `web view`, this function will
+     return a UIView instance with a WebView embedded, in case the context valeu be `in-app-browser`, this function will return a empty UIView, andwill open the
+     lightbox in an ASWebAuthentication instance.
+     @param establishData eD: [AnyHashable : Any]
+     @param onReturn: TrustlyCallback?
+     @param onCancel: TrustlyCallback?
+     */
+    public func establish(establishData eD: [AnyHashable : Any], onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) -> UIView? {
+        
+        self.prepareEstablish(establishData: eD)
+        
+        self.getTrustlySettings(establish: self.establishData ?? eD)
+        
+        if let settings = trustlySettings?.settings, settings.lightbox.context == Constants.LIGHTBOX_CONTEXT_INAPP {
+            return self.establishASWebAuthentication(onReturn: onReturn, onCancel: onCancel)
+        }
+        
+        return self.establishWebView(onReturn: onReturn, onCancel: onCancel)
+    }
+
+
+    private func establishWebView(onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) -> UIView? {
+        
+        returnHandler = onReturn
+        cancelHandler = onCancel
+        externalUrlHandler = nil
+        
+        do {
+            let environment = try buildEnvironment(
+                resourceUrl: .index,
+                environment: (establishData?["env"] ?? "") as! String,
+                localUrl: (establishData?["localUrl"] ?? "") as! String,
+                paymentType: (establishData?["paymentType"] ?? "") as! String,
+                build: Constants.buildSDK
+            )
+            
+            isLocalEnvironment = environment.isLocal
+            
+            var request = URLRequest(url: environment.url)
+
+            request.httpMethod = "POST"
+            request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
+            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField:"Content-Type")
+
+            let requestData = URLUtils.urlEncoded(establishData!).data(using: .utf8)
+
+            request.setValue(String(format:"%lu", requestData!.count), forHTTPHeaderField:"Content-Length")
+            request.httpBody = requestData
+            
+            let semaphore = DispatchSemaphore(value:0)
+            
+            var httpData:Data?
+            var response:URLResponse?
+            var error:Error?
+            URLSession.shared.dataTask(with: request) { (data, resp, err) in
+                httpData = data
+                response = resp
+                error = err
+                semaphore.signal()
+            }.resume()
+
+            semaphore.wait()
+            
+            if(error == nil){
+                self.mainWebView?.load(httpData!, mimeType:"text/html", characterEncodingName:"UTF-8", baseURL: (response?.url)!)
+            } else {
+                self.cancelHandler!(self, [:])
+            }
+        } catch NetworkError.invalidUrl {
+            print("Error: Invalid url.")
+            
+        } catch {
+            print("Unexpected error: \(error).")
+        }
+
+
+        return self
+    }
+    
+    private func establishASWebAuthentication(onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) -> UIView? {
+         
+         if let scheme = establishData?["metadata.urlScheme"] as? String {
+             self.urlScheme = scheme.components(separatedBy: ":")[0]
+             establishData?["returnUrl"] = scheme
+             establishData?["cancelUrl"] = scheme
+         }
+         
+         returnHandler = onReturn
+         cancelHandler = onCancel
+         externalUrlHandler = nil
+        
+        do {
+            let environment = try buildEnvironment(
+                resourceUrl: .establish,
+                environment: (establishData?["env"] ?? "") as! String,
+                localUrl: (establishData?["localUrl"] ?? "") as! String,
+                paymentType: (establishData?["paymentType"] ?? "") as! String,
+                build: Constants.buildSDK,
+                path: .app
+            )
+            
+            isLocalEnvironment = environment.isLocal
+            
+            var url = environment.url.absoluteString
+            
+            let normalizedEstablish:[String : AnyHashable] = EstablishDataUtils.normalizeEstablishWithDotNotation(establish: establishData as! [String : AnyHashable])
+            
+            if let token = JSONUtils.getJsonBase64From(dictionary: normalizedEstablish) {
+                url = "\(url)&accessId=\(establishData!["accessId"]!)&token=\(token)"
+                
+                self.buildASWebAuthenticationSession(url: URL(string: url)!, callbackURL: urlScheme, onReturn: onReturn, onCancel: onCancel)
+            }
+            
+        } catch NetworkError.invalidUrl {
+            print("Error: Invalid url.")
+            
+        } catch {
+            print("Error: building url.")
+        }
+
+        return UIView()
+     }
+    
+    private func prepareEstablish(establishData eD: [AnyHashable : Any]) {
+        establishData = eD
+        
+        self.addSessionCid()
+
+        let deviceType = "\(establishData?["deviceType"] ?? Constants.DEVICE_TYPE):\(Constants.DEVICE_PLATFORM)"
+        establishData?["deviceType"] = deviceType
+        
+        if let lang = establishData?["metadata.lang"] as? String {
+            establishData?["lang"] = lang
+        }
+        
+        establishData?["metadata.sdkIOSVersion"] = Constants.buildSDK
+        
+        if establishData?.index(forKey: "metadata.integrationContext") == nil {
+            establishData?["metadata.integrationContext"] = inAppIntegrationContext
+        }
+        
+        returnUrl = Constants.RETURN_URL
+        establishData?["returnUrl"] = returnUrl
+        cancelUrl = Constants.CANCEL_URL
+        establishData?["cancelUrl"] = cancelUrl
+        establishData?["version"] = Constants.ESTABLISH_VERSION
+        establishData?["grp"] = self.getGrp()
+
+        if establishData?["paymentProviderId"] != nil {
+            establishData?["widgetLoaded"] = "true"
+        }
+        
+        if let scheme = establishData?["metadata.urlScheme"] as? String {
+            self.urlScheme = scheme.components(separatedBy: ":")[0]
+        }
+        
     }
     
     private func getTrustlySettings(establish: [AnyHashable : Any]) {
