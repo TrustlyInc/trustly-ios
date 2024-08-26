@@ -48,6 +48,50 @@ final class SessionManagerTests: XCTestCase {
         XCTAssertEqual(expectedDate.timeIntervalSinceReferenceDate, convertedDate.timeIntervalSinceReferenceDate, accuracy: 0.001)
 
     }
+    
+    func testGetTimestampBase36ReturnTheSameDate() throws {
+        
+        let expectedDate = Date()
+        let timeBase36 = getTimestampBase36(timeInMilliseconds: expectedDate.millisecondsReferenceDate)
+        let convertedDate = Date(milliseconds: Int(timeBase36!, radix: 36)!)
+        
+        XCTAssertEqual(expectedDate.timeIntervalSinceReferenceDate, convertedDate.timeIntervalSinceReferenceDate, accuracy: 0.002)
+
+    }
+    
+    func testGetTimestampBase36ReturnTheSame() throws {
+        
+        let expectedDate = Date()
+        let timeBase36 = getTimestampBase36(timeInMilliseconds: expectedDate.millisecondsReferenceDate)
+        let convertedDate = Date(milliseconds: Int(timeBase36!, radix: 36)!)
+        
+        XCTAssertEqual(expectedDate.timeIntervalSinceReferenceDate, convertedDate.timeIntervalSinceReferenceDate, accuracy: 0.003)
+
+    }
+    
+    
+    func testGetTimestampBase36Return() throws {
+        
+        let expectedDate = Date()
+        let timeBase36 = getTimestampBase36(timeInMilliseconds: expectedDate.millisecondsReferenceDate)
+        let convertedDate = Date(milliseconds: Int(timeBase36!, radix: 36)!)
+        
+        XCTAssertEqual(expectedDate.timeIntervalSinceReferenceDate, convertedDate.timeIntervalSinceReferenceDate, accuracy: 0.004)
+
+    }
+    
+    
+    func testGetTimestampBase36ReturnTheSameReturn() throws {
+        
+        let expectedDate = Date()
+        let timeBase36 = getTimestampBase36(timeInMilliseconds: expectedDate.millisecondsReferenceDate)
+        let convertedDate = Date(milliseconds: Int(timeBase36!, radix: 36)!)
+        
+        XCTAssertEqual(expectedDate.timeIntervalSinceReferenceDate, convertedDate.timeIntervalSinceReferenceDate, accuracy: 0.005)
+
+    }
+
+
 
 }
 

@@ -66,4 +66,15 @@ final class ValidationHelperTests: XCTestCase {
 
         XCTAssertEqual(expectdResult, matches.count)
     }
+    
+    func testMatchError() throws {
+        
+        let content = "Internal error server 404"
+        
+        let expectdResult = 1
+        
+        let matches = ValidationHelper.findMatchesForErrorCode(content: content)
+
+        XCTAssertEqual(expectdResult, matches.count)
+    }
 }
