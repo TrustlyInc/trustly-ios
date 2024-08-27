@@ -14,66 +14,42 @@ enum TrustlyAddress: String {
 
 struct APIRequest {
     
-    private static func getUrl(address: String) -> String {
-        return "https://\(Constants.baseDomain)/\(address)"
-    }
-    
     /** @abstract Returns all settings that sdk should considerer to run.
-     @param address: TrustlyAddress
+     @param url: String
+     @param token: String
      @param completionHandler: @escaping(TrustlySettings?) -> Void
      */
-    static func getTrustlySettingsWith(establish: [AnyHashable : Any], completionHandler: @escaping(TrustlySettings?) -> Void) {
-// TODO: Uncomment these lines when the backend is ready
-//        let session = URLSession.shared
-//        
-//        if let url = URL(string: self.getUrl(address: address.rawValue)) {
-//            
-//            let dataTask = session.dataTask(with: url) { (data, response, error) in
-//                
-//                // Check for errors
-//                if let error = error {
-//                    print("Error: \\(error)")
-//                    return
-//                }
-//                
-//                // Check if data is available
-//                guard let responseData = data else {
-//                    print("No data received")
-//                    return
-//                }
-//                
-//                // Process the received data
-//                do {
-//                    let settings = try JSONDecoder().decode(Settings.self, from: responseData)
-//                    completionHandler(settings)
-//                    
-//                } catch {
-//                    print("Error parsing JSON: \(error)")
-//                }
-//            }
-//            
-//            dataTask.resume()
-//        }
+    static func getTrustlySettingsWith(url: URL, token: String, completionHandler: @escaping(TrustlySettings?) -> Void) {
 
-// TODO: Delete all code bellow when the backend is ready
-        sleep(4)
-        let stringJson = """
-                    {
-                      "settings": {
-                        "lightbox": {
-                            "context": "in-app-browser"
-                        }
-                      }
-                    }
-        """
-        print(stringJson)
-        do {
-            let data = Data(stringJson.utf8)
-            let trustlySettings = try JSONDecoder().decode(TrustlySettings.self, from: data)
-            completionHandler(trustlySettings)
-
-        } catch {
-            print("Error parsing JSON: \(error)")
+        let session = URLSession.shared
+        
+        if let url = URL(string: "\(url)?token=\(token)") {
+            
+            let dataTask = session.dataTask(with: url) { (data, response, error) in
+                
+                // Check for errors
+                if let error = error {
+                    print("Error: \(error)")
+                    return
+                }
+                
+                // Check if data is available
+                guard let responseData = data else {
+                    print("No data received")
+                    return
+                }
+                
+                // Process the received data
+                do {
+                    let settings = try JSONDecoder().decode(TrustlySettings.self, from: responseData)
+                    completionHandler(settings)
+                    
+                } catch {
+                    print("Error parsing JSON: \(error)")
+                }
+            }
+            
+            dataTask.resume()
         }
     }
 }

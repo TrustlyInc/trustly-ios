@@ -29,9 +29,5 @@ struct TrustlySettings: Codable, Hashable {
 }
 
 struct Settings: Codable, Hashable {
-    let lightbox: Lightbox
-}
-
-struct Lightbox: Codable, Hashable {
-    let context: String
+    let integrationStrategy: String
 }

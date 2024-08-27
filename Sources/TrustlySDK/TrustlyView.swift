@@ -575,7 +575,7 @@ extension TrustlyView {
         
         self.getTrustlySettings(establish: self.establishData ?? eD)
         
-        if let settings = trustlySettings?.settings, settings.lightbox.context == Constants.LIGHTBOX_CONTEXT_INAPP {
+        if let settings = trustlySettings?.settings, settings.integrationStrategy == Constants.LIGHTBOX_CONTEXT_INAPP {
             return self.establishASWebAuthentication(onReturn: onReturn, onCancel: onCancel)
         }
         
@@ -660,7 +660,7 @@ extension TrustlyView {
                 localUrl: (establishData?["localUrl"] ?? "") as! String,
                 paymentType: (establishData?["paymentType"] ?? "") as! String,
                 build: Constants.buildSDK,
-                path: .app
+                path: .mobile
             )
             
             isLocalEnvironment = environment.isLocal

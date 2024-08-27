@@ -20,15 +20,34 @@ func getTrustlySettingsWith(establish: [AnyHashable : Any], completionHandler: @
         completionHandler(trustlySettings)
         
     } else {
-        APIRequest.getTrustlySettingsWith(establish: establish) { trustlySettings in
+        do {
+            let environment = try buildEnvironment(
+                resourceUrl: .setup,
+                environment: (establish["env"] ?? "") as! String,
+                localUrl: (establish["localUrl"] ?? "") as! String,
+                paymentType: (establish["paymentType"] ?? "") as! String,
+                build: Constants.buildSDK,
+                path: .mobile
+            )
             
-            if let trustlySettings = trustlySettings {
-                let settings = TrustlySettings(settings: trustlySettings.settings, createdDateTime: Date())
+            let normalizedEstablish = EstablishDataUtils.normalizeEstablishWithDotNotation(establish: establish as! [String : AnyHashable])
+            
+            if let token = JSONUtils.getJsonBase64From(dictionary: normalizedEstablish) {
                 
-                saveData(settings, keyStorage: .settings)
+                APIRequest.getTrustlySettingsWith(url: environment.url, token: token) { trustlySettings in
+                    
+                    if let trustlySettings = trustlySettings {
+                        let settings = TrustlySettings(settings: trustlySettings.settings, createdDateTime: Date())
+                        
+                        saveData(settings, keyStorage: .settings)
+                    }
+                    
+                    completionHandler(trustlySettings)
+                }
             }
             
-            completionHandler(trustlySettings)
+        } catch {
+            print("SettingsManager Error: building url.")
         }
     }
 }
