@@ -46,10 +46,13 @@ func buildEnvironment(resourceUrl:ResourceUrls, environment: String, localUrl: S
         subDomain: subDomain,
         path: path.rawValue,
         resource: resource.rawValue,
-        build: build,
         isLocalUrl: isLocalUrl,
         environment: environment
     )
+    
+    if path == .selectBank {
+        urlString = "\(urlString)?v=\(build)-ios-sdk"
+    }
     
     if let query = query {
         urlString = "\(urlString)&\(URLUtils.urlEncoded(query))"

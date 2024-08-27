@@ -12,11 +12,12 @@ enum ResourceUrls: String {
     case widget = "widget"
     case establish = "establish"
     case selectBank = "selectBank"
+    case setup = "setup"
 }
 
 enum PathUrls: String {
-    case selectBank = "selectBank"
-    case app = "app"
+    case selectBank = "start/selectBank"
+    case mobile = "frontend/mobile"
 }
 
 struct URLUtils {
@@ -31,28 +32,28 @@ struct URLUtils {
      @param environment: String
      @result String
      */
-    static func buildStringUrl(domain: String, subDomain: String, path:String, resource: String, build: String, isLocalUrl: Bool, environment: String) -> String {
+    static func buildStringUrl(domain: String, subDomain: String, path:String, resource: String, isLocalUrl: Bool, environment: String) -> String {
 
         var urlString = ""
         
         if isLocalUrl {
             let localDomain = domain.isEmpty ? "localhost" : domain
-            urlString = "http://\(localDomain):8000/start/\(path)/\(resource)"
+            urlString = "http://\(localDomain):8000/\(path)/\(resource)"
 
         } else if (environment == "dynamic") {
-            urlString = "https://\(domain).int.trustly.one/start/\(path)/\(resource)"
+            urlString = "https://\(domain).int.trustly.one/\(path)/\(resource)"
 
         } else {
-            var urlSubdomain = subDomain
+            var urlSubdomain = ""
             
             if !subDomain.isEmpty {
                 urlSubdomain = "\(subDomain)."
             }
             
-            urlString = "https://\(urlSubdomain)paywithmybank.com/start/\(path)/\(resource)"
+            urlString = "https://\(urlSubdomain)paywithmybank.com/\(path)/\(resource)"
         }
                 
-        return "\(urlString)?v=\(build)-ios-sdk"
+        return "\(urlString)"
     }
     
     // MARK: Encode url and parameters

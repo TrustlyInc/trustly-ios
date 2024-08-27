@@ -11,37 +11,21 @@ import XCTest
 
 final class URLUtilsTests: XCTestCase {
     
-    var establishData:Dictionary<AnyHashable,Any> = [:]
-    
     override func setUp() {
         super.setUp()
         
-        self.establishData = ["accessId": "A48B73F694C4C8EE6306",
-                                "merchantId" : "110005514",
-                                "currency" : "USD",
-                                "amount" : "1.00",
-                                "merchantReference" : "g:cac73df7-52b4-47d7-89d3-9628d4cfb65e",
-                                "paymentType" : "Retrieval",
-                                "returnUrl": "/returnUrl",
-                                "cancelUrl": "/cancelUrl",
-                                "requestSignature": "HT5mVOqBXa8ZlvgX2USmPeLns5o=",
-                                "customer.name": "John IOS",
-                                "customer.address.country": "US",
-                                "metadata.urlScheme": "demoapp://",
-                                "description": "First Data Mobile Test"]
     }
     
     func testBuildEndpointUrlProdEnvironment() throws {
         
-        let expectedUrlForWidget = "https://\(Constants.baseDomain)/start/selectBank/widget?v=\(Constants.buildSDK)-ios-sdk"
-        let expectedUrlForIndex = "https://\(Constants.baseDomain)/start/selectBank/selectBank?v=\(Constants.buildSDK)-ios-sdk"
+        let expectedUrlForWidget = "https://\(Constants.baseDomain)/start/selectBank/widget"
+        let expectedUrlForIndex = "https://\(Constants.baseDomain)/start/selectBank/selectBank"
         
         let urlBuiltForWidget = URLUtils.buildStringUrl(
             domain: "",
             subDomain: "",
             path: PathUrls.selectBank.rawValue,
             resource: ResourceUrls.widget.rawValue,
-            build: Constants.buildSDK,
             isLocalUrl: false,
             environment: ""
         )
@@ -53,7 +37,6 @@ final class URLUtilsTests: XCTestCase {
             subDomain: "",
             path: PathUrls.selectBank.rawValue,
             resource: ResourceUrls.selectBank.rawValue,
-            build: Constants.buildSDK,
             isLocalUrl: false,
             environment: ""
         )
@@ -64,14 +47,13 @@ final class URLUtilsTests: XCTestCase {
     
     func testBuildEndpointUrlSubdomainEnvironment() throws {
         
-        let expectedUrl = "https://sandbox.\(Constants.baseDomain)/start/selectBank/widget?v=\(Constants.buildSDK)-ios-sdk"
+        let expectedUrl = "https://sandbox.\(Constants.baseDomain)/start/selectBank/widget"
 
         let urlBuiltForWidget = URLUtils.buildStringUrl(
             domain: "",
             subDomain: "sandbox",
             path: PathUrls.selectBank.rawValue,
             resource: ResourceUrls.widget.rawValue,
-            build: Constants.buildSDK,
             isLocalUrl: false,
             environment: ""
         )
@@ -81,14 +63,13 @@ final class URLUtilsTests: XCTestCase {
     
     func testBuildEndpointUrlLocalEnvironmentWithIP() throws {
         
-        let expectedUrl = "http://192.168.0.15:8000/start/selectBank/widget?v=\(Constants.buildSDK)-ios-sdk"
+        let expectedUrl = "http://192.168.0.15:8000/start/selectBank/widget"
 
         let urlBuiltForWidget = URLUtils.buildStringUrl(
             domain: "192.168.0.15",
             subDomain: "",
             path: PathUrls.selectBank.rawValue,
             resource: ResourceUrls.widget.rawValue,
-            build: Constants.buildSDK,
             isLocalUrl: true,
             environment: "local"
         )
@@ -98,14 +79,13 @@ final class URLUtilsTests: XCTestCase {
     
     func testBuildEndpointUrlLocalEnvironmentWithoutIP() throws {
         
-        let expectedUrl = "http://localhost:8000/start/selectBank/widget?v=\(Constants.buildSDK)-ios-sdk"
+        let expectedUrl = "http://localhost:8000/start/selectBank/widget"
 
         let urlBuiltForWidget = URLUtils.buildStringUrl(
             domain: "",
             subDomain: "",
             path: PathUrls.selectBank.rawValue,
             resource: ResourceUrls.widget.rawValue,
-            build: Constants.buildSDK,
             isLocalUrl: true,
             environment: "local"
         )
@@ -115,14 +95,13 @@ final class URLUtilsTests: XCTestCase {
     
     func testBuildEndpointUrlDynamic() throws {
         
-        let expectedUrl = "https://dynamicEnv.int.trustly.one/start/selectBank/widget?v=\(Constants.buildSDK)-ios-sdk"
+        let expectedUrl = "https://dynamicEnv.int.trustly.one/frontend/mobile/setup"
 
         let urlBuiltForWidget = URLUtils.buildStringUrl(
             domain: "dynamicEnv",
             subDomain: "",
-            path: PathUrls.selectBank.rawValue,
-            resource: ResourceUrls.widget.rawValue,
-            build: Constants.buildSDK,
+            path: PathUrls.mobile.rawValue,
+            resource: ResourceUrls.setup.rawValue,
             isLocalUrl: false,
             environment: "dynamic"
         )
@@ -169,4 +148,3 @@ final class URLUtilsTests: XCTestCase {
     }
 
 }
-
