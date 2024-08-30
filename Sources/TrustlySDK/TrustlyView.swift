@@ -50,6 +50,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
     private var cid = "ios wrong cid"
     private var isLocalEnvironment = false
     private var trustlySettings: TrustlySettings? = nil
+    private let loading = UIActivityIndicatorView()
 
     
     //Constructors
@@ -102,10 +103,9 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         mainWebView.scrollView.bounces = false
         mainWebView.backgroundColor = UIColor.clear
         mainWebView.isOpaque = false
+        
         if #available(iOS 16.4, *) {
             mainWebView.isInspectable = true
-        } else {
-            // Fallback on earlier versions
         }
 
         addSubview(mainWebView)
@@ -557,6 +557,28 @@ extension TrustlyView {
         
         return false
     }
+    
+    private func startLoading() {
+        self.loading.frame = CGRectMake(0.0, 0.0, 40.0, 40.0);
+        self.loading.center = self.center
+        self.loading.hidesWhenStopped = true
+        self.loading.color = .gray
+        self.loading.hidesWhenStopped = true
+        
+        if #available(iOS 13.0, *) {
+            self.loading.style = .large
+        } else {
+            self.loading.style = .gray
+        }
+        
+        self.addSubview(self.loading)
+        
+        self.loading.startAnimating()
+    }
+
+    private func stopLoading() {
+        self.loading.stopAnimating()
+    }
 }
 
 // MARK: Establish
@@ -577,6 +599,9 @@ extension TrustlyView {
             
             if let establish = self.establishData {
                 
+                DispatchQueue.main.async{
+                    self.startLoading()
+                }
                 
                 getTrustlySettingsWith(establish: establish) { trustlySettings in
 
@@ -669,7 +694,11 @@ extension TrustlyView {
             
             if let token = JSONUtils.getJsonBase64From(dictionary: normalizedEstablish) {
 
+                url = "\(url)?token=\(token)"
+
                 self.buildASWebAuthenticationSession(url: URL(string: url)!, callbackURL: urlScheme, onReturn: onReturn, onCancel: onCancel)
+                
+                self.stopLoading()
             }
             
         } catch NetworkError.invalidUrl {
