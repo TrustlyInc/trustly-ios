@@ -9,7 +9,7 @@ import Foundation
 
 
 struct Constants {
-    static let buildSDK = "3.2.2"
+    static let buildSDK = "3.3.0"
     static let baseDomain = "paywithmybank.com"
     
     static let RETURN_URL = "msg://return"
