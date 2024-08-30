@@ -40,9 +40,11 @@ func getTrustlySettingsWith(establish: [AnyHashable : Any], completionHandler: @
                         let settings = TrustlySettings(settings: trustlySettings.settings, createdDateTime: Date())
                         
                         saveData(settings, keyStorage: .settings)
+                        
+                        completionHandler(settings)
                     }
                     
-                    completionHandler(trustlySettings)
+                    completionHandler(nil)
                 }
             }
             

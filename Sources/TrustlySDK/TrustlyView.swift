@@ -573,17 +573,32 @@ extension TrustlyView {
         
         self.prepareEstablish(establishData: eD)
         
-        self.getTrustlySettings(establish: self.establishData ?? eD)
-        
-        if let settings = trustlySettings?.settings, settings.integrationStrategy == Constants.LIGHTBOX_CONTEXT_INAPP {
-            return self.establishASWebAuthentication(onReturn: onReturn, onCancel: onCancel)
+        DispatchQueue.global(qos: .background).async{
+            
+            if let establish = self.establishData {
+                
+                
+                getTrustlySettingsWith(establish: establish) { trustlySettings in
+
+                    if let settings = trustlySettings?.settings
+                        , settings.integrationStrategy == Constants.LIGHTBOX_CONTEXT_INAPP {
+                        
+                        DispatchQueue.main.async {
+                            // Update the UI on the main thread
+                            self.establishASWebAuthentication(onReturn: onReturn, onCancel: onCancel)
+                        }
+                        
+                    } else {
+                        self.establishWebView(onReturn: onReturn, onCancel: onCancel)
+                    }
+                }
+            }
         }
-        
-        return self.establishWebView(onReturn: onReturn, onCancel: onCancel)
+
+        return self
     }
 
-
-    private func establishWebView(onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) -> UIView? {
+    private func establishWebView(onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) {
         
         returnHandler = onReturn
         cancelHandler = onCancel
@@ -600,48 +615,31 @@ extension TrustlyView {
             
             isLocalEnvironment = environment.isLocal
             
-            var request = URLRequest(url: environment.url)
-
-            request.httpMethod = "POST"
-            request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
-            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField:"Content-Type")
-
-            let requestData = URLUtils.urlEncoded(establishData!).data(using: .utf8)
-
-            request.setValue(String(format:"%lu", requestData!.count), forHTTPHeaderField:"Content-Length")
-            request.httpBody = requestData
-            
-            let semaphore = DispatchSemaphore(value:0)
-            
-            var httpData:Data?
-            var response:URLResponse?
-            var error:Error?
-            URLSession.shared.dataTask(with: request) { (data, resp, err) in
-                httpData = data
-                response = resp
-                error = err
-                semaphore.signal()
-            }.resume()
-
-            semaphore.wait()
-            
-            if(error == nil){
-                self.mainWebView?.load(httpData!, mimeType:"text/html", characterEncodingName:"UTF-8", baseURL: (response?.url)!)
-            } else {
-                self.cancelHandler!(self, [:])
+            if let establish = establishData {
+                
+                loadLightbox(establish: establish, url: environment.url) { (data, response, error) in
+                    DispatchQueue.main.async{
+                        if(error == nil){
+                            self.mainWebView?.load(data!, mimeType:"text/html", characterEncodingName:"UTF-8", baseURL: (response?.url)!)
+                            self.stopLoading()
+                            
+                        } else {
+                            self.cancelHandler!(self, [:])
+                            
+                        }
+                    }
+                }
             }
+            
         } catch NetworkError.invalidUrl {
             print("Error: Invalid url.")
             
         } catch {
             print("Unexpected error: \(error).")
         }
-
-
-        return self
     }
     
-    private func establishASWebAuthentication(onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) -> UIView? {
+    private func establishASWebAuthentication(onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) {
          
          if let scheme = establishData?["metadata.urlScheme"] as? String {
              self.urlScheme = scheme.components(separatedBy: ":")[0]
@@ -670,8 +668,7 @@ extension TrustlyView {
             let normalizedEstablish:[String : AnyHashable] = EstablishDataUtils.normalizeEstablishWithDotNotation(establish: establishData as! [String : AnyHashable])
             
             if let token = JSONUtils.getJsonBase64From(dictionary: normalizedEstablish) {
-                url = "\(url)&accessId=\(establishData!["accessId"]!)&token=\(token)"
-                
+
                 self.buildASWebAuthenticationSession(url: URL(string: url)!, callbackURL: urlScheme, onReturn: onReturn, onCancel: onCancel)
             }
             
@@ -682,7 +679,6 @@ extension TrustlyView {
             print("Error: building url.")
         }
 
-        return UIView()
      }
     
     private func prepareEstablish(establishData eD: [AnyHashable : Any]) {
@@ -718,13 +714,6 @@ extension TrustlyView {
             self.urlScheme = scheme.components(separatedBy: ":")[0]
         }
         
-    }
-    
-    private func getTrustlySettings(establish: [AnyHashable : Any]) {
-
-        getTrustlySettingsWith(establish: establish) { trustlySettings in
-            self.trustlySettings = trustlySettings
-        }
     }
 }
 
