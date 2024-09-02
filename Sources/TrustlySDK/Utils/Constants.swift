@@ -20,7 +20,7 @@ struct Constants {
     static let PAYMENTTYPE_VERIFICATION = "Verification"
     
     static let LIGHTBOX_CONTEXT_INAPP = "in-app-browser"
-    static let LIGHTBOX_CONTEXT_WEBVIEW = "web view"
+    static let LIGHTBOX_CONTEXT_WEBVIEW = "webview"
     
     static let SETTINGS_CACHE_TIME_LIMIT = 15 // minutes
     
