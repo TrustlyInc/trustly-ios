@@ -155,7 +155,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
             let environment = try buildEnvironment(
                 resourceUrl: .widget,
                 environment: (eD["env"] ?? "") as! String,
-                localUrl: (eD["localUrl"] ?? "") as! String,
+                localUrl: (eD["envHost"] ?? "") as! String,
                 paymentType: (eD["paymentType"] ?? "") as! String,
                 build: Constants.buildSDK,
                 query: query,
@@ -633,7 +633,7 @@ extension TrustlyView {
             let environment = try buildEnvironment(
                 resourceUrl: .index,
                 environment: (establishData?["env"] ?? "") as! String,
-                localUrl: (establishData?["localUrl"] ?? "") as! String,
+                localUrl: (establishData?["envHost"] ?? "") as! String,
                 paymentType: (establishData?["paymentType"] ?? "") as! String,
                 build: Constants.buildSDK
             )
@@ -680,7 +680,7 @@ extension TrustlyView {
             let environment = try buildEnvironment(
                 resourceUrl: .establish,
                 environment: (establishData?["env"] ?? "") as! String,
-                localUrl: (establishData?["localUrl"] ?? "") as! String,
+                localUrl: (establishData?["envHost"] ?? "") as! String,
                 paymentType: (establishData?["paymentType"] ?? "") as! String,
                 build: Constants.buildSDK,
                 path: .mobile

@@ -24,7 +24,7 @@ func getTrustlySettingsWith(establish: [AnyHashable : Any], completionHandler: @
             let environment = try buildEnvironment(
                 resourceUrl: .setup,
                 environment: (establish["env"] ?? "") as! String,
-                localUrl: (establish["localUrl"] ?? "") as! String,
+                localUrl: (establish["envHost"] ?? "") as! String,
                 paymentType: (establish["paymentType"] ?? "") as! String,
                 build: Constants.buildSDK,
                 path: .mobile
