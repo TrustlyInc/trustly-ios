@@ -1,0 +1,31 @@
+name: Check PR Title
+on:
+  pull_request:
+    types: [opened, edited, reopened]
+env:
+  GH_TOKEN: ${{ secrets.GIT_TOKEN_SECRET }}
+  OWNER: ${{ github.repository_owner }}
+  REPO: ${{ github.event.repository.name }}
+  PR_NUMBER: ${{ github.event.number }}
+jobs:
+  check_pr_title:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        run: git clone -q https://${GIT_TOKEN_SECRET}@github.com/${OWNER}/${REPO}.git --depth=2
+      - name: Check Jira ID on PR title
+        run: |
+          cd ${REPO} || exit 
+          pr_title=$(gh pr view "${PR_NUMBER}" --json title | jq '.title' | tr -d '"')
+          pr_author=$(gh pr view "${PR_NUMBER}" --json author | jq '.author.login' | tr -d '"')
+
+          if [[ ${pr_title} =~ ^\[(DEV|DEVAUTOM|INF)-[0-9]+\] ]]; then
+            echo -e "(√) Title '${pr_title}' is ok!"
+            exit 0
+          else
+            echo -e "(x) Title '${pr_title}' is not ok!"
+            gh issue comment ${PR_NUMBER} --body ":x: @${pr_author} this pull request title '${pr_title}' is incorrect!
+            Please insert your Jira ID issue on title according the follow convention: [DEVAUTOM-12345], [DEV-12345] or [INF-12345]"
+            exit 1
+          fi
+        shell: bash
