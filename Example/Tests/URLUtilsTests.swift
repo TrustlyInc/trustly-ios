@@ -109,6 +109,23 @@ final class URLUtilsTests: XCTestCase {
         XCTAssertEqual(expectedUrl, urlBuiltForWidget)
     }
     
+    func testBuildEndpointUrlLocalFrontendPort() throws {
+        
+        let expectedUrl = "http://localhost:10000/frontend/mobile/setup"
+
+        let urlBuiltForWidget = URLUtils.buildStringUrl(
+            domain: "localhost",
+            subDomain: "",
+            path: PathUrls.mobile.rawValue,
+            resource: ResourceUrls.setup.rawValue,
+            isLocalUrl: true,
+            environment: "local",
+            port: Constants.PORT_FRONTEND
+        )
+        
+        XCTAssertEqual(expectedUrl, urlBuiltForWidget)
+    }
+    
     func testIsLocalEnvironment() throws {
         
         var expectedResult = true

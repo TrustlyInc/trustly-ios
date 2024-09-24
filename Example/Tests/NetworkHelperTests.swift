@@ -65,6 +65,24 @@ final class NetworkHelperTests: XCTestCase {
         XCTAssertEqual(expectedUrl, environment.url)
     }
     
+    func testBuildLocalHostEnvironmentFrontendPort() throws {
+        
+        let environment = try buildEnvironment(
+            resourceUrl: .setup,
+            environment: "local",
+            localUrl: "",
+            paymentType: "Retrieval",
+            build: "3.2.2",
+            path: .mobile
+        )
+        
+        let expectedIsLocal = true
+        let expectedUrl = URL(string: "http://localhost:10000/frontend/mobile/setup")!
+        
+        XCTAssertEqual(expectedIsLocal, environment.isLocal)
+        XCTAssertEqual(expectedUrl, environment.url)
+    }
+    
     func testBuildDynamicEnvironment() throws {
         
         let environment = try buildEnvironment(

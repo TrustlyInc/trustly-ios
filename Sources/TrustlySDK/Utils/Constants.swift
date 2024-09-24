@@ -24,4 +24,7 @@ struct Constants {
     
     static let SETTINGS_CACHE_TIME_LIMIT = 15 // minutes
     
+    static let PORT_API = "8000"
+    static let PORT_FRONTEND = "10000"
+    
 }

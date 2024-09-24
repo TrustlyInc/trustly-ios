@@ -32,13 +32,13 @@ struct URLUtils {
      @param environment: String
      @result String
      */
-    static func buildStringUrl(domain: String, subDomain: String, path:String, resource: String, isLocalUrl: Bool, environment: String) -> String {
+    static func buildStringUrl(domain: String, subDomain: String, path:String, resource: String, isLocalUrl: Bool, environment: String, port: String = "8000") -> String {
 
         var urlString = ""
         
         if isLocalUrl {
             let localDomain = domain.isEmpty ? "localhost" : domain
-            urlString = "http://\(localDomain):8000/\(path)/\(resource)"
+            urlString = "http://\(localDomain):\(port)/\(path)/\(resource)"
 
         } else if (environment == "dynamic") {
             urlString = "https://\(domain).int.trustly.one/\(path)/\(resource)"

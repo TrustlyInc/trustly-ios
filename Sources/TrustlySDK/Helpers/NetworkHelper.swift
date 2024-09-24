@@ -47,7 +47,8 @@ func buildEnvironment(resourceUrl:ResourceUrls, environment: String, localUrl: S
         path: path.rawValue,
         resource: resource.rawValue,
         isLocalUrl: isLocalUrl,
-        environment: environment
+        environment: environment,
+        port: path == .selectBank ? Constants.PORT_API : Constants.PORT_FRONTEND
     )
     
     if path == .selectBank {
