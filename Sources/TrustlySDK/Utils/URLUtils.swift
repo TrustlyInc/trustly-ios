@@ -30,9 +30,10 @@ struct URLUtils {
      @param build: String
      @param isLocalUrl: Bool
      @param environment: String
+     @param port: String
      @result String
      */
-    static func buildStringUrl(domain: String, subDomain: String, path:String, resource: String, isLocalUrl: Bool, environment: String, port: String = "8000") -> String {
+    static func buildStringUrl(domain: String, subDomain: String, path:String, resource: String, isLocalUrl: Bool, environment: String, port: String = Constants.PORT_API) -> String {
 
         var urlString = ""
         
