@@ -39,22 +39,22 @@ final class EstablishDataUtilsTests: XCTestCase {
         XCTAssertEqual(expectedEstablishData, normalizedEstablish)
                 
     }
-    
-    func testConvertUrlWithParameterToNormalizedEstablish() throws {
-        
-        let expectedEstablishData: [String : AnyHashable] = [
-            "transactionId": "1003151780",
-            "transactionType": "1",
-            "merchantReference": "g:cac73df7-52b4-47d7-89d3-9628d4cfb65e",
-            "payment": ["paymentProvider": ["type" : "1"]],
-            "requestSignature": "E0rbmsl4KOORibvsHoDvfqIqlaQ%3D",
-            "url": self.urlWithParamters
-        ]
-        
-        let normalizedEstablish = EstablishDataUtils.buildEstablishFrom(urlWithParameters: self.urlWithParamters)
-        
-        XCTAssertEqual(expectedEstablishData, normalizedEstablish)
-                
-    }
+// TODO: This test was commented, because for now we will not normalize the return
+//    func testConvertUrlWithParameterToNormalizedEstablish() throws {
+//        
+//        let expectedEstablishData: [String : AnyHashable] = [
+//            "transactionId": "1003151780",
+//            "transactionType": "1",
+//            "merchantReference": "g:cac73df7-52b4-47d7-89d3-9628d4cfb65e",
+//            "payment": ["paymentProvider": ["type" : "1"]],
+//            "requestSignature": "E0rbmsl4KOORibvsHoDvfqIqlaQ%3D",
+//            "url": self.urlWithParamters
+//        ]
+//        
+//        let normalizedEstablish = EstablishDataUtils.buildEstablishFrom(urlWithParameters: self.urlWithParamters)
+//        
+//        XCTAssertEqual(expectedEstablishData, normalizedEstablish)
+//                
+//    }
 
 }

@@ -671,10 +671,6 @@ extension TrustlyView {
              establishData?["returnUrl"] = scheme
              establishData?["cancelUrl"] = scheme
          }
-         
-         returnHandler = onReturn
-         cancelHandler = onCancel
-         externalUrlHandler = nil
         
         do {
             let environment = try buildEnvironment(

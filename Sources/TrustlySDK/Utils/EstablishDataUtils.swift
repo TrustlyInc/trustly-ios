@@ -104,6 +104,9 @@ struct EstablishDataUtils {
             establish[String(keyAndValue[0])] = String(keyAndValue[1])
         }
         
-        return normalizeEstablishWithDotNotation(establish: establish)
+        return establish
+// TODO: This code was commented, because for now we will not normalize the return
+//        return normalizeEstablishWithDotNotation(establish: establish)
+
     }
 }
