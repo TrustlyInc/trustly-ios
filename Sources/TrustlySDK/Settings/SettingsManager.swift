@@ -42,9 +42,10 @@ func getTrustlySettingsWith(establish: [AnyHashable : Any], completionHandler: @
                         saveData(settings, keyStorage: .settings)
                         
                         completionHandler(settings)
+                        
+                    } else {
+                        completionHandler(trustlySettings)
                     }
-                    
-                    completionHandler(nil)
                 }
             }
             

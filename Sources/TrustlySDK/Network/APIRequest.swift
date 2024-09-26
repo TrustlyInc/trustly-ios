@@ -46,6 +46,8 @@ struct APIRequest {
                     
                 } catch {
                     print("Error parsing JSON: \(error)")
+                    
+                    completionHandler(nil)
                 }
             }
             
