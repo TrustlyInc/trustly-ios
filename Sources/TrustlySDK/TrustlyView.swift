@@ -85,7 +85,6 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
     }
 
     func initView() {
-        self.createNotifications()
         
         if let tempCid = generateCid() {
             cid = tempCid
@@ -180,6 +179,8 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
 
     public func establish(establishData eD: [AnyHashable : Any], onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) -> UIView? {
         establishData = eD
+        
+        self.createNotifications()
         
         self.addSessionCid()
 
@@ -643,6 +644,9 @@ extension TrustlyView {
     }
     
     @objc func closeWebview(notification: Notification){
+        
+        NotificationCenter.default.removeObserver(self, name: .trustlyCloseWebview, object: nil)
+        
         if webSession != nil {
             webSession.cancel()
         }
