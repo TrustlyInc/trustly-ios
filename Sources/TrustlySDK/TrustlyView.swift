@@ -504,7 +504,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         }
 
         if ("local" == env), let urlLocal = localUrl {
-            url = "http://"+urlLocal+"/start/selectBank/"+fn+"?v="+build+"-ios-sdk"
+            url = "http://"+urlLocal+":8000/start/selectBank/"+fn+"?v="+build+"-ios-sdk"
             isLocalEnvironment = true
             
         } else {
