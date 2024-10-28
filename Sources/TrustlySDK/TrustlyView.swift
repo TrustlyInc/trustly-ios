@@ -635,7 +635,9 @@ extension TrustlyView {
     }
     
     private func proceedToChooseAccount(){
-        self.mainWebView.evaluateJavaScript("window.Trustly.proceedToChooseAccount();", completionHandler: nil)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.mainWebView.evaluateJavaScript("window.Trustly.proceedToChooseAccount();", completionHandler: nil)
+        }
     }
     
     // MARK: - Utility Functions
