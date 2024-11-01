@@ -24,7 +24,7 @@ jobs:
             exit 0
           else
             echo -e "(x) Title '${pr_title}' is not ok!"
-            gh issue comment ${PR_NUMBER} --body ":x: @${pr_author} this pull request title '${pr_title}' is incorrect!
+            gh issue comment ${PR_NUMBER} --body ":x: @${pr_author} this pull request title '${pr_title}' is incorrect!!
             Please insert your Jira ID issue on title according the follow convention: [DEVAUTOM-12345], [DEV-12345] or [INF-12345]."
             exit 1
           fi
