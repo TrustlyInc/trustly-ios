@@ -85,7 +85,6 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
     }
 
     func initView() {
-        self.createNotifications()
         
         if let tempCid = generateCid() {
             cid = tempCid
@@ -180,6 +179,8 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
 
     public func establish(establishData eD: [AnyHashable : Any], onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) -> UIView? {
         establishData = eD
+        
+        self.createNotifications()
         
         self.addSessionCid()
 
@@ -503,7 +504,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         }
 
         if ("local" == env), let urlLocal = localUrl {
-            url = "http://"+urlLocal+"/start/selectBank/"+fn+"?v="+build+"-ios-sdk"
+            url = "http://"+urlLocal+":8000/start/selectBank/"+fn+"?v="+build+"-ios-sdk"
             isLocalEnvironment = true
             
         } else {
@@ -634,7 +635,9 @@ extension TrustlyView {
     }
     
     private func proceedToChooseAccount(){
-        self.mainWebView.evaluateJavaScript("window.Trustly.proceedToChooseAccount();", completionHandler: nil)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.mainWebView.evaluateJavaScript("window.Trustly.proceedToChooseAccount();", completionHandler: nil)
+        }
     }
     
     // MARK: - Utility Functions
@@ -643,6 +646,9 @@ extension TrustlyView {
     }
     
     @objc func closeWebview(notification: Notification){
+        
+        NotificationCenter.default.removeObserver(self, name: .trustlyCloseWebview, object: nil)
+        
         if webSession != nil {
             webSession.cancel()
         }
