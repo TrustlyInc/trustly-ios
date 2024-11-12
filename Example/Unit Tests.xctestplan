@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "684626F4-CE24-4A19-9D19-ADFCEEF0D713",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:TrustlySDK.xcodeproj",
+        "identifier" : "607FACE41AFB9204008FA782",
+        "name" : "TrustlySDK_Tests"
+      }
+    }
+  ],
+  "version" : 1
+}

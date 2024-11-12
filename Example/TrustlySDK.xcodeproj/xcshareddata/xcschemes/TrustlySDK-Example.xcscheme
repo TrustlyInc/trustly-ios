@@ -50,6 +50,12 @@
             ReferencedContainer = "container:TrustlySDK.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <TestPlans>
+         <TestPlanReference
+            reference = "container:Unit Tests.xctestplan"
+            default = "YES">
+         </TestPlanReference>
+      </TestPlans>
       <Testables>
          <TestableReference
             skipped = "NO">
