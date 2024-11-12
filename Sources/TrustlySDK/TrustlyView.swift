@@ -15,7 +15,7 @@
  *   ___________________________________________________________________________________________________________
 */
 import UIKit
-import WebKit
+@preconcurrency import WebKit
 import AuthenticationServices
 import SafariServices
 
@@ -164,7 +164,10 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         bankSelectedHandler = onBankSelected
 
         let url = getEndpointUrl(function: "widget", establishData:establishData as! [String : String]) + "&" + urlEncoded(query) + "#" + urlEncoded(hash)
-        var request = URLRequest(url: URL(string: url)!)
+        
+        guard let url = URL(string: url) else { return self }
+        
+        var request = URLRequest(url: url)
 
         request.httpMethod = "GET"
         request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
