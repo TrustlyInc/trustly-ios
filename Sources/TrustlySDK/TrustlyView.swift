@@ -73,7 +73,6 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
     }
 
     func initView() {
-        self.createNotifications()
         
         if let tempCid = generateCid() {
             cid = tempCid
@@ -165,7 +164,6 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
             isLocalEnvironment = environment.isLocal
             
             var request = URLRequest(url: environment.url)
-
             request.httpMethod = "GET"
             request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
 
@@ -531,7 +529,9 @@ extension TrustlyView {
     }
 
     private func proceedToChooseAccount(){
-        self.mainWebView.evaluateJavaScript("window.Trustly.proceedToChooseAccount();", completionHandler: nil)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.mainWebView.evaluateJavaScript("window.Trustly.proceedToChooseAccount();", completionHandler: nil)
+        }
     }
     
     // MARK: - Utility Functions
@@ -540,6 +540,9 @@ extension TrustlyView {
     }
     
     @objc func closeWebview(notification: Notification){
+        
+        NotificationCenter.default.removeObserver(self, name: .trustlyCloseWebview, object: nil)
+        
         if webSession != nil {
             webSession.cancel()
         }
