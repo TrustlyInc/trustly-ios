@@ -33,6 +33,7 @@
 		1587AB902A2FE043006F6FC3 /* SessionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManagerTests.swift; sourceTree = "<group>"; };
 		15987B0829DEF79D00D7A395 /* TrustlyLightBoxViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrustlyLightBoxViewController.swift; sourceTree = "<group>"; };
 		15BEC9B32C383FB900050FB9 /* ValidationHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationHelperTests.swift; sourceTree = "<group>"; };
+		15EA22A92CE3D18D00C45E32 /* Unit Tests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Unit Tests.xctestplan"; sourceTree = "<group>"; };
 		2416E32056EECA07B4C86E1B /* TrustlySDK.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = TrustlySDK.podspec; path = ../TrustlySDK.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		24C6055BF6640A73038BF66E /* Pods_TrustlySDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TrustlySDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		38845E178FF73A019452105E /* Pods-TrustlySDK_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrustlySDK_Tests.debug.xcconfig"; path = "Target Support Files/Pods-TrustlySDK_Tests/Pods-TrustlySDK_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -84,6 +85,7 @@
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
+				15EA22A92CE3D18D00C45E32 /* Unit Tests.xctestplan */,
 				607FACF51AFB993E008FA782 /* Podspec Metadata */,
 				607FACD21AFB9204008FA782 /* Example for TrustlySDK */,
 				607FACE81AFB9204008FA782 /* Tests */,
@@ -222,7 +224,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 1530;
+				LastUpgradeCheck = 1610;
 				ORGANIZATIONNAME = CocoaPods;
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
@@ -239,10 +241,9 @@
 			};
 			buildConfigurationList = 607FACCB1AFB9204008FA782 /* Build configuration list for PBXProject "TrustlySDK" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				Base,
 			);
