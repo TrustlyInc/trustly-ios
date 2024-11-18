@@ -49,8 +49,6 @@ For production reason choose the `main` branch, but for test or validation choos
 ## Usage
 
 To quickly get up and running with this SDK see the [iOS Quickstart](https://amer.developers.trustly.com/payments/docs/ios-quickstart) in the Trustly Developer Documentation.
-
-
 <br />
 
 ## Versions
