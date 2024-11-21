@@ -49,6 +49,7 @@
 		15C29FB72C6165570037C239 /* SuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessViewController.swift; sourceTree = "<group>"; };
 		15D96FB22C46E6B700296BC4 /* NetworkHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkHelperTests.swift; sourceTree = "<group>"; };
 		15E049842B7510BA0084B71A /* JsonUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonUtilsTests.swift; sourceTree = "<group>"; };
+		15EA22A92CE3D18D00C45E32 /* Unit Tests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Unit Tests.xctestplan"; sourceTree = "<group>"; };
 		2416E32056EECA07B4C86E1B /* TrustlySDK.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = TrustlySDK.podspec; path = ../TrustlySDK.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		4225824F0F3C24EF9803BCD1 /* Pods_TrustlySDK_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TrustlySDK_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		50EFC16F37CBC7AAB7A131C5 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
@@ -127,6 +128,7 @@
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
+				15EA22A92CE3D18D00C45E32 /* Unit Tests.xctestplan */,
 				607FACF51AFB993E008FA782 /* Podspec Metadata */,
 				607FACD21AFB9204008FA782 /* Example for TrustlySDK */,
 				607FACE81AFB9204008FA782 /* Tests */,
