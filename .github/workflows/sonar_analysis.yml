@@ -65,4 +65,5 @@ jobs:
             -Dsonar.sources="." \
             -Dsonar.cfamily.compile-commands=compile_commands.json \
             -Dsonar.exclusions="**/Tests/**" \
-            -Dsonar.verbose=true
+            -Dsonar.scm.disabled=true \
+            -Dsonar.verbose=true 
