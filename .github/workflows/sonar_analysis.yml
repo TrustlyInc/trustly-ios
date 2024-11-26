@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+  workflow_dispatch:
+
+env:
+  GH_TOKEN: ${{ secrets.GIT_TOKEN_SECRET }}
+  OWNER: ${{ github.repository_owner }}
+  REPO: ${{ github.event.repository.name }}
+  PR_NUMBER: ${{ github.event.number }}
+  SONAR_HOST_URL: "https://sonarqube.trustly.one"
+  SONAR_PROJECT_KEY: "trustly-ios"
+  SONAR_PROJECT_NAME: "trustly-ios"
+
+jobs:
+  SonarQube:
+    runs-on: macOS-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Install CocoaPods
+        run: |
+          gem install cocoapods
+          pod install --project-directory=Example
+
+      - name: Generate Compilation Database
+        run: |
+          xcodebuild -workspace Example/TrustlySDK.xcworkspace \
+                     -scheme TrustlySDK-Example \
+                     -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' \
+                     clean build \
+                     | tee xcodebuild.log | xcpretty --report json-compilation-database \
+                     > compile_commands.json
+
+      - name: Verify Compilation Database
+        run: |
+          cat compile_commands.json
+
+      - name: Install sonar-scanner
+        run: |
+          brew update
+          brew install sonar-scanner
+
+      - name: Run SonarQube Analysis
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_SECRET }}
+        run: |
+          sonar-scanner \
+            -Dsonar.host.url=${{ env.SONAR_HOST_URL }} \
+            -Dsonar.login=${{ env.SONAR_TOKEN }} \
+            -Dsonar.projectKey=${{ env.SONAR_PROJECT_KEY }} \
+            -Dsonar.projectName=${{ env.SONAR_PROJECT_NAME }} \
+            -Dsonar.pullrequest.base="${{ github.base_ref }}" \
+            -Dsonar.pullrequest.branch="${{ github.head_ref }}" \
+            -Dsonar.pullrequest.key="${{ github.event.pull_request.number }}" \
+            -Dsonar.sources="." \
+            -Dsonar.cfamily.compile-commands=compile_commands.json \
+            -Dsonar.exclusions="**/Tests/**" \
+            -Dsonar.verbose=true
