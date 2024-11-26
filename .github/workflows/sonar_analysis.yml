@@ -61,6 +61,7 @@ jobs:
             -Dsonar.pullrequest.base="${{ github.base_ref }}" \
             -Dsonar.pullrequest.branch="${{ github.head_ref }}" \
             -Dsonar.pullrequest.key="${{ github.event.pull_request.number }}" \
+            -Dsonar.scm.revision="${{ github.event.pull_request.head.sha }}" \
             -Dsonar.sources="." \
             -Dsonar.cfamily.compile-commands=compile_commands.json \
             -Dsonar.exclusions="**/Tests/**" \
