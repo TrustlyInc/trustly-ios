@@ -31,22 +31,26 @@ jobs:
           gem install cocoapods
           pod install --project-directory=Example
 
-      - name: Generate Compilation Database
+      - name: Download and Configure Build Wrapper
         run: |
-          xcodebuild -workspace Example/TrustlySDK.xcworkspace \
-                     -scheme TrustlySDK-Example \
-                     -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' \
-                     clean build \
-                     | tee xcodebuild.log | xcpretty --report json-compilation-database \
-                     > compile_commands.json
+          curl -L -o build-wrapper-macosx.zip "https://sonarcloud.io/static/cpp/build-wrapper-macosx-x86.zip"
+          unzip build-wrapper-macosx.zip -d $HOME/.sonar
+          export PATH="$HOME/.sonar/build-wrapper-macosx-x86:$PATH"
 
-      - name: Verify Compilation Database
+      - name: Download and Configure Sonar Scanner
         run: |
-          cat compile_commands.json
+          curl -L -o sonar-scanner.zip "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-latest.zip"
+          unzip sonar-scanner.zip -d $HOME/.sonar
+          export PATH="$HOME/.sonar/sonar-scanner-$SONAR_SCANNER_VERSION/bin:$PATH"
 
-      - name: Install sonar-scanner
+      - name: Execute Build Wrapper
         run: |
-          brew install sonar-scanner
+          $HOME/.sonar/build-wrapper-macosx-x86/build-wrapper-macosx-x86 \
+            --out-dir bw-output \
+            xcodebuild -workspace Example/TrustlySDK.xcworkspace \
+                       -scheme TrustlySDK-Example \
+                       -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' \
+                       clean build
 
       - name: Run SonarQube Analysis
         run: |
@@ -60,9 +64,9 @@ jobs:
             -Dsonar.pullrequest.key="${{ github.event.pull_request.number }}" \
             -Dsonar.scm.revision="${{ github.event.pull_request.head.sha }}" \
             -Dsonar.sources="." \
-            -Dsonar.cfamily.compile-commands=compile_commands.json \
-            -Dsonar.cfamily.build-wrapper-output.bypass=true \
-            -Dsonar.swift.coverage.reportPath="../DerivedData/Coverage.report" \
+            -Dsonar.cfamily.build-wrapper-output=bw-output \
+            -Dsonar.cfamily.threads=4 \
+            -Dsonar.cfamily.cache.enabled=true \
             -Dsonar.exclusions="Pods/**/*, Example/Tests/**" \
             -Dsonar.scm.disabled=true \
             -Dsonar.verbose=true
