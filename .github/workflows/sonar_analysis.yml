@@ -34,7 +34,7 @@ jobs:
       - name: Install xcpretty
         run: gem install xcpretty
 
-      - name: Generate Compilation Database
+      - name: Generate Compilation Database.
         run: |
           xcodebuild -workspace Example/TrustlySDK.xcworkspace \
                      -scheme TrustlySDK-Example \
