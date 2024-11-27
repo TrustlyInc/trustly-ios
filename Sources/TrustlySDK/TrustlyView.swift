@@ -628,6 +628,10 @@ extension TrustlyView {
 
     private func establishWebView(onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) {
         
+        if establishData?.index(forKey: "metadata.integrationContext") == nil {
+            establishData?["metadata.integrationContext"] = inAppIntegrationContext
+        }
+        
         returnHandler = onReturn
         cancelHandler = onCancel
         externalUrlHandler = nil
@@ -722,10 +726,6 @@ extension TrustlyView {
         }
         
         establishData?["metadata.sdkIOSVersion"] = Constants.buildSDK
-        
-        if establishData?.index(forKey: "metadata.integrationContext") == nil {
-            establishData?["metadata.integrationContext"] = inAppIntegrationContext
-        }
         
         returnUrl = Constants.RETURN_URL
         establishData?["returnUrl"] = returnUrl
