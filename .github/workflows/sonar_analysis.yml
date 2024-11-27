@@ -37,11 +37,10 @@ jobs:
           unzip build-wrapper-macosx.zip -d $HOME/.sonar
           export PATH="$HOME/.sonar/build-wrapper-macosx-x86:$PATH"
 
-      - name: Download and Configure Sonar Scanner
+      - name: Install sonar-scanner
         run: |
-          curl -L -o sonar-scanner.zip "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-latest.zip"
-          unzip sonar-scanner.zip -d $HOME/.sonar
-          export PATH="$HOME/.sonar/sonar-scanner-$SONAR_SCANNER_VERSION/bin:$PATH"
+          brew update
+          brew install sonar-scanner
 
       - name: Execute Build Wrapper
         run: |
