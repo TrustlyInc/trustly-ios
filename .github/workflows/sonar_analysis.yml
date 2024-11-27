@@ -46,7 +46,6 @@ jobs:
 
       - name: Install sonar-scanner
         run: |
-          brew update
           brew install sonar-scanner
 
       - name: Run SonarQube Analysis
@@ -65,5 +64,5 @@ jobs:
             -Dsonar.cfamily.build-wrapper-output.bypass=true \
             -Dsonar.swift.coverage.reportPath="../DerivedData/Coverage.report" \
             -Dsonar.exclusions="Pods/**/*, Example/Tests/**" \
-            -Dsonar.scm.disabled=false \
+            -Dsonar.scm.disabled=true \
             -Dsonar.verbose=true
