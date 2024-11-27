@@ -33,8 +33,8 @@ jobs:
 
       - name: Download and Configure Build Wrapper
         run: |
-          curl -L -o build-wrapper-macosx.zip "https://sonarcloud.io/static/cpp/build-wrapper-macosx-x86.zip"
-          unzip build-wrapper-macosx.zip -d $HOME/.sonar
+          curl -L -o build-wrapper-macosx.zip "https://sonarqube.trustly.one/static/cpp/build-wrapper-macosx-x86.zip"
+          unzip -o build-wrapper-macosx.zip -d $HOME/.sonar
           export PATH="$HOME/.sonar/build-wrapper-macosx-x86:$PATH"
 
       - name: Install sonar-scanner
@@ -53,7 +53,7 @@ jobs:
 
       - name: Run SonarQube Analysis
         run: |
-            sonar-scanner \
+          sonar-scanner \
             -Dsonar.host.url=${{ env.SONAR_HOST_URL }} \
             -Dsonar.login=${{ env.SONAR_TOKEN }} \
             -Dsonar.projectKey=${{ env.SONAR_PROJECT_KEY }} \
@@ -64,9 +64,6 @@ jobs:
             -Dsonar.scm.revision="${{ github.event.pull_request.head.sha }}" \
             -Dsonar.sources="." \
             -Dsonar.cfamily.build-wrapper-output=bw-output \
-            -Dsonar.cfamily.threads=4 \
-            -Dsonar.cfamily.cache.enabled=true \
-            -Dsonar.cfamily.cache.path="cfamily-cache" \
             -Dsonar.exclusions="Pods/**/*, Example/Tests/**" \
             -Dsonar.scm.disabled=true \
-            -Dsonar.verbose=true                     
+            -Dsonar.verbose=true
