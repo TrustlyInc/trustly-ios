@@ -64,6 +64,5 @@ jobs:
             -Dsonar.scm.revision="${{ github.event.pull_request.head.sha }}" \
             -Dsonar.sources="." \
             -Dsonar.cfamily.compile-commands=compile_commands.json \
-            -Dsonar.exclusions="**/Tests/**" \
             -Dsonar.scm.disabled=true \
             -Dsonar.verbose=true 
