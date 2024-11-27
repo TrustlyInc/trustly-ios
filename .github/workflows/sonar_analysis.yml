@@ -10,6 +10,7 @@ env:
   OWNER: ${{ github.repository_owner }}
   REPO: ${{ github.event.repository.name }}
   PR_NUMBER: ${{ github.event.number }}
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_SECRET }}
   SONAR_HOST_URL: "https://sonarqube.trustly.one"
   SONAR_PROJECT_KEY: "trustly-ios"
   SONAR_PROJECT_NAME: "trustly-ios"
@@ -49,9 +50,6 @@ jobs:
           brew install sonar-scanner
 
       - name: Run SonarQube Analysis
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_SECRET }}
         run: |
           sonar-scanner \
             -Dsonar.host.url=${{ env.SONAR_HOST_URL }} \
@@ -64,5 +62,8 @@ jobs:
             -Dsonar.scm.revision="${{ github.event.pull_request.head.sha }}" \
             -Dsonar.sources="." \
             -Dsonar.cfamily.compile-commands=compile_commands.json \
+            -Dsonar.cfamily.build-wrapper-output.bypass=true \
+            -Dsonar.swift.coverage.reportPath="../DerivedData/Coverage.report" \
+            -Dsonar.exclusions="Pods/**/*, Example/Tests/**" \
             -Dsonar.scm.disabled=false \
-            -Dsonar.verbose=true 
+            -Dsonar.verbose=true
