@@ -33,10 +33,11 @@ jobs:
 
       - name: Install SonarSource Build-Wrapper
         run: |
-          curl -L https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip -o build-wrapper.zip
-          unzip build-wrapper.zip
-          chmod +x build-wrapper-linux-x86/build-wrapper-linux-x86-64
-          export PATH=build-wrapper-linux-x86:$PATH
+            curl -L https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip -o build-wrapper.zip
+            unzip build-wrapper.zip
+            chmod +x build-wrapper-linux-x86/build-wrapper-linux-x86-64
+            export PATH=$PATH:$PWD/build-wrapper-linux-x86
+            which build-wrapper-linux-x86-64
 
       - name: Run Build with Build-Wrapper
         run: |
