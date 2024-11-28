@@ -34,7 +34,18 @@ jobs:
       - name: Install xcpretty
         run: gem install xcpretty
 
-      - name: Generate Compilation Database.
+      - name: Build and Run Tests with Code Coverage
+        run: |
+          swift test --enable-code-coverage
+
+      - name: Generate Coverage Report
+        run: |
+          xcrun llvm-cov show \
+                -instr-profile=.build/debug/codecov/default.profdata \
+                .build/debug/MyPackageTests.xctest/Contents/MacOS/MyPackageTests \
+                > coverage.report
+
+      - name: Generate Compilation Database
         run: |
           xcodebuild -workspace Example/TrustlySDK.xcworkspace \
                      -scheme TrustlySDK-Example \
@@ -59,5 +70,6 @@ jobs:
                 -Dsonar.scm.disabled=true \
                 -Dsonar.language=swift \
                 -Dsonar.sources="." \
+                -Dsonar.swift.coverage.reportPaths=coverage.report \
                 -Dsonar.cfamily.compile-commands=compile_commands.json \
                 -Dsonar.verbose=true
