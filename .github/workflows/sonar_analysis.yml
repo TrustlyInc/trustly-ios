@@ -11,6 +11,7 @@ env:
   REPO: ${{ github.event.repository.name }}
   PR_NUMBER: ${{ github.event.number }}
   SONAR_HOST_URL: "https://sonarqube.trustly.one"
+  SONAR_TOKNE: ${{secrets.SONAR_TOKEN_SECRET}}
   SONAR_PROJECT_KEY: "trustly-ios"
   SONAR_PROJECT_NAME: "trustly-ios"
 
