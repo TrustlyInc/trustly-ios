@@ -12,8 +12,8 @@ env:
   PR_NUMBER: ${{ github.event.number }}
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_SECRET }}
   SONAR_HOST_URL: "https://sonarqube.trustly.one"
-  SONAR_PROJECT_KEY: "trustly-ios-test"
-  SONAR_PROJECT_NAME: "trustly-ios-test"
+  SONAR_PROJECT_KEY: "trustly-ios"
+  SONAR_PROJECT_NAME: "trustly-ios"
 
 jobs:
   SonarQube:
@@ -43,7 +43,6 @@ jobs:
 
       - name: Install sonar-scanner
         run: |
-          brew update
           brew install sonar-scanner
 
       - name: Run SonarQube Analysis
@@ -57,6 +56,8 @@ jobs:
                 -Dsonar.pullrequest.branch="${{ github.head_ref }}" \
                 -Dsonar.pullrequest.key="${{ github.event.pull_request.number }}" \
                 -Dsonar.scm.revision="${{ github.event.pull_request.head.sha }}" \
+                -Dsonar.scm.disabled=true \
+                -Dsonar.language=swift \
                 -Dsonar.sources="." \
                 -Dsonar.cfamily.compile-commands=compile_commands.json \
                 -Dsonar.cfamily.cache.enabled=false \
