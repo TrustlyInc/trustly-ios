@@ -37,9 +37,6 @@ jobs:
       - name: Install lcov
         run: brew install lcov
 
-      - name: Install xccov-to-lcov
-        run: brew install xccov-to-lcov
-
       - name: Create coverage directory
         run: mkdir -p coverage
 
