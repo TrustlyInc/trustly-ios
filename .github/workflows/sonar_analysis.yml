@@ -39,10 +39,8 @@ jobs:
           xcodebuild \
             -workspace Example/TrustlySDK.xcworkspace \
             -scheme TrustlySDK-Example \
-            -derivedDataPath Build/ \
             -enableCodeCoverage YES \
             test \
-            CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
     
       - name: Generate SonarQube Coverage Report
         run: |
