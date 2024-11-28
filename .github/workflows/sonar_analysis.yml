@@ -36,14 +36,14 @@ jobs:
           xcodebuild -workspace Example/TrustlySDK.xcworkspace \
             -scheme TrustlySDK-Example \
             -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' \
-            -derivedDataPath ./derivedData \
-            test
+            -derivedDataPath ~/builds \
+            test > compile_commands.json
 
       - name: Install sonar-scanner
         run: |
           brew install sonar-scanner
 
-      - name: Run SonarQube Analysis with build-wrapper or compile_commands
+      - name: Run SonarQube Analysis
         run: |
           sonar-scanner \
             -Dsonar.host.url=${SONAR_HOST_URL} \
@@ -58,4 +58,5 @@ jobs:
             -Dsonar.language=swift \
             -Dsonar.sources="." \
             -Dsonar.verbose=true \
-            -Dsonar.apple.periphery.indexStorePath=derivedData/Index/DataStore
+            -Dsonar.cfamily.compile-commands="compile_commands.json"
+
