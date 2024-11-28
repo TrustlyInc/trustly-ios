@@ -32,7 +32,7 @@ class ViewController: UIViewController {
                               "metadata.urlScheme": "demoapp://",
                               "description": "First Data Mobile Test",
                               "env": "<[int, sandbox, local]>",
-                              "localUrl": "<YOUR LOCAL URL WHEN `ENV` PROPERTY IS `LOCAL` (ex: 192.168.0.30:8000)>"]
+                              "envHost": "<YOUR LOCAL URL WHEN `ENV` PROPERTY IS `LOCAL` (ex: 192.168.0.30:8000)>"]
 
         
         self.trustlyView.onChangeListener { (eventName, attributes) in
