@@ -36,6 +36,7 @@ jobs:
           curl -L https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip -o build-wrapper.zip
           unzip build-wrapper.zip
           chmod +x build-wrapper-linux-x86/build-wrapper-linux-x86-64
+          export PATH=build-wrapper-linux-x86:$PATH
 
       - name: Run Build with Build-Wrapper
         run: |
