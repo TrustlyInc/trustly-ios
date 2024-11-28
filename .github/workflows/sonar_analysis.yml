@@ -33,7 +33,6 @@ jobs:
       - name: Install SonarSource Build-Wrapper.
         run: |
             curl -L -o build-wrapper-macosx-x86.zip https://binaries.sonarsource.com/CommercialBuildWrapper/build-wrapper-macosx-x86.zip
-            rm -rf build-wrapper-macosx-x86
             unzip -o build-wrapper-macosx-x86.zip
             chmod +x build-wrapper-macosx-x86/build-wrapper-macosx-x86
             export PATH=$PATH:$PWD/build-wrapper-macosx-x86
