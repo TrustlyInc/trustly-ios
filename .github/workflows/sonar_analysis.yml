@@ -33,17 +33,17 @@ jobs:
 
       - name: Install SonarSource Build-Wrapper for macOS
         run: |
-            curl -L https://sonarcloud.io/static/cpp/build-wrapper-osx.zip -o build-wrapper-osx.zip
+            curl -L https://github.com/SonarSource/sonar-build-wrapper/releases/download/2.2/build-wrapper-macosx-x86.zip -o build-wrapper-osx.zip
+            ls -la build-wrapper-osx.zip
             unzip build-wrapper-osx.zip
-            chmod +x build-wrapper-osx/build-wrapper-osx
-            export PATH=$PATH:$PWD/build-wrapper-osx
-            which build-wrapper-osx
+            chmod +x build-wrapper-macosx-x86/build-wrapper-macosx-x86
+            export PATH=$PATH:$PWD/build-wrapper-macosx-x86
+            which build-wrapper-macosx-x86
         
-
       - name: Run Build with Build-Wrapper
         run: |
           # Run the build command with the build-wrapper to capture the build information
-          ./build-wrapper-osx --out-dir bw-output \
+          ./build-wrapper-macosx-x86 --out-dir bw-output \
             xcodebuild -workspace Example/TrustlySDK.xcworkspace \
             -scheme TrustlySDK-Example \
             -configuration Debug \
