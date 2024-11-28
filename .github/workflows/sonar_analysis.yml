@@ -33,38 +33,11 @@ jobs:
 
       - name: Generate Compilation Database
         run: |
-          # Gerando a base de dados de compilação (compile_commands.json)
-          # Se for usar build-wrapper, substitua por esse comando
           xcodebuild -workspace Example/TrustlySDK.xcworkspace \
             -scheme TrustlySDK-Example \
             -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' \
+            -derivedDataPath ./derivedData \
             test
-
-      - name: Install Bear (to generate compile_commands.json)
-        run: |
-          # Instala o Bear para gerar compile_commands.json
-          brew install bear
-
-      - name: Generate Compilation Database with Bear
-        run: |
-          # Usa o Bear para gerar compile_commands.json
-          bear -- xcodebuild -workspace Example/TrustlySDK.xcworkspace \
-            -scheme TrustlySDK-Example \
-            -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' \
-            test
-
-      - name: Verificar a presença de compile_commands.json
-        run: |
-            # Procura pelo arquivo compile_commands.json no projeto
-            FILE_PATH=$(find . -name "compile_commands.json" -print -quit)
-        
-            # Verifica se o arquivo foi encontrado
-            if [ -z "$FILE_PATH" ]; then
-                echo "compile_commands.json não encontrado!"
-                exit 1
-            else
-                echo "Arquivo encontrado em: $FILE_PATH"
-            fi 
 
       - name: Install sonar-scanner
         run: |
@@ -85,4 +58,4 @@ jobs:
             -Dsonar.language=swift \
             -Dsonar.sources="." \
             -Dsonar.verbose=true \
-            -Dsonar.cfamily.compile-commands="compile_commands.json"
+            -Dsonar.apple.periphery.indexStorePath=derivedData/Index/DataStore
