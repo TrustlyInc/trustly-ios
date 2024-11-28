@@ -36,7 +36,8 @@ jobs:
 
       - name: Build and Run Tests with Code Coverage
         run: |
-          cd ${REPO}/Example
+          echo "printing dir"  
+          ls -la
           swift test --enable-code-coverage
 
       - name: Generate Coverage Report
