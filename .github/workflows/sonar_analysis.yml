@@ -36,6 +36,7 @@ jobs:
 
       - name: Build and Run Tests with Code Coverage
         run: |
+          cd ${REPO}/Example
           swift test --enable-code-coverage
 
       - name: Generate Coverage Report
