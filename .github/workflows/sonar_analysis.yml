@@ -40,7 +40,7 @@ jobs:
           bear -- xcodebuild -workspace Example/TrustlySDK.xcworkspace \
             -scheme TrustlySDK-Example \
             -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' \
-            build build OTHER_CFLAGS="-fsyntax-only"
+            build OTHER_CFLAGS="-fsyntax-only"
 
       - name: Install sonar-scanner
         run: |
