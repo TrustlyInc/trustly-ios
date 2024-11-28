@@ -31,14 +31,14 @@ jobs:
           gem install cocoapods
           pod install --project-directory=Example
 
-      - name: Install SonarSource Build-Wrapper
-       run: |
-        curl -L https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip -o build-wrapper.zip
-        unzip build-wrapper.zip
-        chmod +x build-wrapper-linux-x86/build-wrapper-linux-x86-64
-        export PATH=$PATH:$PWD/build-wrapper-linux-x86
-        which build-wrapper-linux-x86-64
-    
+      - name: Install SonarSource Build-Wrapper.
+        run: |
+            curl -L https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip -o build-wrapper.zip
+            unzip build-wrapper.zip
+            chmod +x build-wrapper-linux-x86/build-wrapper-linux-x86-64
+            export PATH=$PATH:$PWD/build-wrapper-linux-x86
+            which build-wrapper-linux-x86-64
+        
       - name: Run Build with Build-Wrapper
         run: |
           # Run the build command with the build-wrapper to capture the build information
