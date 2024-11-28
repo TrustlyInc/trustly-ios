@@ -34,8 +34,10 @@ jobs:
       - name: Install xcpretty
         run: gem install xcpretty
 
-      - name: Install lcov
-        run: brew install lcov
+      - name: Install lcov and xccov-to-lcov
+        run: |
+          brew install lcov
+          brew install xccov
 
       - name: Create coverage directory
         run: mkdir -p coverage
@@ -47,7 +49,7 @@ jobs:
             -scheme TrustlySDK-Example \
             -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' \
             -enableCodeCoverage YES \
-            test
+            test | xcpretty
 
       - name: Verify lcov File
         run: |
@@ -55,8 +57,9 @@ jobs:
             echo "Coverage file not found!" && exit 1
           fi
 
-      - name: Convert lcov to SonarQube Format
+      - name: Convert xccov to lcov
         run: |
+          # Convert the xcresult to lcov format
           xccov-to-lcov -p Build/Logs/Test/*.xcresult > coverage/coverage.lcov
 
       - name: Install sonar-scanner
