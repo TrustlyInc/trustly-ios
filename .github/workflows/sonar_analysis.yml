@@ -33,25 +33,33 @@ jobs:
 
       - name: Install xcpretty
         run: gem install xcpretty
-        
+
       - name: Install lcov
         run: brew install lcov
 
+      - name: Create coverage directory
+        run: mkdir -p coverage
+
       - name: Run Tests with Coverage
         run: |
-            xcodebuild -workspace Example/TrustlySDK.xcworkspace \
-                        -scheme TrustlySDK-Example \
-                        -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' \
-                        clean test \
-                        -enableCodeCoverage YES | tee xcodebuild.log | xcpretty -r lcov --output coverage.lcov
-    
-      - name: Generate SonarQube Coverage Report
+          xcodebuild -workspace Example/TrustlySDK.xcworkspace \
+                      -scheme TrustlySDK-Example \
+                      -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' \
+                      clean test \
+                      -enableCodeCoverage YES | tee xcodebuild.log | xcpretty -r lcov --output coverage/coverage.lcov
+
+      - name: Verify lcov File
         run: |
-          bash xccov-to-sonarqube-generic.sh Build/Logs/Test/Run-swift-coverage-example-$(date +"%Y.%m.%d_%H-%M-%S-%z").xcresult/ > Coverage.xml
+          if [ ! -f coverage/coverage.lcov ]; then
+            echo "Coverage file not found!" && exit 1
+          fi
+
+      - name: Convert lcov to SonarQube Format
+        run: |
+          xccov-to-lcov -p Build/Logs/Test/*.xcresult > coverage/coverage.lcov
 
       - name: Install sonar-scanner
-        run: |
-          brew install sonar-scanner
+        run: brew install sonar-scanner
 
       - name: Run SonarQube Analysis
         run: |
@@ -67,6 +75,6 @@ jobs:
                 -Dsonar.scm.disabled=true \
                 -Dsonar.language=swift \
                 -Dsonar.sources="." \
-                -Dsonar.swift.coverage.reportPaths=coverage.report \
+                -Dsonar.swift.coverage.reportPaths=coverage/coverage.lcov \
                 -Dsonar.cfamily.compile-commands=compile_commands.json \
                 -Dsonar.verbose=true
