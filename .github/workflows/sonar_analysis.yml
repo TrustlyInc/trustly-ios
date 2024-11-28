@@ -45,8 +45,7 @@ jobs:
       - name: Find compile_command.json
         run: |
 
-            find . -name "compile_commands.json"
-
+            find -name "compile_commands.json"
 
       - name: Install sonar-scanner
         run: |
@@ -66,6 +65,7 @@ jobs:
             -Dsonar.scm.disabled=true \
             -Dsonar.language=swift \
             -Dsonar.sources="." \
-            -Dsonar.verbose=true
+            -Dsonar.verbose=true \
+            -Dsonar.cfamily.compile-commands=compile_commands.json
 
 
