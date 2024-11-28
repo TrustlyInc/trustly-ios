@@ -40,7 +40,13 @@ jobs:
           bear -- xcodebuild -workspace Example/TrustlySDK.xcworkspace \
             -scheme TrustlySDK-Example \
             -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' \
-            test
+            test 
+
+      - name: Find compile_command.json
+        run: |
+
+            find . -name "compile_commands.json"
+
 
       - name: Install sonar-scanner
         run: |
