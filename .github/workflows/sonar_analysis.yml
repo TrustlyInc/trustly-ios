@@ -32,6 +32,7 @@ jobs:
 
       - name: Install SonarSource Build-Wrapper.
         run: |
+            rm -rf build-wrapper-macosx-x86
             curl -L https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip -o build-wrapper.zip
             unzip build-wrapper.zip
             chmod +x build-wrapper-linux-x86/build-wrapper-linux-x86-64
