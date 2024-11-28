@@ -60,5 +60,4 @@ jobs:
                 -Dsonar.language=swift \
                 -Dsonar.sources="." \
                 -Dsonar.cfamily.compile-commands=compile_commands.json \
-                -Dsonar.cfamily.cache.enabled=true \
                 -Dsonar.verbose=true
