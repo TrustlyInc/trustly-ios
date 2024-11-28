@@ -35,12 +35,12 @@ jobs:
         run: |
           curl -L https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip -o build-wrapper.zip
           unzip build-wrapper.zip
-          chmod +x build-wrapper
+          chmod +x build-wrapper-linux-x86/build-wrapper-linux-x86-64
 
       - name: Run Build with Build-Wrapper
         run: |
           # Run the build command with the build-wrapper to capture the build information
-          ./build-wrapper --out-dir bw-output \
+          ./build-wrapper-linux-x86-64 --out-dir bw-output \
             xcodebuild -workspace Example/TrustlySDK.xcworkspace \
             -scheme TrustlySDK-Example \
             -configuration Debug \
