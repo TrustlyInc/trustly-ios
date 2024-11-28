@@ -48,10 +48,10 @@ jobs:
       - name: Run SonarQube Analysis
         run: |
           sonar-scanner \
-                -Dsonar.host.url=${{ env.SONAR_HOST_URL }} \
-                -Dsonar.login=${{ env.SONAR_TOKEN }} \
-                -Dsonar.projectKey=${{ env.SONAR_PROJECT_KEY }} \
-                -Dsonar.projectName=${{ env.SONAR_PROJECT_NAME }} \
+                -Dsonar.host.url=${SONAR_HOST_URL} \
+                -Dsonar.login=${SONAR_TOKEN} \
+                -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+                -Dsonar.projectName=${SONAR_PROJECT_NAME} \
                 -Dsonar.pullrequest.base="${{ github.base_ref }}" \
                 -Dsonar.pullrequest.branch="${{ github.head_ref }}" \
                 -Dsonar.pullrequest.key="${{ github.event.pull_request.number }}" \
