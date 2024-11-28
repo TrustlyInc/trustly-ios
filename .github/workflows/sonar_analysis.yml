@@ -33,9 +33,9 @@ jobs:
 
       - name: Install SonarSource Build-Wrapper for macOS
         run: |
-            curl -L https://github.com/SonarSource/sonar-build-wrapper/releases/download/2.2/build-wrapper-macosx-x86.zip -o build-wrapper-osx.zip
-            ls -la build-wrapper-osx.zip
-            unzip build-wrapper-osx.zip
+            curl -L https://github.com/SonarSource/sonar-build-wrapper/releases/download/2.2/build-wrapper-macosx-x86.zip -o build-wrapper-macosx-x86.zip
+            ls -la build-wrapper-macosx-x86.zip
+            unzip build-wrapper-macosx-x86.zip
             chmod +x build-wrapper-macosx-x86/build-wrapper-macosx-x86
             export PATH=$PATH:$PWD/build-wrapper-macosx-x86
             which build-wrapper-macosx-x86
