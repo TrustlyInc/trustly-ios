@@ -43,7 +43,7 @@ jobs:
       - name: Run Build with Build-Wrapper
         run: |
           # Run the build command with the build-wrapper to capture the build information
-          ./trustly-ios/build-wrapper-linux-x86-64/build-wrapper-linux-x86-64 --out-dir bw-output \
+          ./trustly-ios/trustly-ios/build-wrapper-linux-x86-64/build-wrapper-linux-x86-64 --out-dir bw-output \
             xcodebuild -workspace Example/TrustlySDK.xcworkspace \
             -scheme TrustlySDK-Example \
             -configuration Debug \
