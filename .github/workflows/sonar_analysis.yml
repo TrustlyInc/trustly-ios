@@ -37,12 +37,13 @@ jobs:
             chmod +x build-wrapper-linux-x86/build-wrapper-linux-x86-64
             export PATH=$PATH:$PWD/build-wrapper-linux-x86
             which build-wrapper-linux-x86-64
+            cd build-wrapper-linux-x86
             ls -la
         
       - name: Run Build with Build-Wrapper
         run: |
           # Run the build command with the build-wrapper to capture the build information
-          ./build-wrapper-linux-x86 --out-dir bw-output \
+          ./build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir bw-output \
             xcodebuild -workspace Example/TrustlySDK.xcworkspace \
             -scheme TrustlySDK-Example \
             -configuration Debug \
