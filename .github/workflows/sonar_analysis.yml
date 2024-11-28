@@ -36,7 +36,7 @@ jobs:
 
       - name: Build and Run Tests with Code Coverage
         run: |
-          echo "printing dir"  
+          cd Example
           ls -la
           swift test --enable-code-coverage
 
