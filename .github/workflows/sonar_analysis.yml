@@ -20,6 +20,9 @@ jobs:
     runs-on: macOS-latest
 
     steps:
+      - name: Set up Xcode 14
+        run: sudo xcode-select --switch /Applications/Xcode_14.app/Contents/Developer
+        
       - name: Checkout code
         uses: actions/checkout@v3
         with:
