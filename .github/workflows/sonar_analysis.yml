@@ -34,13 +34,13 @@ jobs:
       - name: Install xcpretty
         run: gem install xcpretty
 
-      - name: Build and Test with Code Coverage
+      - name: Run Tests with Coverage
         run: |
-          xcodebuild \
-            -workspace Example/TrustlySDK.xcworkspace \
-            -scheme TrustlySDK-Example \
-            -enableCodeCoverage YES \
-            test \
+            xcodebuild -workspace Example/TrustlySDK.xcworkspace \
+                        -scheme TrustlySDK-Example \
+                        -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' \
+                        clean test \
+                        -enableCodeCoverage YES | tee xcodebuild.log | xcpretty -r lcov --output coverage.lcov
     
       - name: Generate SonarQube Coverage Report
         run: |
