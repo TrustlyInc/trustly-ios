@@ -31,19 +31,18 @@ jobs:
           gem install cocoapods
           pod install --project-directory=Example
 
-      - name: Install SonarSource Build-Wrapper for macOS
-        run: |
-            curl -L https://github.com/SonarSource/sonar-build-wrapper/releases/download/2.2/build-wrapper-macosx-x86.zip -o build-wrapper-macosx-x86.zip
-            ls -la build-wrapper-macosx-x86.zip
-            unzip build-wrapper-macosx-x86.zip
-            chmod +x build-wrapper-macosx-x86/build-wrapper-macosx-x86
-            export PATH=$PATH:$PWD/build-wrapper-macosx-x86
-            which build-wrapper-macosx-x86
-        
+      - name: Install SonarSource Build-Wrapper
+       run: |
+        curl -L https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip -o build-wrapper.zip
+        unzip build-wrapper.zip
+        chmod +x build-wrapper-linux-x86/build-wrapper-linux-x86-64
+        export PATH=$PATH:$PWD/build-wrapper-linux-x86
+        which build-wrapper-linux-x86-64
+    
       - name: Run Build with Build-Wrapper
         run: |
           # Run the build command with the build-wrapper to capture the build information
-          ./build-wrapper-macosx-x86 --out-dir bw-output \
+          ./build-wrapper-linux-x86-64/build-wrapper-linux-x86-64 --out-dir bw-output \
             xcodebuild -workspace Example/TrustlySDK.xcworkspace \
             -scheme TrustlySDK-Example \
             -configuration Debug \
