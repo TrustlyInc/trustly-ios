@@ -53,6 +53,19 @@ jobs:
             -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' \
             test
 
+      - name: Verificar a presença de compile_commands.json
+        run: |
+            # Procura pelo arquivo compile_commands.json no projeto
+            FILE_PATH=$(find . -name "compile_commands.json" -print -quit)
+        
+            # Verifica se o arquivo foi encontrado
+            if [ -z "$FILE_PATH" ]; then
+                echo "compile_commands.json não encontrado!"
+                exit 1
+            else
+                echo "Arquivo encontrado em: $FILE_PATH"
+            fi 
+
       - name: Install sonar-scanner
         run: |
           brew install sonar-scanner
@@ -72,4 +85,4 @@ jobs:
             -Dsonar.language=swift \
             -Dsonar.sources="." \
             -Dsonar.verbose=true \
-            -Dsonar.cfamily.compile-commands="path/to/compile_commands.json"
+            -Dsonar.cfamily.compile-commands="compile_commands.json"
