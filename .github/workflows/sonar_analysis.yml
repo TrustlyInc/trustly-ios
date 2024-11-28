@@ -33,18 +33,15 @@ jobs:
 
       - name: Generate Compilation Database and Run Tests
         run: |
-            # Executar os testes e gerar o arquivo compile_commands.json
-            xcodebuild -workspace Example/TrustlySDK.xcworkspace \
+            xcodebuild test \
+                -workspace Example/TrustlySDK.xcworkspace \
                 -scheme TrustlySDK-Example \
-                -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' \
-                -exportCompilationDatabase compile_commands.json test
+                -destination "platform=iOS Simulator,name=iPhone 15 Pro" \
+                -derivedDataPath Build/ \
+                -enableCodeCoverage YES \
+                -resultBundlePath TestResults/TestResults.xcresult
 
-            # Certifique-se de que o arquivo compile_commands.json foi gerado
-            if [ ! -f "compile_commands.json" ]; then
-                echo "Erro: compile_commands.json não foi gerado!"
-                exit 1
-            fi
-        
+            find . -name "TestResults.xcresult" -print    
 
       - name: Install sonar-scanner
         run: |
@@ -65,5 +62,5 @@ jobs:
             -Dsonar.language=swift \
             -Dsonar.sources="." \
             -Dsonar.verbose=true \
-            -Dsonar.cfamily.compile-commands="compile_commands.json"
+            -Dsonar.swift.coverage.reportPaths=TestResults/TestResults.xcresult
 
