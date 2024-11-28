@@ -38,6 +38,8 @@ jobs:
             chmod +x build-wrapper-linux-x86/build-wrapper-linux-x86-64
             export PATH=$PATH:$PWD/build-wrapper-linux-x86
             which build-wrapper-linux-x86-64
+            cd build-wrapper-linux-x86/build-wrapper-linux-x86-64
+            ls -la
         
       - name: Run Build with Build-Wrapper
         run: |
