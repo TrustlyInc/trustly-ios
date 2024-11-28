@@ -34,19 +34,19 @@ jobs:
       - name: Install xcpretty
         run: gem install xcpretty
 
-      - name: Generate Coverage Report
+      - name: Build and Test with Code Coverage
         run: |
-          xcrun llvm-cov show \
-                -instr-profile=.build/debug/codecov/default.profdata \
-                .build/debug/MyPackageTests.xctest/Contents/MacOS/MyPackageTests \
-                > coverage.report
-
-      - name: Generate Compilation Database
+          xcodebuild \
+            -workspace Example/TrustlySDK.xcworkspace \
+            -scheme TrustlySDK-Example \
+            -derivedDataPath Build/ \
+            -enableCodeCoverage YES \
+            test \
+            CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+    
+      - name: Generate SonarQube Coverage Report
         run: |
-          xcodebuild -workspace Example/TrustlySDK.xcworkspace \
-                     -scheme TrustlySDK-Example \
-                     -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' \
-                     clean build test | xcpretty -r json-compilation-database --output compile_commands.json
+          bash xccov-to-sonarqube-generic.sh Build/Logs/Test/Run-swift-coverage-example-$(date +"%Y.%m.%d_%H-%M-%S-%z").xcresult/ > Coverage.xml
 
       - name: Install sonar-scanner
         run: |
