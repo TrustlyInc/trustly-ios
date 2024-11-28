@@ -10,7 +10,6 @@ env:
   OWNER: ${{ github.repository_owner }}
   REPO: ${{ github.event.repository.name }}
   PR_NUMBER: ${{ github.event.number }}
-  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_SECRET }}
   SONAR_HOST_URL: "https://sonarqube.trustly.one"
   SONAR_PROJECT_KEY: "trustly-ios"
   SONAR_PROJECT_NAME: "trustly-ios"
@@ -31,43 +30,26 @@ jobs:
           gem install cocoapods
           pod install --project-directory=Example
 
-      - name: Install xcpretty
-        run: gem install xcpretty
-
-      - name: Install lcov and xccov-to-lcov
+      - name: Generate Compilation Database
         run: |
-          brew install lcov
-          brew install xccov
-
-      - name: Create coverage directory
-        run: mkdir -p coverage
-
-      - name: Run Tests with Coverage
-        run: |
-          xcodebuild \
-            -workspace Example/TrustlySDK.xcworkspace \
+          xcodebuild -workspace Example/TrustlySDK.xcworkspace \
             -scheme TrustlySDK-Example \
             -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' \
-            -enableCodeCoverage YES \
-            test | xcpretty
-
-      - name: Verify lcov File
-        run: |
-          if [ ! -f coverage/coverage.lcov ]; then
-            echo "Coverage file not found!" && exit 1
-          fi
-
-      - name: Convert xccov to lcov
-        run: |
-          # Convert the xcresult to lcov format
-          xccov-to-lcov -p Build/Logs/Test/*.xcresult > coverage/coverage.lcov
+            test
 
       - name: Install sonar-scanner
-        run: brew install sonar-scanner
+        run: |
+            echo "printing dir"
+            ls -la     
+
+      - name: Install sonar-scanner
+        run: |
+          brew update
+          brew install sonar-scanner
 
       - name: Run SonarQube Analysis
         run: |
-          sonar-scanner \
+           sonar-scanner \
                 -Dsonar.host.url=${SONAR_HOST_URL} \
                 -Dsonar.login=${SONAR_TOKEN} \
                 -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
@@ -79,6 +61,4 @@ jobs:
                 -Dsonar.scm.disabled=true \
                 -Dsonar.language=swift \
                 -Dsonar.sources="." \
-                -Dsonar.swift.coverage.reportPaths=coverage/coverage.lcov \
-                -Dsonar.cfamily.compile-commands=compile_commands.json \
                 -Dsonar.verbose=true
