@@ -33,33 +33,43 @@ jobs:
 
       - name: Generate Compilation Database
         run: |
+          # Gerando a base de dados de compilação (compile_commands.json)
+          # Se for usar build-wrapper, substitua por esse comando
           xcodebuild -workspace Example/TrustlySDK.xcworkspace \
+            -scheme TrustlySDK-Example \
+            -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' \
+            test
+
+      - name: Install Bear (to generate compile_commands.json)
+        run: |
+          # Instala o Bear para gerar compile_commands.json
+          brew install bear
+
+      - name: Generate Compilation Database with Bear
+        run: |
+          # Usa o Bear para gerar compile_commands.json
+          bear -- xcodebuild -workspace Example/TrustlySDK.xcworkspace \
             -scheme TrustlySDK-Example \
             -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' \
             test
 
       - name: Install sonar-scanner
         run: |
-            echo "printing dir"
-            ls -la     
-
-      - name: Install sonar-scanner
-        run: |
-          brew update
           brew install sonar-scanner
 
-      - name: Run SonarQube Analysis
+      - name: Run SonarQube Analysis with build-wrapper or compile_commands
         run: |
-           sonar-scanner \
-                -Dsonar.host.url=${SONAR_HOST_URL} \
-                -Dsonar.login=${SONAR_TOKEN} \
-                -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
-                -Dsonar.projectName=${SONAR_PROJECT_NAME} \
-                -Dsonar.pullrequest.base="${{ github.base_ref }}" \
-                -Dsonar.pullrequest.branch="${{ github.head_ref }}" \
-                -Dsonar.pullrequest.key="${{ github.event.pull_request.number }}" \
-                -Dsonar.scm.revision="${{ github.event.pull_request.head.sha }}" \
-                -Dsonar.scm.disabled=true \
-                -Dsonar.language=swift \
-                -Dsonar.sources="." \
-                -Dsonar.verbose=true
+          sonar-scanner \
+            -Dsonar.host.url=${SONAR_HOST_URL} \
+            -Dsonar.login=${SONAR_TOKEN} \
+            -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+            -Dsonar.projectName=${SONAR_PROJECT_NAME} \
+            -Dsonar.pullrequest.base="${{ github.base_ref }}" \
+            -Dsonar.pullrequest.branch="${{ github.head_ref }}" \
+            -Dsonar.pullrequest.key="${{ github.event.pull_request.number }}" \
+            -Dsonar.scm.revision="${{ github.event.pull_request.head.sha }}" \
+            -Dsonar.scm.disabled=true \
+            -Dsonar.language=swift \
+            -Dsonar.sources="." \
+            -Dsonar.verbose=true \
+            -Dsonar.cfamily.compile-commands="path/to/compile_commands.json"
