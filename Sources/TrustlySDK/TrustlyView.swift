@@ -24,20 +24,6 @@ func Rgb2UIColor(_ r: CGFloat, _ g: CGFloat, _ b: CGFloat) -> UIColor {
 }
 
 let WidgetView:Int = 100
-
-let ExternalLinkViewTag:Int = 99
-let ExternalLinkTitleTag:Int = 98
-let ExternalLinkSubtitleTag:Int = 97
-let ExternalLinkWebViewTag:Int = 96
-let ExternalLinkPrintBtnTag:Int = 95
-
-let NavBarHeight:Int = 26
-let NavBarIconWidth:Int = 10
-let NavBarIconHeight:Int = 10
-
-let build = "3.2.2"
-
-let CloseIconBase64:String! = "iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAACxLAAAsSwGlPZapAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAG1SURBVHgB3diLTcNADAZgpxOUBVA6CYzQDdoRGMETABMAG8AEVUdggmaDdoMYn5KTQlSau8RnW/ySVUWyo/sa9XEH8E9SDS+IaM0vO647rmNVVUdwFF5feAlr3HLVXN+8xq9x047rQr/zAk4SEFwbrma0xhNXHZvqK4iYdzDODUTMITbu6XbMMAmIkHbV968n7re3wFD3mdhwhXe8Thl4pLSoYRKfRMxpOPhBaSmOyUS0XLvxDcwxmYgQ/OtGZhgxhCVGHGGBKYbQxBRHaGDUECUx6ogSGDOEJMYcIYFxg1iKcYWYi6Fuz9MkziBoJgPz6RYxA+MXIYxB8JCFGARPmYlB8JhMDIJQViAY6s6XHjJG7sFTKP8Xe5g38JCFCB8YIYQtRhhhg5mBQEr/NtPB0IK/4m4wtHA/wdeVOYaENkWmGBLe2ZlgqND2VBVDhffYKhhSOigoiiHl044iGDI6shHFkPG5kwjGGiGG8YBYjKHuaTSJgwgKycQ8x6Ft4gCCYjIw5ziACc0IBknEtLF56okgGCYB0w6bT9carBExExgcNtZch37xoc5cT+AoPeZ1ALhExA8NsASbTxPzlwAAAABJRU5ErkJggg=="
     
 @available(iOS 12.0, *)
 public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScriptMessageHandler, WKUIDelegate {
@@ -54,15 +40,17 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
     private var changeListenerHandler:TrustlyListenerCallback?
     private var establishData:[AnyHashable : Any]?
     private var mainWebView:WKWebView!
-    private var returnUrl = "msg://return"
-    private var cancelUrl = "msg://cancel"
+    private var returnUrl = Constants.RETURN_URL
+    private var cancelUrl = Constants.CANCEL_URL
     private var urlScheme = ""
     private var webSession: ASWebAuthenticationSession!
     private var baseUrls = ["paywithmybank.com", "trustly.one"]
-    private var isLocalEnvironment = false
     private let oauthLoginPath = "/oauth/login/"
     private var sessionCid = "ios wrong sessionCid"
     private var cid = "ios wrong cid"
+    private var isLocalEnvironment = false
+    private var trustlySettings: TrustlySettings? = nil
+    private let loading = UIActivityIndicatorView()
 
     
     //Constructors
@@ -78,7 +66,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
     }
     
 
-    func notifyListener(_ eventName:String!, _ eventDetails:[AnyHashable : Any]!) {
+    private func notifyListener(_ eventName:String!, _ eventDetails:[AnyHashable : Any]!) {
         if(changeListenerHandler != nil) {
             changeListenerHandler!(eventName, eventDetails)
         }
@@ -114,10 +102,9 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         mainWebView.scrollView.bounces = false
         mainWebView.backgroundColor = UIColor.clear
         mainWebView.isOpaque = false
+        
         if #available(iOS 16.4, *) {
             mainWebView.isInspectable = true
-        } else {
-            // Fallback on earlier versions
         }
 
         addSubview(mainWebView)
@@ -163,93 +150,35 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         
         bankSelectedHandler = onBankSelected
 
-        let url = getEndpointUrl(function: "widget", establishData:establishData as! [String : String]) + "&" + urlEncoded(query) + "#" + urlEncoded(hash)
-        
-        guard let url = URL(string: url) else { return self }
-        
-        var request = URLRequest(url: url)
+        do {
+            let environment = try buildEnvironment(
+                resourceUrl: .widget,
+                environment: (eD["env"] ?? "") as! String,
+                localUrl: (eD["envHost"] ?? "") as! String,
+                paymentType: (eD["paymentType"] ?? "") as! String,
+                build: Constants.buildSDK,
+                query: query,
+                hash: hash
+            )
+            
+            isLocalEnvironment = environment.isLocal
+            
+            var request = URLRequest(url: environment.url)
+            request.httpMethod = "GET"
+            request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
 
-        request.httpMethod = "GET"
-        request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
+            self.notifyEvent("widget", "loading")
 
-        self.notifyEvent("widget", "loading")
-
-        self.mainWebView!.tag = WidgetView
-        self.mainWebView!.load(request)
-
-        return self
-    }
-
-    public func establish(establishData eD: [AnyHashable : Any], onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) -> UIView? {
-        establishData = eD
-        
-        self.createNotifications()
-        
-        self.addSessionCid()
-
-        let deviceType = establishData?["deviceType"] ?? "mobile" + ":ios:native"
-        establishData?["deviceType"] = deviceType
-        if let lang = establishData?["metadata.lang"] as? String {
-            establishData?["lang"] = lang
+            self.mainWebView!.tag = WidgetView
+            self.mainWebView!.load(request)
+            
+        } catch NetworkError.invalidUrl {
+            print("Error: Invalid url.")
+            
+        } catch {
+            print("Unexpected error: \(error).")
         }
         
-        establishData?["metadata.sdkIOSVersion"] = build
-        
-        if establishData?.index(forKey: "metadata.integrationContext") == nil {
-            establishData?["metadata.integrationContext"] = inAppIntegrationContext
-        }
-        
-        
-        returnUrl = "msg://return"
-        establishData?["returnUrl"] = returnUrl
-        cancelUrl = "msg://cancel"
-        establishData?["cancelUrl"] = cancelUrl
-        establishData?["version"] = "2"
-        establishData?["grp"] = self.getGrp()
-
-        if establishData?["paymentProviderId"] != nil {
-            establishData?["widgetLoaded"] = "true"
-        }
-        
-        if let scheme = establishData?["metadata.urlScheme"] as? String {
-            self.urlScheme = scheme.components(separatedBy: ":")[0]
-        }
-        
-        returnHandler = onReturn
-        cancelHandler = onCancel
-        externalUrlHandler = nil
-
-        let url = getEndpointUrl(function: "index", establishData:establishData! as! [String:String])
-        var request = URLRequest(url: URL(string: url)!)
-
-        request.httpMethod = "POST"
-        request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
-        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField:"Content-Type")
-
-        let requestData = urlEncoded(establishData!).data(using: .utf8)
-
-        request.setValue(String(format:"%lu", requestData!.count), forHTTPHeaderField:"Content-Length")
-        request.httpBody = requestData
-        
-        let semaphore = DispatchSemaphore(value:0)
-        
-        var httpData:Data?
-        var response:URLResponse?
-        var error:Error?
-        URLSession.shared.dataTask(with: request) { (data, resp, err) in
-            httpData = data
-            response = resp
-            error = err
-            semaphore.signal()
-        }.resume()
-
-        semaphore.wait()
-        
-        if(error == nil){
-            self.mainWebView?.load(httpData!, mimeType:"text/html", characterEncodingName:"UTF-8", baseURL: (response?.url)!)
-        } else {
-            self.cancelHandler!(self, [:])
-        }
         return self
     }
 
@@ -272,7 +201,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
     
     public func verify(verifyData:[AnyHashable : Any], onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) -> UIView? {
         var mutableDictionary = verifyData
-        mutableDictionary["paymentType"] = "Verification"
+        mutableDictionary["paymentType"] = Constants.PAYMENTTYPE_VERIFICATION
         
         return establish(establishData: mutableDictionary, onReturn:onReturn, onCancel:onCancel)
     }
@@ -414,7 +343,6 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         let request = navigationAction.request
         let targetFrame = navigationAction.targetFrame;
         let host = request.url?.host
-        //let relative = request.url?.relativePath ?? ""
         let query = request.url?.query ?? ""
         let scheme = request.url?.scheme ?? ""
         let absolute = request.url?.absoluteString
@@ -437,10 +365,10 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
                 //messages
                 switch(host){
                     case "push":
-                        let params = self.urlDecode(query)?.components(separatedBy: "|")
-                        if ("PayWithMyBank.createTransaction" == params?[0]) && bankSelectedHandler != nil {
-                            if params?.count ?? 0 > 1 {
-                                establishData?["paymentProviderId"] = params?[1]
+                    let params = URLUtils.urlDecode(query).components(separatedBy: "|")
+                    if ("PayWithMyBank.createTransaction" == params[0]) && bankSelectedHandler != nil {
+                        if params.count > 1 {
+                            establishData?["paymentProviderId"] = params[1]
                             }
                             
                             if let establishData = establishData {
@@ -489,33 +417,6 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         }
     }
 
-    func getEndpointUrl(function:String, establishData:[String:String]) -> String {
-        var fn = function
-        let env = establishData["env"]
-        let localUrl = establishData["localUrl"]
-        var subDomain = ""
-        var url:String
-
-        if env != nil && env!.count > 0 {
-            subDomain = String(format:"%@.", env!)
-        }
-
-        if  "index" == fn &&
-            "Verification" != establishData["paymentType"] &&
-            establishData["paymentType"] != nil {
-            fn = "selectBank"
-        }
-
-        if ("local" == env), let urlLocal = localUrl {
-            url = "http://"+urlLocal+":8000/start/selectBank/"+fn+"?v="+build+"-ios-sdk"
-            isLocalEnvironment = true
-            
-        } else {
-            url = "https://"+subDomain+"paywithmybank.com/start/selectBank/"+fn+"?v="+build+"-ios-sdk"
-        }
-        return url
-    }
-
     func parametersForUrl(_ url:URL) -> [AnyHashable : Any] {
         let absoluteString = url.absoluteString
         var queryStringDictionary = [String : String]()
@@ -560,36 +461,6 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         return grp
     }
     
-    private func toString(_ object: Any?) -> String? {
-        if let object = object {
-            return "\(object)"
-        }
-        return nil
-    }
-
-    private func urlEncode(_ object: Any?) -> String? {
-        let str = toString(object)
-        let set = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ0123456789-._~")
-
-        return str?.addingPercentEncoding(withAllowedCharacters: set)
-    }
-
-    private func urlDecode(_ object: Any?) -> String? {
-        let string = toString(object)
-
-        return string?.removingPercentEncoding
-    }
-
-
-    func urlEncoded(_ data:[AnyHashable : Any?]) -> String! {
-        var parts = [String]()
-        for (key,value) in data {
-            let part = String(format:"%@=%@", urlEncode(key)!, urlEncode(value)!)
-            parts.append(part)
-         }
-        return parts.joined(separator: "&")
-    }
-    
     private func addSessionCid() {
         
         self.establishData?["sessionCid"] = sessionCid
@@ -615,7 +486,7 @@ extension TrustlyView {
         let path = url.path
         
         //1.1: On the main view creates a new OAuth view (new WKWebview) and opens the URL there
-        if isLocalEnvironment || (self.checkUrl(host: host) &&
+        if self.isLocalEnvironment || (self.checkUrl(host: host) &&
             path.contains(self.oauthLoginPath)) {
 
             self.buildASWebAuthenticationSession(url: url, callbackURL: urlScheme)
@@ -637,6 +508,26 @@ extension TrustlyView {
         webSession.start()
     }
     
+    private func buildASWebAuthenticationSession(url: URL, callbackURL: String, onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) {
+        webSession = ASWebAuthenticationSession(url: url, callbackURLScheme: callbackURL, completionHandler: { (url, error) in
+            if let stringUrl = url?.absoluteString {
+                let returnedEstablish = EstablishDataUtils.buildEstablishFrom(urlWithParameters: stringUrl)
+                
+                onReturn?(self, returnedEstablish)
+                
+            } else {
+                onCancel?(self, [:])
+            }
+        })
+        
+        if #available(iOS 13, *) {
+            webSession.prefersEphemeralWebBrowserSession = true
+            webSession.presentationContextProvider = self
+        }
+
+        webSession.start()
+    }
+
     private func proceedToChooseAccount(){
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.mainWebView.evaluateJavaScript("window.Trustly.proceedToChooseAccount();", completionHandler: nil)
@@ -668,6 +559,189 @@ extension TrustlyView {
         }
         
         return false
+    }
+    
+    private func startLoading() {
+        self.loading.frame = CGRectMake(0.0, 0.0, 40.0, 40.0);
+        self.loading.center = self.center
+        self.loading.hidesWhenStopped = true
+        self.loading.color = .gray
+        self.loading.hidesWhenStopped = true
+        
+        if #available(iOS 13.0, *) {
+            self.loading.style = .large
+        } else {
+            self.loading.style = .gray
+        }
+        
+        self.addSubview(self.loading)
+        
+        self.loading.startAnimating()
+    }
+
+    private func stopLoading() {
+        self.loading.stopAnimating()
+    }
+}
+
+// MARK: Establish
+extension TrustlyView {
+
+    /** @abstract This function is responsible to open the lightbox, according to TrustlySettings service. If the context of the lightbox is `web view`, this function will
+     return a UIView instance with a WebView embedded, in case the context valeu be `in-app-browser`, this function will return a empty UIView, andwill open the
+     lightbox in an ASWebAuthentication instance.
+     @param establishData eD: [AnyHashable : Any]
+     @param onReturn: TrustlyCallback?
+     @param onCancel: TrustlyCallback?
+     */
+    public func establish(establishData eD: [AnyHashable : Any], onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) -> UIView? {
+        
+        self.prepareEstablish(establishData: eD)
+        
+        DispatchQueue.global(qos: .background).async{
+            
+            if let establish = self.establishData {
+                
+                DispatchQueue.main.async{
+                    self.startLoading()
+                }
+                
+                getTrustlySettingsWith(establish: establish) { trustlySettings in
+
+                    if let settings = trustlySettings?.settings
+                        , settings.integrationStrategy == Constants.LIGHTBOX_CONTEXT_INAPP {
+                        
+                        DispatchQueue.main.async {
+                            // Update the UI on the main thread
+                            self.establishASWebAuthentication(onReturn: onReturn, onCancel: onCancel)
+                        }
+                        
+                    } else {
+                        self.establishWebView(onReturn: onReturn, onCancel: onCancel)
+                    }
+                }
+            }
+        }
+
+        return self
+    }
+
+    private func establishWebView(onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) {
+        
+        if establishData?.index(forKey: "metadata.integrationContext") == nil {
+            establishData?["metadata.integrationContext"] = inAppIntegrationContext
+        }
+        
+        returnHandler = onReturn
+        cancelHandler = onCancel
+        externalUrlHandler = nil
+        
+        do {
+            let environment = try buildEnvironment(
+                resourceUrl: .index,
+                environment: (establishData?["env"] ?? "") as! String,
+                localUrl: (establishData?["envHost"] ?? "") as! String,
+                paymentType: (establishData?["paymentType"] ?? "") as! String,
+                build: Constants.buildSDK
+            )
+            
+            isLocalEnvironment = environment.isLocal
+            
+            if let establish = establishData {
+                
+                loadLightbox(establish: establish, url: environment.url) { (data, response, error) in
+                    DispatchQueue.main.async{
+                        if(error == nil){
+                            self.mainWebView?.load(data!, mimeType:"text/html", characterEncodingName:"UTF-8", baseURL: (response?.url)!)
+                            self.stopLoading()
+                            
+                        } else {
+                            self.cancelHandler!(self, [:])
+                            
+                        }
+                    }
+                }
+            }
+            
+        } catch NetworkError.invalidUrl {
+            print("Error: Invalid url.")
+            
+        } catch {
+            print("Unexpected error: \(error).")
+        }
+    }
+    
+    private func establishASWebAuthentication(onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) {
+         
+         if let scheme = establishData?["metadata.urlScheme"] as? String {
+             self.urlScheme = scheme.components(separatedBy: ":")[0]
+             establishData?["returnUrl"] = scheme
+             establishData?["cancelUrl"] = scheme
+         }
+        
+        do {
+            let environment = try buildEnvironment(
+                resourceUrl: .establish,
+                environment: (establishData?["env"] ?? "") as! String,
+                localUrl: (establishData?["envHost"] ?? "") as! String,
+                paymentType: (establishData?["paymentType"] ?? "") as! String,
+                build: Constants.buildSDK,
+                path: .mobile
+            )
+            
+            isLocalEnvironment = environment.isLocal
+            
+            var url = environment.url.absoluteString
+            
+            let normalizedEstablish:[String : AnyHashable] = EstablishDataUtils.normalizeEstablishWithDotNotation(establish: establishData as! [String : AnyHashable])
+            
+            if let token = JSONUtils.getJsonBase64From(dictionary: normalizedEstablish) {
+
+                url = "\(url)?token=\(token)"
+
+                self.buildASWebAuthenticationSession(url: URL(string: url)!, callbackURL: urlScheme, onReturn: onReturn, onCancel: onCancel)
+                
+                self.stopLoading()
+            }
+            
+        } catch NetworkError.invalidUrl {
+            print("Error: Invalid url.")
+            
+        } catch {
+            print("Error: building url.")
+        }
+
+     }
+    
+    private func prepareEstablish(establishData eD: [AnyHashable : Any]) {
+        establishData = eD
+        
+        self.addSessionCid()
+
+        let deviceType = "\(establishData?["deviceType"] ?? Constants.DEVICE_TYPE):\(Constants.DEVICE_PLATFORM)"
+        establishData?["deviceType"] = deviceType
+        
+        if let lang = establishData?["metadata.lang"] as? String {
+            establishData?["lang"] = lang
+        }
+        
+        establishData?["metadata.sdkIOSVersion"] = Constants.buildSDK
+        
+        returnUrl = Constants.RETURN_URL
+        establishData?["returnUrl"] = returnUrl
+        cancelUrl = Constants.CANCEL_URL
+        establishData?["cancelUrl"] = cancelUrl
+        establishData?["version"] = Constants.ESTABLISH_VERSION
+        establishData?["grp"] = self.getGrp()
+
+        if establishData?["paymentProviderId"] != nil {
+            establishData?["widgetLoaded"] = "true"
+        }
+        
+        if let scheme = establishData?["metadata.urlScheme"] as? String {
+            self.urlScheme = scheme.components(separatedBy: ":")[0]
+        }
+        
     }
 }
 
