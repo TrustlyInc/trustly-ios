@@ -16,7 +16,9 @@ struct SessionCid: Codable {
     func isValid(expirationTimeLimit: Int) -> Bool {
         let dateNow = Date()
         
+
         let diffs = Calendar.current.dateComponents([.hour], from: expirationTime, to: dateNow)
+        
         
         if let hours = diffs.hour {
             return hours < expirationTimeLimit
