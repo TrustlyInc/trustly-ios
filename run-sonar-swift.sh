@@ -35,109 +35,109 @@ XCODEBUILD_CMD=xcodebuild
 trap "echo 'Script interrupted by Ctrl+C'; stopProgress; exit 1" SIGHUP SIGINT SIGTERM
 
 function startProgress() {
-    while true
-    do
-        echo -n "."
-        sleep 5
-    done
+	while true
+	do
+    	echo -n "."
+	    sleep 5
+	done
 }
 
 function stopProgress() {
-    if [ "$vflag" = "" -a "$nflag" = "" ]; then
-        kill $PROGRESS_PID &>/dev/null
-    fi
+	if [ "$vflag" = "" -a "$nflag" = "" ]; then
+		kill $PROGRESS_PID &>/dev/null
+	fi
 }
 
 function testIsInstalled() {
 
-    hash $1 2>/dev/null
-    if [ $? -eq 1 ]; then
-        echo >&2 "ERROR - $1 is not installed or not in your PATH"; exit 1;
-    fi
+	hash $1 2>/dev/null
+	if [ $? -eq 1 ]; then
+		echo >&2 "ERROR - $1 is not installed or not in your PATH"; exit 1;
+	fi
 }
 
 function readParameter() {
 
-    variable=$1
-    shift
-    parameter=$1
-    shift
+	variable=$1
+	shift
+	parameter=$1
+	shift
 
-    eval $variable="\"$(sed '/^\#/d' sonar-project.properties | grep $parameter | tail -n 1 | cut -d '=' -f2- | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')\""
+	eval $variable="\"$(sed '/^\#/d' sonar-project.properties | grep $parameter | tail -n 1 | cut -d '=' -f2- | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')\""
 }
 
 # Run a set of commands with logging and error handling
 function runCommand() {
 
-    # 1st arg: redirect stdout
-    # 2nd arg: command to run
-    # 3rd..nth arg: args
-    redirect=$1
-    shift
+	# 1st arg: redirect stdout
+	# 2nd arg: command to run
+	# 3rd..nth arg: args
+	redirect=$1
+	shift
 
-    command=$1
-    shift
+	command=$1
+	shift
 
-    if [ "$nflag" = "on" ]; then
-        # don't execute command, just echo it
-        echo
-        if [ "$redirect" = "/dev/stdout" ]; then
-            if [ "$vflag" = "on" ]; then
-                echo "+" $command "$@"
-            else
-                echo "+" $command "$@" "> /dev/null"
-            fi
-        elif [ "$redirect" != "no" ]; then
-            echo "+" $command "$@" "> $redirect"
-        else
-            echo "+" $command "$@"
-        fi
+	if [ "$nflag" = "on" ]; then
+		# don't execute command, just echo it
+		echo
+		if [ "$redirect" = "/dev/stdout" ]; then
+			if [ "$vflag" = "on" ]; then
+				echo "+" $command "$@"
+			else
+				echo "+" $command "$@" "> /dev/null"
+			fi
+		elif [ "$redirect" != "no" ]; then
+			echo "+" $command "$@" "> $redirect"
+		else
+			echo "+" $command "$@"
+		fi
 
-    elif [ "$vflag" = "on" ]; then
-        echo
+	elif [ "$vflag" = "on" ]; then
+		echo
 
-        if [ "$redirect" = "/dev/stdout" ]; then
-            set -x #echo on
-            $command "$@"
-            returnValue=$?
-            set +x #echo off
-        elif [ "$redirect" != "no" ]; then
-            set -x #echo on
-            $command "$@" > $redirect
-            returnValue=$?
-            set +x #echo off
-        else
-            set -x #echo on
-            $command "$@"
-            returnValue=$?
-            set +x #echo off
-        fi
+		if [ "$redirect" = "/dev/stdout" ]; then
+			set -x #echo on
+			$command "$@"
+			returnValue=$?
+			set +x #echo off
+		elif [ "$redirect" != "no" ]; then
+			set -x #echo on
+			$command "$@" > $redirect
+			returnValue=$?
+			set +x #echo off
+		else
+			set -x #echo on
+			$command "$@"
+			returnValue=$?
+			set +x #echo off
+		fi
 
-        if [[ $returnValue != 0 && $returnValue != 5 ]] ; then
-            stopProgress
-            echo "ERROR - Command '$command $@' failed with error code: $returnValue"
-            exit $returnValue
-        fi
-    else
+		if [[ $returnValue != 0 && $returnValue != 5 ]] ; then
+			stopProgress
+			echo "ERROR - Command '$command $@' failed with error code: $returnValue"
+			exit $returnValue
+		fi
+	else
 
-        if [ "$redirect" = "/dev/stdout" ]; then
-            $command "$@" > /dev/null
-        elif [ "$redirect" != "no" ]; then
-            $command "$@" > $redirect
-        else
-            $command "$@"
-        fi
+		if [ "$redirect" = "/dev/stdout" ]; then
+			$command "$@" > /dev/null
+		elif [ "$redirect" != "no" ]; then
+			$command "$@" > $redirect
+		else
+			$command "$@"
+		fi
 
         returnValue=$?
-        if [[ $returnValue != 0 && $returnValue != 5 ]] ; then
-            stopProgress
-            echo "ERROR - Command '$command $@' failed with error code: $returnValue"
-            exit $returnValue
-        fi
+		if [[ $returnValue != 0 && $returnValue != 5 ]] ; then
+			stopProgress
+			echo "ERROR - Command '$command $@' failed with error code: $returnValue"
+			exit $returnValue
+		fi
 
 
-        echo
-    fi
+		echo
+	fi
 }
 
 ## COMMAND LINE OPTIONS
@@ -154,17 +154,17 @@ sonarscanner=""
 while [ $# -gt 0 ]
 do
     case "$1" in
-    -v) vflag=on;;
+    -v)	vflag=on;;
     -n) nflag=on;;
     -nounittests) unittests="";;
     -noswiftlint) swiftlint="";;
     -notailor) tailor="";;
     -usesonarscanner) sonarscanner="on";;
-    --) shift; break;;
-    -*)
+	--)	shift; break;;
+	-*)
         echo >&2 "Usage: $0 [-v]"
-            exit 1;;
-    *)  break;;     # terminate while loop
+		    exit 1;;
+	*)	break;;		# terminate while loop
     esac
     shift
 done
@@ -176,7 +176,7 @@ echo "Running run-sonar-swift.sh..."
 
 # sonar-project.properties in current directory
 if [ ! -f sonar-project.properties ]; then
-    echo >&2 "ERROR - No sonar-project.properties in current directory"; exit 1;
+	echo >&2 "ERROR - No sonar-project.properties in current directory"; exit 1;
 fi
 
 ## READ PARAMETERS from sonar-project.properties
@@ -187,10 +187,10 @@ workspaceFile=''; readParameter workspaceFile 'sonar.swift.workspace'
 
 # Count projects
 if [[ ! -z "$projectFile" ]]; then
-    projectCount=$(echo $projectFile | sed -n 1'p' | tr ',' '\n' | wc -l | tr -d '[[:space:]]')
-    if [ "$vflag" = "on" ]; then
-        echo "Project count is [$projectCount]"
-    fi
+	projectCount=$(echo $projectFile | sed -n 1'p' | tr ',' '\n' | wc -l | tr -d '[[:space:]]')
+	if [ "$vflag" = "on" ]; then
+	    echo "Project count is [$projectCount]"
+	fi
 fi
 
 # Source directories for .swift files
@@ -219,42 +219,42 @@ excludedPathsFromCoverage=''; readParameter excludedPathsFromCoverage 'sonar.swi
 
 # Check for mandatory parameters
 if [ -z "$projectFile" -o "$projectFile" = " " ] && [ -z "$workspaceFile" -o "$workspaceFile" = " " ]; then
-    echo >&2 "ERROR - sonar.swift.project or/and sonar.swift.workspace parameter is missing in sonar-project.properties. You must specify which projects (comma-separated list) are application code or which workspace and project to use."
-    exit 1
+	echo >&2 "ERROR - sonar.swift.project or/and sonar.swift.workspace parameter is missing in sonar-project.properties. You must specify which projects (comma-separated list) are application code or which workspace and project to use."
+	exit 1
 elif [ ! -z "$workspaceFile" ] && [ -z "$projectFile" ]; then
-    echo >&2 "ERROR - sonar.swift.workspace parameter is present in sonar-project.properties but sonar.swift.project and is not. You must specify which projects (comma-separated list) are application code or which workspace and project to use."
-    exit 1
+	echo >&2 "ERROR - sonar.swift.workspace parameter is present in sonar-project.properties but sonar.swift.project and is not. You must specify which projects (comma-separated list) are application code or which workspace and project to use."
+	exit 1
 fi
 if [ -z "$srcDirs" -o "$srcDirs" = " " ]; then
-    echo >&2 "ERROR - sonar.sources parameter is missing in sonar-project.properties. You must specify which directories contain your .swift source files (comma-separated list)."
-    exit 1
+	echo >&2 "ERROR - sonar.sources parameter is missing in sonar-project.properties. You must specify which directories contain your .swift source files (comma-separated list)."
+	exit 1
 fi
 if [ -z "$appScheme" -o "$appScheme" = " " ]; then
-    echo >&2 "ERROR - sonar.swift.appScheme parameter is missing in sonar-project.properties. You must specify which scheme is used to build your application."
-    exit 1
+	echo >&2 "ERROR - sonar.swift.appScheme parameter is missing in sonar-project.properties. You must specify which scheme is used to build your application."
+	exit 1
 fi
 if [ "$unittests" = "on" ]; then
     if [ -z "$destinationSimulator" -o "$destinationSimulator" = " " ]; then
-          echo >&2 "ERROR - sonar.swift.simulator parameter is missing in sonar-project.properties. You must specify which simulator to use."
-          exit 1
+	      echo >&2 "ERROR - sonar.swift.simulator parameter is missing in sonar-project.properties. You must specify which simulator to use."
+	      exit 1
     fi
 fi
 
 # if the appConfiguration is not specified then set to Debug
 if [ -z "$appConfiguration" -o "$appConfiguration" = " " ]; then
-    appConfiguration="Debug"
+	appConfiguration="Debug"
 fi
 
 
 
 if [ "$vflag" = "on" ]; then
-    echo "Xcode project file is: $projectFile"
-    echo "Xcode workspace file is: $workspaceFile"
-    echo "Xcode application scheme is: $appScheme"
+ 	echo "Xcode project file is: $projectFile"
+	echo "Xcode workspace file is: $workspaceFile"
+ 	echo "Xcode application scheme is: $appScheme"
     echo "Number version from plist is: $numVerionFromPlist"
   if [ -n "$unittests" ]; then
-        echo "Destination simulator is: $destinationSimulator"
-        echo "Excluded paths from coverage are: $excludedPathsFromCoverage"
+ 	    echo "Destination simulator is: $destinationSimulator"
+ 	    echo "Excluded paths from coverage are: $excludedPathsFromCoverage"
   else
       echo "Unit surefire are disabled"
   fi
@@ -264,9 +264,9 @@ fi
 
 # Start progress indicator in the background
 if [ "$vflag" = "" -a "$nflag" = "" ]; then
-    startProgress &
-    # Save PID
-    PROGRESS_PID=$!
+	startProgress &
+	# Save PID
+	PROGRESS_PID=$!
 fi
 
 # Create sonar-reports/ for reports output
@@ -307,12 +307,12 @@ if [ "$unittests" = "on" ]; then
     # Put default xml files with no surefire and no coverage...
     echo "<?xml version='1.0' encoding='UTF-8' standalone='yes'?><testsuites name='AllTestUnits'></testsuites>" > sonar-reports/TEST-report.xml
     
-    echo -n 'Running surefire'
+	echo -n 'Running surefire'
     buildCmd=($XCODEBUILD_CMD clean build test)
     if [[ ! -z "$workspaceFile" ]]; then
         buildCmd+=(-workspace "$workspaceFile")
     elif [[ ! -z "$projectFile" ]]; then
-          buildCmd+=(-project "$projectFile")
+	      buildCmd+=(-project "$projectFile")
     fi
     buildCmd+=( -scheme "$appScheme" -configuration "$appConfiguration" -enableCodeCoverage YES -derivedDataPath sonar-reports/)
     if [[ ! -z "$destinationSimulator" ]]; then
@@ -329,22 +329,22 @@ if [ "$unittests" = "on" ]; then
     # Build the --exclude flags
     excludedCommandLineFlags=""
     if [ ! -z "$excludedPathsFromCoverage" -a "$excludedPathsFromCoverage" != " " ]; then
-          echo $excludedPathsFromCoverage | sed -n 1'p' | tr ',' '\n' > tmpFileRunSonarSh2
-          while read word; do
-                excludedCommandLineFlags+=" -i $word"
-          done < tmpFileRunSonarSh2
-          rm -rf tmpFileRunSonarSh2
+	      echo $excludedPathsFromCoverage | sed -n 1'p' | tr ',' '\n' > tmpFileRunSonarSh2
+	      while read word; do
+		        excludedCommandLineFlags+=" -i $word"
+	      done < tmpFileRunSonarSh2
+	      rm -rf tmpFileRunSonarSh2
     fi
     if [ "$vflag" = "on" ]; then
-          echo "Command line exclusion flags for slather is:$excludedCommandLineFlags"
+	      echo "Command line exclusion flags for slather is:$excludedCommandLineFlags"
     fi
 
-    firstProject=$(echo $projectFile | sed -n 1'p' | tr ',' '\n' | head -n 1)
+	firstProject=$(echo $projectFile | sed -n 1'p' | tr ',' '\n' | head -n 1)
 
-    bash xccov-to-sonarqube-generic.sh sonar-reports/Logs/Test/Run-TrustlySDK-Example-*.xcresult/ > sonar-reports/generic-coverage.xml
+	bash xccov-to-sonarqube-generic.sh sonar-reports/Logs/Test/Run-TrustlySDK-Example-*.xcresult/ > sonar-reports/generic-coverage.xml
     # slatherCmd=($SLATHER_CMD coverage)
     # if [[ ! -z "$binaryName" ]]; then
-    #   slatherCmd+=( --binary-basename "$binaryName")
+    # 	slatherCmd+=( --binary-basename "$binaryName")
     # fi
 
     # slatherCmd+=( --input-format profdata $excludedCommandLineFlags --cobertura-xml --output-directory sonar-reports)
@@ -362,77 +362,77 @@ fi
 
 # SwiftLint
 if [ "$swiftlint" = "on" ]; then
-    if hash $SWIFTLINT_CMD 2>/dev/null; then
-        echo -n 'Running SwiftLint...'
+	if hash $SWIFTLINT_CMD 2>/dev/null; then
+		echo -n 'Running SwiftLint...'
 
-        # Build the --include flags
-        currentDirectory=${PWD##*/}
-        echo "$srcDirs" | sed -n 1'p' | tr ',' '\n' > tmpFileRunSonarSh
-        while read word; do
+		# Build the --include flags
+		currentDirectory=${PWD##*/}
+		echo "$srcDirs" | sed -n 1'p' | tr ',' '\n' > tmpFileRunSonarSh
+		while read word; do
 
-            # Run SwiftLint command
-            $SWIFTLINT_CMD lint --path "$word" > sonar-reports/"$appScheme"-swiftlint.txt
+			# Run SwiftLint command
+		    $SWIFTLINT_CMD lint --path "$word" > sonar-reports/"$appScheme"-swiftlint.txt
 
-        done < tmpFileRunSonarSh
-        rm -rf tmpFileRunSonarSh
-    else
-        echo "Skipping SwiftLint (not installed!)"
-    fi
+		done < tmpFileRunSonarSh
+		rm -rf tmpFileRunSonarSh
+	else
+		echo "Skipping SwiftLint (not installed!)"
+	fi
 
 else
-    echo 'Skipping SwiftLint (test purposes only!)'
+	echo 'Skipping SwiftLint (test purposes only!)'
 fi
 
 # Tailor
 if [ "$tailor" = "on" ]; then
-    if hash $TAILOR_CMD 2>/dev/null; then
-        echo -n 'Running Tailor...'
+	if hash $TAILOR_CMD 2>/dev/null; then
+		echo -n 'Running Tailor...'
 
-        # Build the --include flags
-        currentDirectory=${PWD##*/}
-        echo "$srcDirs" | sed -n 1'p' | tr ',' '\n' > tmpFileRunSonarSh
-        while read word; do
+		# Build the --include flags
+		currentDirectory=${PWD##*/}
+		echo "$srcDirs" | sed -n 1'p' | tr ',' '\n' > tmpFileRunSonarSh
+		while read word; do
 
-              # Run tailor command
-            $TAILOR_CMD $tailorConfiguration "$word" > sonar-reports/"$appScheme"-tailor.txt
+			  # Run tailor command
+		    $TAILOR_CMD $tailorConfiguration "$word" > sonar-reports/"$appScheme"-tailor.txt
 
-        done < tmpFileRunSonarSh
-        rm -rf tmpFileRunSonarSh
-    else
-        echo "Skipping Tailor (not installed!)"
-    fi
+		done < tmpFileRunSonarSh
+		rm -rf tmpFileRunSonarSh
+	else
+		echo "Skipping Tailor (not installed!)"
+	fi
 
 else
-    echo 'Skipping Tailor!'
+	echo 'Skipping Tailor!'
 fi
 
 if [ "$oclint" = "on" ] && [ "$hasObjC" = "yes" ]; then
 
-    echo -n 'Running OCLint...'
+	echo -n 'Running OCLint...'
 
-    # Options
-    maxPriority=10000
+	# Options
+	maxPriority=10000
     longLineThreshold=250
 
-    # Build the --include flags
-    currentDirectory=${PWD##*/}
-    echo "$srcDirs" | sed -n 1'p' | tr ',' '\n' > tmpFileRunSonarSh
-    while read word; do
+	# Build the --include flags
+	currentDirectory=${PWD##*/}
+	echo "$srcDirs" | sed -n 1'p' | tr ',' '\n' > tmpFileRunSonarSh
+	while read word; do
 
-        includedCommandLineFlags=" --include .*/${currentDirectory}/${word}/*"
-        if [ "$vflag" = "on" ]; then
+		includedCommandLineFlags=" --include .*/${currentDirectory}/${word}/*"
+		if [ "$vflag" = "on" ]; then
             echo
             echo -n "Path included in oclint analysis is:$includedCommandLineFlags"
         fi
-        # Run OCLint with the right set of compiler options
-        runCommand no oclint-json-compilation-database -v $includedCommandLineFlags -- -rc LONG_LINE=$longLineThreshold -max-priority-1 $maxPriority -max-priority-2 $maxPriority -max-priority-3 $maxPriority -report-type pmd -o sonar-reports/$appScheme-oclint.xml
+		# Run OCLint with the right set of compiler options
+	    runCommand no oclint-json-compilation-database -v $includedCommandLineFlags -- -rc LONG_LINE=$longLineThreshold -max-priority-1 $maxPriority -max-priority-2 $maxPriority -max-priority-3 $maxPriority -report-type pmd -o sonar-reports/$appScheme-oclint.xml
 
-    done < tmpFileRunSonarSh
-    rm -rf tmpFileRunSonarSh
+	done < tmpFileRunSonarSh
+	rm -rf tmpFileRunSonarSh
 
 
 else
-    echo 'Skipping OCLint (test purposes only!)'
+	echo 'Skipping OCLint (test purposes only!)'
 fi
 
 #FauxPas
@@ -476,7 +476,7 @@ if [ "$fauxpas" = "on" ] && [ "$hasObjC" = "yes" ]; then
             done < tmpFileRunSonarSh
             rm -rf tmpFileRunSonarSh
 
-        fi
+	    fi
 
     else
         echo 'Skipping FauxPas (not installed)'
@@ -487,23 +487,23 @@ fi
 
 # Lizard Complexity
 if [ "$lizard" = "on" ]; then
-    if hash $LIZARD_CMD 2>/dev/null; then
-        echo -n 'Running Lizard...'
-        $LIZARD_CMD --xml "$srcDirs" > sonar-reports/lizard-report.xml
-    else
-        echo 'Skipping Lizard (not installed!)'
-    fi
+	if hash $LIZARD_CMD 2>/dev/null; then
+		echo -n 'Running Lizard...'
+  		$LIZARD_CMD --xml "$srcDirs" > sonar-reports/lizard-report.xml
+  	else
+  		echo 'Skipping Lizard (not installed!)'
+  	fi
 else
-    echo 'Skipping Lizard (test purposes only!)'
+ 	echo 'Skipping Lizard (test purposes only!)'
 fi
 
 # The project version from properties file
 numVersionSonarRunner=''; readParameter numVersionSonarRunner 'sonar.projectVersion'
 if [ -z "$numVersionSonarRunner" -o "$numVersionSonarRunner" = " " ]; then
-    numVersionSonarRunner=" --define sonar.projectVersion=$numVerionFromPlist"
+	numVersionSonarRunner=" --define sonar.projectVersion=$numVerionFromPlist"
 else
-    #if we have version number in properties file, we don't overide numVersion for sonar-runner/sonar-scanner command
-    numVersionSonarRunner='';
+	#if we have version number in properties file, we don't overide numVersion for sonar-runner/sonar-scanner command
+	numVersionSonarRunner='';
 fi
 # SonarQube
 if [ "$sonarscanner" = "on" ]; then
@@ -516,9 +516,9 @@ if [ "$sonarscanner" = "on" ]; then
 else
     echo -n 'Running SonarQube using SonarQube Runner'
     if hash /dev/stdout sonar-runner 2>/dev/null; then
-       runCommand /dev/stdout sonar-runner $numVersionSonarRunner
+	   runCommand /dev/stdout sonar-runner $numVersionSonarRunner
     else
-       runCommand /dev/stdout sonar-scanner $numVersionSonarRunner
+	   runCommand /dev/stdout sonar-scanner $numVersionSonarRunner
     fi
 fi
 
