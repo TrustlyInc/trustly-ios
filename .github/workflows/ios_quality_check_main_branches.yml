@@ -1,0 +1,54 @@
+name: iOS Main Branches Quality Check
+
+on:
+  push:
+    branches:
+      - main
+      - DEV
+
+env:
+  SONAR_HOST_URL: "https://sonarqube.trustly.one"
+  SONAR_PROJECT_KEY: "trustly-ios"
+  SONAR_PROJECT_NAME: "trustly-ios"
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_SECRET }}
+
+jobs:
+  run_tests_and_sonar_analysis:
+    runs-on: macOS-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: |
+          brew update
+          brew install swiftlint
+          brew install tailor
+          sudo gem install -n /usr/local/bin xcpretty
+          brew install lizard
+          gem install cocoapods
+          pod install --project-directory=Example
+          brew install sonar-scanner
+
+      - name: Run SonarQube Analysis
+        run: |
+          echo "sonar.host.url=${{ env.SONAR_HOST_URL }}" >> sonar-project.properties
+          echo "sonar.projectKey=${{ env.SONAR_PROJECT_KEY }}" >> sonar-project.properties
+          echo "sonar.projectName=${{ env.SONAR_PROJECT_NAME }}" >> sonar-project.properties
+          echo "sonar.login=${{ env.SONAR_TOKEN }}" >> sonar-project.properties
+          echo "sonar.branch.name=${{ github.ref_name }}" >> sonar-project.properties
+
+          chmod +x ./run-sonar-swift.sh
+          ./run-sonar-swift.sh -v
+
+      - name: Verify Coverage Report
+        run: |
+          if [ -f "sonar-reports/generic-coverage.xml" ]; then
+            echo "Coverage report generated successfully: sonar-reports/generic-coverage.xml"
+            cat sonar-reports/generic-coverage.xml
+          else
+            echo "Coverage report not found!" && exit 1
+          fi

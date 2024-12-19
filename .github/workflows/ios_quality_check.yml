@@ -1,0 +1,70 @@
+name: iOS PR Quality Check
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+  workflow_dispatch:
+
+env:
+  BRANCH_ORIGIN: ${{ github.head_ref }}
+  BASE_BRANCH: ${{ github.base_ref }}
+  PR_NUMBER: ${{ github.event.pull_request.number }}
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_SECRET }}
+  SONAR_HOST_URL: "https://sonarqube.trustly.one"
+  SONAR_PROJECT_KEY: "trustly-ios"
+  SONAR_PROJECT_NAME: "trustly-ios"
+
+jobs:
+  run_tests_and_sonar_analysis:
+    runs-on: macOS-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Get Git Revision (Commit SHA)
+        id: git_revision
+        run: |
+            git fetch origin "${BRANCH_ORIGIN}"
+            GIT_REVISION=$(git rev-parse origin/${BRANCH_ORIGIN})
+            echo "Git Revision: $GIT_REVISION"
+            echo "GIT_REVISION=$GIT_REVISION" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: |
+             brew update
+             brew install swiftlint
+             brew install tailor
+             sudo gem install -n /usr/local/bin xcpretty
+             brew install lizard
+             gem install cocoapods
+             pod install --project-directory=Example
+             brew install sonar-scanner
+         
+      - name: Run SonarQube Analysis
+        run: |
+          # Update sonar-project.properties
+          echo "sonar.host.url=${{ env.SONAR_HOST_URL }}" >> sonar-project.properties
+          echo "sonar.projectKey=${{ env.SONAR_PROJECT_KEY }}" >> sonar-project.properties
+          echo "sonar.projectName=${{ env.SONAR_PROJECT_NAME }}" >> sonar-project.properties
+          echo "sonar.login=${{ secrets.SONAR_TOKEN_SECRET }}" >> sonar-project.properties
+          echo "sonar.pullrequest.key=${{ env.PR_NUMBER }}" >> sonar-project.properties
+          echo "sonar.pullrequest.branch=${{ env.BRANCH_ORIGIN }}" >> sonar-project.properties
+          echo "sonar.pullrequest.base=${{ env.BASE_BRANCH }}" >> sonar-project.properties
+          echo "sonar.scm.revision=${{ env.GIT_REVISION }}" >> sonar-project.properties
+
+      - name: Run Sonar-Swift Script
+        run: |
+          chmod +x ./run-sonar-swift.sh
+          ./run-sonar-swift.sh -v
+
+      - name: Verify Coverage Report
+        run: |
+          if [ -f "sonar-reports/generic-coverage.xml" ]; then
+            echo "Coverage report generated successfully: sonar-reports/generic-coverage.xml"
+            cat sonar-reports/generic-coverage.xml
+          else
+            echo "Coverage report not found!" && exit 1
+          fi
