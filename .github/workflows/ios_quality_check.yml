@@ -6,9 +6,9 @@ on:
   workflow_dispatch:
 
 env:
+  PR_NUMBER: ${{ github.event.number }}
   BRANCH_ORIGIN: ${{ github.head_ref }}
   BASE_BRANCH: ${{ github.base_ref }}
-  PR_NUMBER: ${{ github.event.pull_request.number }}
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_SECRET }}
   SONAR_HOST_URL: "https://sonarqube.trustly.one"
   SONAR_PROJECT_KEY: "trustly-ios"
@@ -34,25 +34,35 @@ jobs:
 
       - name: Install dependencies
         run: |
-             brew update
-             brew install swiftlint
-             brew install tailor
-             sudo gem install -n /usr/local/bin xcpretty
-             brew install lizard
-             gem install cocoapods
-             pod install --project-directory=Example
-             brew install sonar-scanner
-         
-      - name: Run SonarQube Analysis
+            # Update Homebrew
+            brew update
+            # Install SwiftLint
+            brew install swiftlint
+            # Install Tailor
+            brew install tailor
+            # Install xcpretty
+            sudo gem install -n /usr/local/bin xcpretty
+            # Install Lizard
+            brew install lizard
+
+      - name: Install CocoaPods
         run: |
-          # Update sonar-project.properties
+            gem install cocoapods
+            pod install --project-directory=Example
+
+      - name: Install sonnar-scanner
+        run: |
+         brew install sonar-scanner
+         
+      - name: Update sonar properties
+        run: |
           echo "sonar.host.url=${{ env.SONAR_HOST_URL }}" >> sonar-project.properties
           echo "sonar.projectKey=${{ env.SONAR_PROJECT_KEY }}" >> sonar-project.properties
           echo "sonar.projectName=${{ env.SONAR_PROJECT_NAME }}" >> sonar-project.properties
           echo "sonar.login=${{ secrets.SONAR_TOKEN_SECRET }}" >> sonar-project.properties
-          echo "sonar.pullrequest.key=${{ env.PR_NUMBER }}" >> sonar-project.properties
-          echo "sonar.pullrequest.branch=${{ env.BRANCH_ORIGIN }}" >> sonar-project.properties
-          echo "sonar.pullrequest.base=${{ env.BASE_BRANCH }}" >> sonar-project.properties
+          echo "sonar.pullrequest.key=${{ github.event.number }}" >> sonar-project.properties
+          echo "sonar.pullrequest.branch=${{ github.head_ref }}" >> sonar-project.properties
+          echo "sonar.pullrequest.base=${{ github.base_ref }}" >> sonar-project.properties
           echo "sonar.scm.revision=${{ env.GIT_REVISION }}" >> sonar-project.properties
 
       - name: Run Sonar-Swift Script
