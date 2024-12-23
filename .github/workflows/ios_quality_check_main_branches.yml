@@ -1,3 +1,7 @@
+# This workflow ensures that pull requests and commits to the main iOS branches are properly analyzed and tested.
+# Workflow 'iOS Main Branches Quality Check' runs static code analysis, installs dependencies, and verifies code coverage.
+# It helps maintain code quality and adherence to best practices before merging into the main branch.
+# For furthuer information, check: https://trustly.atlassian.net/wiki/spaces/Engineering/pages/71335182337/iOS+Main+Branches+Quality+Check
 name: iOS Main Branches Quality Check
 
 on:
