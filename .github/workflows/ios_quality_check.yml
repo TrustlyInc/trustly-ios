@@ -1,8 +1,12 @@
+# This workflow ensures that pull requests and commits to the main iOS branches are properly analyzed and tested.
+# Workflow 'iOS PR Quality Check' runs static code analysis, installs dependencies, and verifies code coverage.
+# It helps maintain code quality and adherence to best practices before merging into the main branch.
+# For furthuer information, check: https://trustly.atlassian.net/wiki/spaces/Engineering/pages/71335182425/iOS+PR+Quality+Check
 name: iOS PR Quality Check
 
 on:
   pull_request:
-    types: [opened, edited, reopened, synchronize]
+    types: [opened, reopened, synchronize]
   workflow_dispatch:
 
 env:
