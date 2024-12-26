@@ -11,10 +11,9 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var trustlyView: TrustlyView!
     @IBOutlet weak var amountTextView: UITextField!
-    var enrollmentId: String?
+
     var alertObj:UIAlertController?
     var establishData:Dictionary<AnyHashable,Any> = [:]
-    var trustlyPanel = TrustlyView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,16 +32,18 @@ class ViewController: UIViewController {
                               "metadata.urlScheme": "demoapp://",
                               "description": "First Data Mobile Test",
                               "env": "<[int, sandbox, local]>",
-                              "localUrl": "<YOUR LOCAL URL WHEN `ENV` PROPERTY IS `LOCAL` (ex: 192.168.0.30:8000)>"]
+                              "envHost": "<YOUR LOCAL URL WHEN `ENV` PROPERTY IS `LOCAL` (ex: 192.168.0.30:8000)>"]
 
         
         self.trustlyView.onChangeListener { (eventName, attributes) in
             print("onChangeListener: \(eventName) \(attributes)")
         }
 
-        self.trustlyView.selectBankWidget(establishData: establishData) { (view, data) in
+        let _ = self.trustlyView.selectBankWidget(establishData: establishData) { (view, data) in
             print("returnParameters:\(data)")
             self.establishData = data
+            
+            self.openLightbox()
         }
 
     }
@@ -51,31 +52,31 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-    // MARK: - IBActions
     
-    @IBAction func pay(_ sender: Any) {
-        
-        let trustlyLightboxViewController = TrustlyLightBoxViewController()
-        trustlyLightboxViewController.delegate = self
-
+    private func openLightbox(){
         if let amountText = amountTextView.text,
            let amount = Double(amountText) {
             
             establishData["amount"] = String(format: "%.2f", amount)
-            trustlyLightboxViewController.establishData = establishData
-            
-            self.present(trustlyLightboxViewController, animated: true)
+        } else {
+            establishData["amount"] = "0.00"
         }
         
-    }
+        let trustlyLightboxViewController = TrustlyLightBoxViewController()
+        trustlyLightboxViewController.delegate = self
+        
+        trustlyLightboxViewController.establishData = self.establishData
+
+        self.present(trustlyLightboxViewController, animated: true)
+        
+    }    
 }
 
 extension ViewController: TrustlyLightboxViewProtocol {
     
     func onReturnWithTransactionId(transactionId: String, controller: TrustlyLightBoxViewController) {
         controller.dismiss(animated: true)
-        self.showSuccessAlert()
+        self.showSuccessView(transactionId: transactionId)
     }
     
     func onCancelWithTransactionId(transactionId: String, controller: TrustlyLightBoxViewController) {
@@ -85,7 +86,7 @@ extension ViewController: TrustlyLightboxViewProtocol {
     
     // MARK: - Alert functions
     private func showAlert(title: String, message: String){
-        var dialogMessage = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let dialogMessage = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
         // Create OK button with action handler
         let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
@@ -97,12 +98,21 @@ extension ViewController: TrustlyLightboxViewProtocol {
         self.present(dialogMessage, animated: true, completion: nil)
     }
     
-    private func showSuccessAlert(){
-        self.showAlert(title: "Success", message: "Your payment was processed with success")
+    private func showSuccessView(transactionId: String){
+        let successViewController = SuccessViewController(nibName: "SuccessViewController", bundle: nil)
+        successViewController.email = self.establishData["customer.email"] as? String
+        successViewController.transactionId = transactionId
+        
+        self.getWindow().rootViewController = successViewController
     }
     
     private func showFailureAlert(){
         self.showAlert(title: "Failure", message: "Failure when to try to process your payment. Try again later")
+    }
+    
+    private func getWindow() -> UIWindow {
+        guard let window = self.view.window else { fatalError("The view was not in the app's view hierarchy!") }
+        return window
     }
 
 }
