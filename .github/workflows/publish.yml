@@ -1,0 +1,17 @@
+name: Publish to CocoaPods
+
+on:
+  workflow_dispatch:
+
+env:
+  COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+
+jobs:
+  publish:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Publish to CocoaPods Register
+        run: |
+          pod trunk push TrustlySDK-Test.podspec
