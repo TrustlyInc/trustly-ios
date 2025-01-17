@@ -1,0 +1,2 @@
+# Only DevOps can approve changes in this action
+/.github/workflows/publish.yml @TrustlyInc/ops-ninjas-admin @TrustlyInc/amer-devops-master
