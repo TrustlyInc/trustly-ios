@@ -19,6 +19,12 @@ import UIKit
 import AuthenticationServices
 import SafariServices
 
+public typealias TrustlyViewCallback = (_ returnParameters: [AnyHashable : Any]) -> Void;
+
+protocol TrustlyViewProtocol {
+    func selectBankWidget(establishData: [AnyHashable : Any], onBankSelected: @escaping TrustlyViewCallback) -> UIView;
+}
+
 func Rgb2UIColor(_ r: CGFloat, _ g: CGFloat, _ b: CGFloat) -> UIColor {
     UIColor(red: r / 255.0, green: g / 255.0, blue: b / 255.0, alpha: 1.0)
 }
@@ -26,17 +32,17 @@ func Rgb2UIColor(_ r: CGFloat, _ g: CGFloat, _ b: CGFloat) -> UIColor {
 let WidgetView:Int = 100
     
 @available(iOS 12.0, *)
-public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScriptMessageHandler, WKUIDelegate {
+class TrustlyView : UIView, WKNavigationDelegate, WKScriptMessageHandler, WKUIDelegate {
 
-    public var navBarColor:UIColor!
-    public var navBarButtonColor:UIColor!
-    public var navBarTitleColor:UIColor!
-    public var navBarSubtitleColor:UIColor!
+//    public var navBarColor:UIColor!
+//    public var navBarButtonColor:UIColor!
+//    public var navBarTitleColor:UIColor!
+//    public var navBarSubtitleColor:UIColor!
     private let inAppIntegrationContext = "InAppBrowser"
     private var returnHandler:TrustlyCallback?
     private var cancelHandler:TrustlyCallback?
     private var externalUrlHandler:TrustlyCallback?
-    private var bankSelectedHandler:TrustlyCallback?
+    private var bankSelectedHandler:TrustlyViewCallback?
     private var changeListenerHandler:TrustlyListenerCallback?
     private var establishData:[AnyHashable : Any]?
     private var mainWebView:WKWebView!
@@ -79,10 +85,10 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
             sessionCid = getOrCreateSessionCid(cid)
         }
         
-        self.navBarColor = Rgb2UIColor(254, 255, 254)
-        self.navBarButtonColor = Rgb2UIColor(109, 109, 109)
-        self.navBarTitleColor = Rgb2UIColor(0, 0, 0)
-        self.navBarSubtitleColor = Rgb2UIColor(51, 51, 51)
+//        self.navBarColor = Rgb2UIColor(254, 255, 254)
+//        self.navBarButtonColor = Rgb2UIColor(109, 109, 109)
+//        self.navBarTitleColor = Rgb2UIColor(0, 0, 0)
+//        self.navBarSubtitleColor = Rgb2UIColor(51, 51, 51)
 
         let configuration = WKWebViewConfiguration()
         let userController = WKUserContentController()
@@ -111,94 +117,6 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
     }
 
     //TrustlySDK Protocol
-    public func selectBankWidget(establishData eD:[AnyHashable : Any], onBankSelected: TrustlyCallback?) -> UIView? {
-        establishData = eD
-        
-        self.addSessionCid()
-        
-        var query = [String : Any]()
-        var hash = [String : Any]()
-        
-        let deviceType = establishData?["deviceType"] ?? "mobile" + ":ios:native"
-        query["deviceType"] = deviceType
-        
-        if let lang = establishData?["metadata.lang"] as? String {
-            query["lang"] = lang
-        }
-
-        query["onlinePPSubType"] = establishData?["onlinePPSubType"]
-        query["accessId"] = establishData?["accessId"]
-        query["merchantId"] = establishData?["merchantId"]
-        query["paymentType"] = establishData?["paymentType"] ?? "Instant"
-        query["deviceType"] = deviceType
-        query["grp"] = self.getGrp()
-        query["dynamicWidget"] = "true"
-        query["sessionCid"] = sessionCid
-        query["cid"] = cid
-        
-        if establishData?["customer.address.country"] != nil {
-            query["customer.address.country"]=establishData?["customer.address.country"]
-        }
-        
-        if (establishData?["customer.address.country"] == nil || establishData?["customer.address.country"] as! String == "us") &&
-            establishData?["customer.address.state"] != nil{
-            query["customer.address.state"]=establishData?["customer.address.state"]
-        }
-        
-        hash["merchantReference"] = establishData?["merchantReference"] ?? ""
-        hash["customer.externalId"] = establishData?["customer.externalId"] ?? ""
-        
-        bankSelectedHandler = onBankSelected
-
-        do {
-            let environment = try buildEnvironment(
-                resourceUrl: .widget,
-                environment: (eD["env"] ?? "") as! String,
-                localUrl: (eD["envHost"] ?? "") as! String,
-                paymentType: (eD["paymentType"] ?? "") as! String,
-                build: Constants.buildSDK,
-                query: query,
-                hash: hash
-            )
-            
-            isLocalEnvironment = environment.isLocal
-            
-            var request = URLRequest(url: environment.url)
-            request.httpMethod = "GET"
-            request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
-
-            self.notifyEvent("widget", "loading")
-
-            self.mainWebView!.tag = WidgetView
-            self.mainWebView!.load(request)
-            
-        } catch NetworkError.invalidUrl {
-            print("Error: Invalid url.")
-            
-        } catch {
-            print("Unexpected error: \(error).")
-        }
-        
-        return self
-    }
-
-    public func hybrid(url address : String, returnUrl: String, onReturn: TrustlyCallback?, cancelUrl: String, onCancel: TrustlyCallback?)  -> UIView? {
-        guard let url = URL(string:address)  else {
-            return self
-        }
-        var request = URLRequest(url: url)
-        self.returnUrl = returnUrl
-        self.cancelUrl = cancelUrl
-        returnHandler = onReturn
-        cancelHandler = onCancel
-        externalUrlHandler = nil
-        request.httpMethod = "GET"
-        request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
-        self.mainWebView!.load(request)
-        
-        return self
-    }
-    
     public func verify(verifyData:[AnyHashable : Any], onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) -> UIView? {
         var mutableDictionary = verifyData
         mutableDictionary["paymentType"] = Constants.PAYMENTTYPE_VERIFICATION
@@ -310,7 +228,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
             let matches = ValidationHelper.findMatchesForErrorCode(content: theTitle)
             
             if let cancelHandler = self.cancelHandler, ValidationHelper.isErrorCodePage(matches: matches, content: theTitle) {
-                cancelHandler(self, [:])
+                cancelHandler([:])
             }
             
         } else {
@@ -322,7 +240,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
                     let matches = ValidationHelper.findMatchesForErrorCode(content: dataHtml)
                     
                     if let cancelHandler = self.cancelHandler, ValidationHelper.isErrorCodePage(matches: matches, content: dataHtml) {
-                        cancelHandler(self, [:])
+                        cancelHandler([:])
                     }
                 })
             }
@@ -333,7 +251,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
 
         if webView == mainWebView {
             if (self.cancelHandler != nil) {
-                self.cancelHandler!(self, [:])
+                self.cancelHandler!([:])
             }
         }
     }
@@ -350,14 +268,14 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         if(webView == mainWebView){
             if(absolute != nil && absolute!.hasPrefix(returnUrl)){
                 if returnHandler != nil {
-                    returnHandler!(self, self.parametersForUrl(request.url!))
+                    returnHandler!(self.parametersForUrl(request.url!))
                 }
                 self.notifyListener("close", nil)
                 decisionHandler(WKNavigationActionPolicy.cancel)
             }
             else if(absolute != nil && absolute!.hasPrefix(cancelUrl)){
                 if cancelHandler != nil {
-                    cancelHandler!(self, self.parametersForUrl(request.url!))
+                    cancelHandler!(self.parametersForUrl(request.url!))
                 }
                 self.notifyListener("close", nil)
                 decisionHandler(WKNavigationActionPolicy.cancel)
@@ -372,7 +290,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
                             }
                             
                             if let establishData = establishData {
-                                bankSelectedHandler?(self, establishData)
+                                bankSelectedHandler?(establishData)
                             }
                             
                         }
@@ -390,7 +308,7 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
                         var mutableDictionary = [String:String]()
                         mutableDictionary["url"] = request.url?.absoluteString
 
-                        self.externalUrlHandler!(self,mutableDictionary)
+                        self.externalUrlHandler!(mutableDictionary)
                     } else {
                         //Open it on the SFSafariViewController
                         presentOnSFSafariViewController(request.url)
@@ -513,10 +431,10 @@ extension TrustlyView {
             if let stringUrl = url?.absoluteString {
                 let returnedEstablish = EstablishDataUtils.buildEstablishFrom(urlWithParameters: stringUrl)
                 
-                onReturn?(self, returnedEstablish)
+                onReturn?(returnedEstablish)
                 
             } else {
-                onCancel?(self, [:])
+                onCancel?([:])
             }
         })
         
@@ -656,7 +574,7 @@ extension TrustlyView {
                             self.stopLoading()
                             
                         } else {
-                            self.cancelHandler!(self, [:])
+                            self.cancelHandler!([:])
                             
                         }
                     }
@@ -742,6 +660,80 @@ extension TrustlyView {
             self.urlScheme = scheme.components(separatedBy: ":")[0]
         }
         
+    }
+}
+
+// MARK: widget implemetation
+extension TrustlyView: TrustlyViewProtocol {
+    public func selectBankWidget(establishData eD:[AnyHashable : Any], onBankSelected: @escaping TrustlyViewCallback) -> UIView {
+        establishData = eD
+        
+        self.addSessionCid()
+        
+        var query = [String : Any]()
+        var hash = [String : Any]()
+        
+        let deviceType = establishData?["deviceType"] ?? "mobile" + ":ios:native"
+        query["deviceType"] = deviceType
+        
+        if let lang = establishData?["metadata.lang"] as? String {
+            query["lang"] = lang
+        }
+
+        query["onlinePPSubType"] = establishData?["onlinePPSubType"]
+        query["accessId"] = establishData?["accessId"]
+        query["merchantId"] = establishData?["merchantId"]
+        query["paymentType"] = establishData?["paymentType"] ?? "Instant"
+        query["deviceType"] = deviceType
+        query["grp"] = self.getGrp()
+        query["dynamicWidget"] = "true"
+        query["sessionCid"] = sessionCid
+        query["cid"] = cid
+        
+        if establishData?["customer.address.country"] != nil {
+            query["customer.address.country"]=establishData?["customer.address.country"]
+        }
+        
+        if (establishData?["customer.address.country"] == nil || establishData?["customer.address.country"] as! String == "us") &&
+            establishData?["customer.address.state"] != nil{
+            query["customer.address.state"]=establishData?["customer.address.state"]
+        }
+        
+        hash["merchantReference"] = establishData?["merchantReference"] ?? ""
+        hash["customer.externalId"] = establishData?["customer.externalId"] ?? ""
+        
+        bankSelectedHandler = onBankSelected
+
+        do {
+            let environment = try buildEnvironment(
+                resourceUrl: .widget,
+                environment: (eD["env"] ?? "") as! String,
+                localUrl: (eD["envHost"] ?? "") as! String,
+                paymentType: (eD["paymentType"] ?? "") as! String,
+                build: Constants.buildSDK,
+                query: query,
+                hash: hash
+            )
+            
+            isLocalEnvironment = environment.isLocal
+            
+            var request = URLRequest(url: environment.url)
+            request.httpMethod = "GET"
+            request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
+
+            self.notifyEvent("widget", "loading")
+
+            self.mainWebView!.tag = WidgetView
+            self.mainWebView!.load(request)
+            
+        } catch NetworkError.invalidUrl {
+            print("Error: Invalid url.")
+            
+        } catch {
+            print("Unexpected error: \(error).")
+        }
+        
+        return self
     }
 }
 
