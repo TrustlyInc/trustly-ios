@@ -32,7 +32,7 @@ func buildEnvironment(resourceUrl:ResourceUrls, environment: String, localUrl: S
     
     switch resourceUrl {
     case .index:
-        if paymentType != "Verification" {
+        if paymentType != Constants.PAYMENTTYPE_VERIFICATION {
             resource = .selectBank
         }
     default:
