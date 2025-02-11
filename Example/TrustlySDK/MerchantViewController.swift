@@ -34,6 +34,19 @@ class MerchantViewController: UIViewController {
                               "env": "<[int, sandbox, local]>",
                               "envHost": "<YOUR LOCAL URL WHEN `ENV` PROPERTY IS `LOCAL` (ex: 192.168.0.30)>"]
         
+        let widgetVC = WidgetViewController()
+        widgetVC.delegate = self
+
+        addChild(widgetVC)
+
+        widgetVC.view.frame = CGRect(x: 15, y: 170, width: 400, height: 500)
+        view.addSubview(widgetVC.view)
+        widgetVC.didMove(toParent: self)
+        
+        widgetVC.selectBankWidget(establishData: establishData) { data in
+            print("returnParameters:\(data)")
+            self.establishData = data
+            
         }
                 
     }
@@ -74,3 +87,18 @@ extension MerchantViewController {
 
 }
 
+//MARK: WidgetProtocol
+extension MerchantViewController: WidgetViewControllerProtocol {
+    func onExternalUrl(onExternalUrl: TrustlyCallback?) {
+        print("onExternalUrl")
+    }
+    
+    func onChangeListener(_ eventName: String, _ eventDetails: [AnyHashable : Any]) {
+        print("eventName: \(eventName), eventDetails: \(eventDetails)")
+    }
+}
+
+//MARK: LightboxProtocol
+extension MerchantViewController: LightBoxViewControllerProtocol {
+    
+}
