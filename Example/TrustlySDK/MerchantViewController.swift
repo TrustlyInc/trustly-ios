@@ -47,10 +47,41 @@ class MerchantViewController: UIViewController {
             print("returnParameters:\(data)")
             self.establishData = data
             
+            self.openLightbox()
+
         }
                 
     }
     
+    private func openLightbox(){
+        if let amountText = amountTextView.text,
+           let amount = Double(amountText) {
+            
+            establishData["amount"] = String(format: "%.2f", amount)
+        } else {
+            establishData["amount"] = "0.00"
+        }
+        
+        let lightboxViewController = LightBoxViewController()
+        lightboxViewController.delegate = self
+        
+        
+        lightboxViewController.establish(establishData: establishData,
+                                         onReturn: { returnParameters ->Void in
+            lightboxViewController.dismiss(animated: true)
+            
+            self.showSuccessView(transactionId: returnParameters["transactionId"] as! String)
+
+        }, onCancel: { returnParameters ->Void in
+
+            lightboxViewController.dismiss(animated: true)
+            
+            self.showFailureAlert()
+        })
+
+        self.present(lightboxViewController, animated: true)
+    }
+}
 
 extension MerchantViewController {
     
