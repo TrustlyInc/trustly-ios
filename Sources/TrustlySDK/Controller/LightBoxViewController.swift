@@ -13,7 +13,7 @@ public protocol LightBoxViewControllerProtocol: AnyObject {
         @brief Sets a callback to handle external URLs
         @param onExternalUrl Called when the TrustlySDK panel must open an external URL. If not handled an internal in app WebView will show the external URL.The external URL is sent on the returnParameters entry key “url”.
     */
-    func onExternalUrl(onExternalUrl: TrustlyCallback?) -> Void;
+    func onExternalUrl(onExternalUrl: TrustlyViewCallback?) -> Void;
     
     /*!
         @brief Sets a callback to handle event triggered by javascript
@@ -45,7 +45,7 @@ public class LightBoxViewController: UIViewController {
 
 extension LightBoxViewController {
     
-    public func establish(establishData: [AnyHashable : Any], onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) {
+    public func establish(establishData: [AnyHashable : Any], onReturn: TrustlyViewCallback?, onCancel: TrustlyViewCallback?) {
         self.view = trustlyView.establish(establishData: establishData,
                                                    onReturn: { returnParameters ->Void in
             print(returnParameters)
