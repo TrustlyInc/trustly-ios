@@ -10,6 +10,7 @@
 		152541E62B7E74B20029F149 /* EstablishDataUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152541E52B7E74B20029F149 /* EstablishDataUtilsTests.swift */; };
 		1587AB912A2FE043006F6FC3 /* SessionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1587AB902A2FE043006F6FC3 /* SessionManagerTests.swift */; };
 		15987B0929DEF79D00D7A395 /* TrustlyLightBoxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15987B0829DEF79D00D7A395 /* TrustlyLightBoxViewController.swift */; };
+		159A116B2D495F11009609D6 /* MerchantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159A116A2D495F11009609D6 /* MerchantViewController.swift */; };
 		15BB98602B68120100A9210B /* URLUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15BB985F2B68120100A9210B /* URLUtilsTests.swift */; };
 		15BEC9B42C383FB900050FB9 /* ValidationHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15BEC9B32C383FB900050FB9 /* ValidationHelperTests.swift */; };
 		15C29FB62C6165480037C239 /* SuccessViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15C29FB52C6165480037C239 /* SuccessViewController.xib */; };
@@ -43,6 +44,7 @@
 		152541E52B7E74B20029F149 /* EstablishDataUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EstablishDataUtilsTests.swift; sourceTree = "<group>"; };
 		1587AB902A2FE043006F6FC3 /* SessionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManagerTests.swift; sourceTree = "<group>"; };
 		15987B0829DEF79D00D7A395 /* TrustlyLightBoxViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrustlyLightBoxViewController.swift; sourceTree = "<group>"; };
+		159A116A2D495F11009609D6 /* MerchantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerchantViewController.swift; sourceTree = "<group>"; };
 		15BB985F2B68120100A9210B /* URLUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLUtilsTests.swift; sourceTree = "<group>"; };
 		15BEC9B32C383FB900050FB9 /* ValidationHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationHelperTests.swift; sourceTree = "<group>"; };
 		15C29FB52C6165480037C239 /* SuccessViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SuccessViewController.xib; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				15C29FB52C6165480037C239 /* SuccessViewController.xib */,
 				15C29FB72C6165570037C239 /* SuccessViewController.swift */,
+				159A116A2D495F11009609D6 /* MerchantViewController.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -392,6 +395,7 @@
 			files = (
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				159A116B2D495F11009609D6 /* MerchantViewController.swift in Sources */,
 				15C29FB82C6165570037C239 /* SuccessViewController.swift in Sources */,
 				15987B0929DEF79D00D7A395 /* TrustlyLightBoxViewController.swift in Sources */,
 			);

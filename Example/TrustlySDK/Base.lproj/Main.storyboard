@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="U1b-IB-buc">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -69,6 +69,53 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="139.69465648854961" y="0.0"/>
+        </scene>
+        <!--Merchant View Controller-->
+        <scene sceneID="6gO-FZ-sCu">
+            <objects>
+                <viewController storyboardIdentifier="MerchantViewController" id="U1b-IB-buc" customClass="MerchantViewController" customModule="TrustlySDK_Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="XoH-jc-WAk"/>
+                        <viewControllerLayoutGuide type="bottom" id="BPc-dI-7pg"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="bEs-6A-vbi">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Amount:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="57K-Er-fyu">
+                                <rect key="frame" x="16" y="97" width="332" height="26.333333333333329"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="332" id="UIj-ia-E8a"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="08v-0k-Zj3">
+                                <rect key="frame" x="15" y="122" width="354" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="34" id="rO9-vr-EOv"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="57K-Er-fyu" firstAttribute="top" secondItem="XoH-jc-WAk" secondAttribute="bottom" constant="38" id="2f2-rR-9eE"/>
+                            <constraint firstItem="08v-0k-Zj3" firstAttribute="leading" secondItem="bEs-6A-vbi" secondAttribute="leading" constant="15" id="G58-r6-eem"/>
+                            <constraint firstAttribute="trailing" secondItem="08v-0k-Zj3" secondAttribute="trailing" constant="24" id="PcZ-oe-a3j"/>
+                            <constraint firstItem="57K-Er-fyu" firstAttribute="leading" secondItem="bEs-6A-vbi" secondAttribute="leadingMargin" id="h1s-ef-1BA"/>
+                            <constraint firstItem="08v-0k-Zj3" firstAttribute="top" secondItem="XoH-jc-WAk" secondAttribute="bottom" constant="63" id="sqE-j1-xn2"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="amountTextView" destination="08v-0k-Zj3" id="c8h-hn-I2D"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0fA-M7-WEq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="113.74045801526717" y="664.78873239436621"/>
         </scene>
     </scenes>
     <resources>
