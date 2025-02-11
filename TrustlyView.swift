@@ -20,7 +20,6 @@ import AuthenticationServices
 import SafariServices
 
 public typealias TrustlyViewCallback = (_ returnParameters: [AnyHashable : Any]) -> Void;
-public typealias TrustlyListenerCallback = (_ eventName: String, _ eventDetails: [AnyHashable : Any]) -> Void;
 
 protocol TrustlyViewProtocol {
     func selectBankWidget(establishData: [AnyHashable : Any], onBankSelected: @escaping TrustlyViewCallback) -> UIView;
@@ -40,9 +39,9 @@ class TrustlyView : UIView, WKNavigationDelegate, WKScriptMessageHandler, WKUIDe
 //    public var navBarTitleColor:UIColor!
 //    public var navBarSubtitleColor:UIColor!
     private let inAppIntegrationContext = "InAppBrowser"
-    private var returnHandler:TrustlyViewCallback?
-    private var cancelHandler:TrustlyViewCallback?
-    private var externalUrlHandler:TrustlyViewCallback?
+    private var returnHandler:TrustlyCallback?
+    private var cancelHandler:TrustlyCallback?
+    private var externalUrlHandler:TrustlyCallback?
     private var bankSelectedHandler:TrustlyViewCallback?
     private var changeListenerHandler:TrustlyListenerCallback?
     private var establishData:[AnyHashable : Any]?
@@ -118,14 +117,14 @@ class TrustlyView : UIView, WKNavigationDelegate, WKScriptMessageHandler, WKUIDe
     }
 
     //TrustlySDK Protocol
-    public func verify(verifyData:[AnyHashable : Any], onReturn: TrustlyViewCallback?, onCancel: TrustlyViewCallback?) -> UIView? {
+    public func verify(verifyData:[AnyHashable : Any], onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) -> UIView? {
         var mutableDictionary = verifyData
         mutableDictionary["paymentType"] = Constants.PAYMENTTYPE_VERIFICATION
         
         return establish(establishData: mutableDictionary, onReturn:onReturn, onCancel:onCancel)
     }
     
-    public func onExternalUrl(onExternalUrl: TrustlyViewCallback?) {
+    public func onExternalUrl(onExternalUrl: TrustlyCallback?) {
         self.externalUrlHandler = onExternalUrl
     }
     
@@ -427,7 +426,7 @@ extension TrustlyView {
         webSession.start()
     }
     
-    private func buildASWebAuthenticationSession(url: URL, callbackURL: String, onReturn: TrustlyViewCallback?, onCancel: TrustlyViewCallback?) {
+    private func buildASWebAuthenticationSession(url: URL, callbackURL: String, onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) {
         webSession = ASWebAuthenticationSession(url: url, callbackURLScheme: callbackURL, completionHandler: { (url, error) in
             if let stringUrl = url?.absoluteString {
                 let returnedEstablish = EstablishDataUtils.buildEstablishFrom(urlWithParameters: stringUrl)
@@ -513,7 +512,7 @@ extension TrustlyView {
      @param onReturn: TrustlyCallback?
      @param onCancel: TrustlyCallback?
      */
-    public func establish(establishData eD: [AnyHashable : Any], onReturn: TrustlyViewCallback?, onCancel: TrustlyViewCallback?) -> UIView? {
+    public func establish(establishData eD: [AnyHashable : Any], onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) -> UIView? {
         
         self.prepareEstablish(establishData: eD)
         
@@ -545,7 +544,7 @@ extension TrustlyView {
         return self
     }
 
-    private func establishWebView(onReturn: TrustlyViewCallback?, onCancel: TrustlyViewCallback?) {
+    private func establishWebView(onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) {
         
         if establishData?.index(forKey: "metadata.integrationContext") == nil {
             establishData?["metadata.integrationContext"] = inAppIntegrationContext
@@ -590,7 +589,7 @@ extension TrustlyView {
         }
     }
     
-    private func establishASWebAuthentication(onReturn: TrustlyViewCallback?, onCancel: TrustlyViewCallback?) {
+    private func establishASWebAuthentication(onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) {
          
          if let scheme = establishData?["metadata.urlScheme"] as? String {
              self.urlScheme = scheme.components(separatedBy: ":")[0]
