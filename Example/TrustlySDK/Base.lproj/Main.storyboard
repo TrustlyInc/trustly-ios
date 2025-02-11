@@ -4,72 +4,9 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
-        <scene sceneID="ufC-wZ-h7g">
-            <objects>
-                <viewController storyboardIdentifier="MainViewController" id="vXZ-lx-hvc" customClass="ViewController" customModule="TrustlySDK_Example" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
-                        <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yrf-Eg-ElA">
-                                <rect key="frame" x="-4" y="72" width="401" height="746"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="14" translatesAutoresizingMaskIntoConstraints="NO" id="89n-Hd-53n">
-                                        <rect key="frame" x="20" y="20" width="361" height="605.33333333333337"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Amount:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d2S-eh-Amc">
-                                                <rect key="frame" x="0.0" y="0.0" width="361" height="20.333333333333332"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="10.0" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Iqf-hK-a3I">
-                                                <rect key="frame" x="0.0" y="34.333333333333329" width="361" height="34"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits"/>
-                                            </textField>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="guD-xS-eey" customClass="TrustlyView" customModule="TrustlySDK">
-                                                <rect key="frame" x="0.0" y="82.333333333333371" width="361" height="523"/>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="523" id="EoN-h3-Uwt"/>
-                                                </constraints>
-                                            </view>
-                                        </subviews>
-                                    </stackView>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="89n-Hd-53n" firstAttribute="top" secondItem="YET-E2-fOo" secondAttribute="top" constant="20" id="2Ui-F4-Fqi"/>
-                                    <constraint firstItem="89n-Hd-53n" firstAttribute="leading" secondItem="YET-E2-fOo" secondAttribute="leading" constant="20" id="Fs2-8U-V0f"/>
-                                    <constraint firstItem="89n-Hd-53n" firstAttribute="bottom" secondItem="YET-E2-fOo" secondAttribute="bottom" id="RDT-C9-Imw"/>
-                                    <constraint firstItem="89n-Hd-53n" firstAttribute="trailing" secondItem="YET-E2-fOo" secondAttribute="trailing" id="RWZ-2d-cSw"/>
-                                    <constraint firstItem="89n-Hd-53n" firstAttribute="width" secondItem="eAd-Fw-mMR" secondAttribute="width" multiplier="0.900249" id="cJk-5F-RUR"/>
-                                </constraints>
-                                <viewLayoutGuide key="contentLayoutGuide" id="YET-E2-fOo"/>
-                                <viewLayoutGuide key="frameLayoutGuide" id="eAd-Fw-mMR"/>
-                            </scrollView>
-                        </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                    <connections>
-                        <outlet property="amountTextView" destination="Iqf-hK-a3I" id="g7Q-KP-B1p"/>
-                        <outlet property="trustlyView" destination="guD-xS-eey" id="YxX-cB-xV5"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="139.69465648854961" y="0.0"/>
-        </scene>
         <!--Merchant View Controller-->
         <scene sceneID="6gO-FZ-sCu">
             <objects>
@@ -118,9 +55,4 @@
             <point key="canvasLocation" x="113.74045801526717" y="664.78873239436621"/>
         </scene>
     </scenes>
-    <resources>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-    </resources>
 </document>
