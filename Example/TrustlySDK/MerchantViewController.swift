@@ -18,21 +18,22 @@ class MerchantViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.establishData = ["accessId": "<ACCESS_ID>",
-                              "merchantId" : "<MERCHANT_ID>",
-                              "currency" : "USD",
-                              "amount" : "1.00",
-                              "merchantReference" : "<MERCHANT_REFERENCE>",
-                              "paymentType" : "Retrieval",
-                              "returnUrl": "/returnUrl",
-                              "cancelUrl": "/cancelUrl",
-                              "requestSignature": "<REQUEST_SIGNATURE>",
-                              "customer.name": "John",
-                              "customer.address.country": "US",
-                              "metadata.urlScheme": "demoapp://",
-                              "description": "First Data Mobile Test",
-                              "env": "<[int, sandbox, local]>",
-                              "envHost": "<YOUR LOCAL URL WHEN `ENV` PROPERTY IS `LOCAL` (ex: 192.168.0.30)>"]
+        self.establishData = [
+                        "accessId": "A48B73F694C4C8EE6306",
+                                        "merchantId" : "110005514",
+                                      "currency" : "USD",
+                                      "amount" : "1.00",
+                                      "merchantReference" : "cac73df7-52b4-47d7-89d3-9628d4cfb65e",
+                                      "paymentType" : "Retrieval",
+                                      "returnUrl": "/returnUrl",
+                                      "cancelUrl": "/cancelUrl",
+                                      "requestSignature": "HT5mVOqBXa8ZlvgX2USmPeLns5o=",
+                                      "customer.name": "John",
+                                      "customer.address.country": "US",
+                                      "metadata.urlScheme": "demoapp://",
+                                      "description": "First Data Mobile Test",
+                                      "env": "sandbox",
+                                      "envHost": "192.168.0.13"]
         
         let widgetVC = WidgetViewController()
         widgetVC.delegate = self
@@ -120,7 +121,7 @@ extension MerchantViewController {
 
 //MARK: WidgetProtocol
 extension MerchantViewController: WidgetViewControllerProtocol {
-    func onExternalUrl(onExternalUrl: TrustlyCallback?) {
+    func onExternalUrl(onExternalUrl: TrustlyViewCallback?) {
         print("onExternalUrl")
     }
     
