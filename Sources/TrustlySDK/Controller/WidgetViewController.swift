@@ -13,7 +13,7 @@ public protocol WidgetViewControllerProtocol: AnyObject {
         @brief Sets a callback to handle external URLs
         @param onExternalUrl Called when the TrustlySDK panel must open an external URL. If not handled an internal in app WebView will show the external URL.The external URL is sent on the returnParameters entry key “url”.
     */
-    func onExternalUrl(onExternalUrl: TrustlyCallback?) -> Void;
+    func onExternalUrl(onExternalUrl: TrustlyViewCallback?) -> Void;
     
     /*!
         @brief Sets a callback to handle event triggered by javascript
@@ -45,7 +45,7 @@ public class WidgetViewController: UIViewController {
 
 extension WidgetViewController {
 
-    public func selectBankWidget(establishData: [AnyHashable : Any], onBankSelected: @escaping TrustlyCallback) {
+    public func selectBankWidget(establishData: [AnyHashable : Any], onBankSelected: @escaping TrustlyViewCallback) {
         self.view = self.trustlyView.selectBankWidget(establishData: establishData) { data in
             print("returnParameters:\(data)")
             
