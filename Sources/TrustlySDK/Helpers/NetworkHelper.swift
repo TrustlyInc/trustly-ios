@@ -21,7 +21,7 @@ enum NetworkError: Error {
  @throws NetworkError.invalidUrl
  @result (url: URL, isLocal: Bool)
  */
-func buildEnvironment(resourceUrl:ResourceUrls, environment: String, localUrl: String, paymentType: String, build: String, path:PathUrls = .selectBank, query: [AnyHashable : Any]? = nil) throws -> (url: URL, isLocal: Bool)  {
+func buildEnvironment(resourceUrl:ResourceUrls, environment: String, localUrl: String, paymentType: String, build: String, path:PathUrls = .selectBank, query: [String : Any]? = nil, hash: [String : Any]? = nil) throws -> (url: URL, isLocal: Bool)  {
     var resource = resourceUrl
     var subDomain = ""
     var urlString = ""
@@ -32,7 +32,7 @@ func buildEnvironment(resourceUrl:ResourceUrls, environment: String, localUrl: S
     
     switch resourceUrl {
     case .index:
-        if paymentType != Constants.paymentTypeVerification {
+        if paymentType != Constants.PAYMENTTYPE_VERIFICATION {
             resource = .selectBank
         }
     default:
@@ -48,7 +48,7 @@ func buildEnvironment(resourceUrl:ResourceUrls, environment: String, localUrl: S
         resource: resource.rawValue,
         isLocalUrl: isLocalUrl,
         environment: environment,
-        port: path == .selectBank ? Constants.portApi : Constants.portFrontend
+        port: path == .selectBank ? Constants.PORT_API : Constants.PORT_FRONTEND
     )
     
     if path == .selectBank {
@@ -56,9 +56,11 @@ func buildEnvironment(resourceUrl:ResourceUrls, environment: String, localUrl: S
     }
     
     if let query = query {
-        let parameters = URLUtils.urlEncoded(query)
-        
-        urlString = "\(urlString)&\(parameters)#\(parameters.base64())"
+        urlString = "\(urlString)&\(URLUtils.urlEncoded(query))"
+    }
+    
+    if let hash = hash {
+        urlString = "\(urlString)#\(URLUtils.urlEncoded(hash))"
     }
     
     guard let url = URL(string: urlString) else {
