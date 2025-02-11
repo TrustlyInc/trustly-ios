@@ -57,28 +57,7 @@ class TrustlyView : UIView, WKNavigationDelegate, WKScriptMessageHandler, WKUIDe
     private var cid = "ios wrong cid"
     private var isLocalEnvironment = false
     private var trustlySettings: TrustlySettings? = nil
-    private var loading: UIActivityIndicatorView = {
-
-        let indicator = UIActivityIndicatorView()
-        
-        indicator.autoresizingMask = [
-            .flexibleLeftMargin, .flexibleRightMargin,
-            .flexibleTopMargin, .flexibleBottomMargin
-        ]
-        
-        indicator.hidesWhenStopped = true
-        indicator.color = .gray
-        
-        if #available(iOS 13.0, *) {
-            indicator.style = .large
-        } else {
-            indicator.style = .gray
-        }
-        
-        indicator.startAnimating()
-        
-        return indicator
-    }()
+    private let loading = UIActivityIndicatorView()
 
     
     //Constructors
@@ -502,12 +481,21 @@ extension TrustlyView {
     }
     
     private func startLoading() {
-        self.loading.center = CGPoint(
-            x: self.bounds.midX,
-            y: self.bounds.midY
-        )
+        self.loading.frame = CGRectMake(0.0, 0.0, 40.0, 40.0);
+        self.loading.center = self.center
+        self.loading.hidesWhenStopped = true
+        self.loading.color = .gray
+        self.loading.hidesWhenStopped = true
+        
+        if #available(iOS 13.0, *) {
+            self.loading.style = .large
+        } else {
+            self.loading.style = .gray
+        }
         
         self.addSubview(self.loading)
+        
+        self.loading.startAnimating()
     }
 
     private func stopLoading() {
@@ -527,15 +515,15 @@ extension TrustlyView {
      */
     public func establish(establishData eD: [AnyHashable : Any], onReturn: TrustlyViewCallback?, onCancel: TrustlyViewCallback?) -> UIView? {
         
-        self.startLoading()
-        
         self.prepareEstablish(establishData: eD)
-        
-        EstablishDataUtils.validateEstablishData(establishData: self.establishData ?? [:])
         
         DispatchQueue.global(qos: .background).async{
             
             if let establish = self.establishData {
+                
+                DispatchQueue.main.async{
+                    self.startLoading()
+                }
                 
                 getTrustlySettingsWith(establish: establish) { trustlySettings in
 
