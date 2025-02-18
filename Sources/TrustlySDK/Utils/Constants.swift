@@ -27,4 +27,10 @@ struct Constants {
     static let PORT_API = "8000"
     static let PORT_FRONTEND = "10000"
     
+    static let IN_APP_INTEGRATION_CONTEXT = "InAppBrowser"
+    static let MESSAGE_WEBVIEW_HANDLER = "PayWithMyBankNativeSDK"
+    
+    static let WIDGET_PAGE = "widget"
+    static let LOADING_TYPE = "loading"
+    
 }
