@@ -33,7 +33,7 @@ struct URLUtils {
      @param port: String
      @result String
      */
-    static func buildStringUrl(domain: String, subDomain: String, path:String, resource: String, isLocalUrl: Bool, environment: String, port: String = Constants.portApi) -> String {
+    static func buildStringUrl(domain: String, subDomain: String, path:String, resource: String, isLocalUrl: Bool, environment: String, port: String = Constants.PORT_API) -> String {
 
         var urlString = ""
         
@@ -112,20 +112,17 @@ struct URLUtils {
 
         for keyValuePair in urlComponents! {
             let pairComponents = keyValuePair.components(separatedBy: "=")
+            let key = pairComponents.first?.removingPercentEncoding
             let value = pairComponents.last?.removingPercentEncoding
-            
-            if let key = pairComponents.first?.removingPercentEncoding {
-                queryStringDictionary[key] = value
-            }
+            queryStringDictionary[key!] = value
          }
 
-        if let regex = try? NSRegularExpression(pattern: "&requestSignature=.*", options:NSRegularExpression.Options.caseInsensitive) {
-            queryStringDictionary["url"] =
-                regex.stringByReplacingMatches(in: absoluteString,
-                                               options:[],
-                                               range:NSMakeRange(0, absoluteString.count),
-                                               withTemplate:"") as String
-        }
+        let regex = try! NSRegularExpression(pattern: "&requestSignature=.*", options:NSRegularExpression.Options.caseInsensitive)
+        queryStringDictionary["url"] =
+            regex.stringByReplacingMatches(in: absoluteString,
+                                           options:[],
+                                           range:NSMakeRange(0, absoluteString.count),
+                                           withTemplate:"") as String
 
         return queryStringDictionary
     }

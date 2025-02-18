@@ -52,4 +52,10 @@ struct Constants {
     
     static let baseUrls = ["paywithmybank.com", "trustly.one"]
     
+    static let IN_APP_INTEGRATION_CONTEXT = "InAppBrowser"
+    static let MESSAGE_WEBVIEW_HANDLER = "PayWithMyBankNativeSDK"
+    
+    static let WIDGET_PAGE = "widget"
+    static let LOADING_TYPE = "loading"
+    
 }
