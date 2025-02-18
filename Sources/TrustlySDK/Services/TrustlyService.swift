@@ -7,18 +7,11 @@
 
 import Foundation
 
-protocol TrustlyServiceProtocol {
-    func showLightbox(data: Data?, url: URL?)
-    func showLightboxOAuth(url: URL, urlScheme: String)
-}
-
 
 class TrustlyService {
     
     private var sessionCid = "ios wrong sessionCid"
     private var cid = "ios wrong cid"
-    
-    public var delegate: TrustlyServiceProtocol?
 
     
     init () {
@@ -28,26 +21,44 @@ class TrustlyService {
         }
     }
     
-    func selectBankWidget(establishData eD: [AnyHashable : Any]) -> URLRequest? {
+    public func selectBankWidget(establishData eD: [AnyHashable : Any]) -> URLRequest? {
         
         var establishData = eD
         
         establishData["sessionCid"] = sessionCid
         establishData["metadata.cid"] = cid
         
+        var query = [String : Any]()
+        var hash = [String : Any]()
+        
         let deviceType = establishData["deviceType"] ?? "mobile" + ":ios:native"
-        establishData["deviceType"] = deviceType
+        query["deviceType"] = deviceType
         
         if let lang = establishData["metadata.lang"] as? String {
-            establishData["lang"] = lang
+            query["lang"] = lang
         }
 
-        establishData["grp"] = EstablishDataUtils.getGrp()
-        establishData["dynamicWidget"] = "true"
-        establishData["sessionCid"] = establishData["sessionCid"]
-        establishData["cid"] = establishData["metadata.cid"]
+        query["onlinePPSubType"] = establishData["onlinePPSubType"]
+        query["accessId"] = establishData["accessId"]
+        query["merchantId"] = establishData["merchantId"]
+        query["paymentType"] = establishData["paymentType"] ?? "Instant"
+        query["deviceType"] = deviceType
+        query["grp"] = EstablishDataUtils.getGrp()
+        query["dynamicWidget"] = "true"
+        query["sessionCid"] = establishData["sessionCid"]
+        query["cid"] = establishData["metadata.cid"]
         
-        EstablishDataUtils.validateEstablishData(establishData: establishData)
+        if establishData["customer.address.country"] != nil {
+            query["customer.address.country"] = establishData["customer.address.country"]
+        }
+        
+        if (establishData["customer.address.country"] == nil || establishData["customer.address.country"] as! String == "us") &&
+            establishData["customer.address.state"] != nil{
+            query["customer.address.state"] = establishData["customer.address.state"]
+        }
+        
+        hash["merchantReference"] = establishData["merchantReference"] ?? ""
+        hash["customer.externalId"] = establishData["customer.externalId"] ?? ""
 
         do {
             let environment = try buildEnvironment(
@@ -56,7 +67,8 @@ class TrustlyService {
                 localUrl: (establishData["envHost"] ?? "") as! String,
                 paymentType: (establishData["paymentType"] ?? "") as! String,
                 build: Constants.buildSDK,
-                query: establishData
+                query: query,
+                hash: hash
             )
             
             var request = URLRequest(url: environment.url)
@@ -75,91 +87,4 @@ class TrustlyService {
         return nil
     }
     
-    func establishWebView(establishData eD: [AnyHashable : Any]) {
-        
-        var establishData = EstablishDataUtils.prepareEstablish(establishData: eD, cid: cid, sessionCid: sessionCid)
-        
-        if establishData.index(forKey: "metadata.integrationContext") == nil {
-            establishData["metadata.integrationContext"] = Constants.inAppIntegrationContext
-        }
-        
-        do {
-            let environment = try buildEnvironment(
-                resourceUrl: .index,
-                environment: (establishData["env"] ?? "") as! String,
-                localUrl: (establishData["envHost"] ?? "") as! String,
-                paymentType: (establishData["paymentType"] ?? "") as! String,
-                build: Constants.buildSDK
-            )
-
-            loadLightbox(establish: establishData, url: environment.url) { (data, response, error) in
-                
-                if error == nil, let response = response {
-                    self.delegate?.showLightbox(data: data, url: response.url)
-                }
-            }
-            
-        } catch NetworkError.invalidUrl {
-            print("Error: Invalid url.")
-            
-        } catch {
-            print("Unexpected error: \(error).")
-        }
-    }
-    
-    func establishASWebAuthentication(establishData eD: [AnyHashable : Any], onReturn: TrustlyViewCallback?, onCancel: TrustlyViewCallback?) {
-        
-        var establishData = eD
-        
-        guard let scheme = establishData["metadata.urlScheme"] as? String else {
-            return
-        }
-        
-        establishData["returnUrl"] = scheme
-        establishData["cancelUrl"] = scheme
-        
-        do {
-            let environment = try buildEnvironment(
-                resourceUrl: .establish,
-                environment: (establishData["env"] ?? "") as! String,
-                localUrl: (establishData["envHost"] ?? "") as! String,
-                paymentType: (establishData["paymentType"] ?? "") as! String,
-                build: Constants.buildSDK,
-                path: .mobile
-            )
-            
-            var url = environment.url.absoluteString
-            
-            let normalizedEstablish:[String : AnyHashable] = EstablishDataUtils.normalizeEstablishWithDotNotation(establish: establishData as! [String : AnyHashable])
-            
-            if let token = JSONUtils.getJsonBase64From(dictionary: normalizedEstablish) {
-
-                url = "\(url)?token=\(token)"
-                let cleanScheme = scheme.components(separatedBy: ":")[0]
-                
-                self.delegate?.showLightboxOAuth(url: URL(string: url)!, urlScheme: cleanScheme)
-
-            }
-            
-        } catch NetworkError.invalidUrl {
-            print("Error: Invalid url.")
-            
-        } catch {
-            print("Error: building url.")
-        }
-
-     }
-    
-    public func chooseIntegrationStrategy(establishData: [AnyHashable : Any], completionHandler: @escaping(String) -> Void) {
-        
-        getTrustlySettingsWith(establish: establishData) { trustlySettings in
-
-            if let settings = trustlySettings?.settings {
-                completionHandler(settings.integrationStrategy)
-                
-            } else {
-                completionHandler(Constants.lightboxContentWebview)
-            }
-        }
-    }
 }
