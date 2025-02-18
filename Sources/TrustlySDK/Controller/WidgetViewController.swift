@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+@preconcurrency import WebKit
 
 public protocol WidgetViewControllerProtocol: AnyObject {
     /*!
@@ -27,30 +28,77 @@ public protocol WidgetViewControllerProtocol: AnyObject {
 
 public class WidgetViewController: UIViewController {
     
+    private let WidgetView:Int = 100
+    
+    private var mainWebView:WKWebView!
+    private var webViewManager: WebViewManager?
+    
     public weak var delegate: WidgetViewControllerProtocol?
-    var trustlyView:TrustlyView = TrustlyView()
-        
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = .cyan
+        self.initWebView()
         
-        self.trustlyView.onChangeListener { (eventName, attributes) in
+        self.webViewManager?.onChangeListener { (eventName, attributes) in
             self.delegate?.onChangeListener(eventName, attributes)
             
             print("onChangeListener: \(eventName) \(attributes)")
         }
+    }
+    
+    func initWebView() {
+        
+        let configuration = WKWebViewConfiguration()
+        
+        let frame = CGRect(x:0, y:0, width: self.view.frame.size.width, height: self.view.frame.size.height)
+        mainWebView = WKWebView(frame:frame, configuration:configuration)
+        
+        webViewManager = WebViewManager(webView: mainWebView)
+        webViewManager?.notifyEvent(Constants.WIDGET_PAGE, Constants.LOADING_TYPE)
+        
+        let userController = WKUserContentController()
+        
+        if let webViewManager = webViewManager {
+            userController.add(webViewManager, name: Constants.MESSAGE_WEBVIEW_HANDLER)
+        }
+        
+        configuration.userContentController = userController
+        
+        let wkPreferences = WKPreferences()
+        wkPreferences.javaScriptCanOpenWindowsAutomatically = true
+        
+        configuration.preferences = wkPreferences
+
+        mainWebView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        mainWebView.navigationDelegate = webViewManager
+        mainWebView.uiDelegate = webViewManager
+        mainWebView.scrollView.bounces = false
+        mainWebView.backgroundColor = UIColor.clear
+        mainWebView.isOpaque = false
+        mainWebView.tag = WidgetView
+        
+        if #available(iOS 16.4, *) {
+            mainWebView.isInspectable = true
+        }
+
+        self.view = self.mainWebView
     }
 }
 
 extension WidgetViewController {
 
     public func selectBankWidget(establishData: [AnyHashable : Any], onBankSelected: @escaping TrustlyViewCallback) {
-        self.view = self.trustlyView.selectBankWidget(establishData: establishData) { data in
-            print("returnParameters:\(data)")
-            
-            onBankSelected(data)
-
+        
+        let service = TrustlyService()
+        
+        self.webViewManager?.establishData = establishData
+        
+        if let urlRequest = service.selectBankWidget(establishData: establishData) {
+            self.mainWebView.load(urlRequest)
         }
+        
+        self.webViewManager?.bankSelectedHandler = onBankSelected
+
     }
 }
