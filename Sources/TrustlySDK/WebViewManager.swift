@@ -8,66 +8,40 @@
 import Foundation
 @preconcurrency import WebKit
 import SafariServices
-import AuthenticationServices
 
-public typealias TrustlyViewCallback = (_ returnParameters: [AnyHashable : Any]) -> Void;
-public typealias TrustlyListenerCallback = (_ eventName: String, _ eventDetails: [AnyHashable : Any]) -> Void;
-
-class WebViewManager: NSObject {
     
-    var establishData:[AnyHashable : Any]?
-    var mainWebView:WKWebView!
-    var returnHandler:TrustlyViewCallback?
-    var cancelHandler:TrustlyViewCallback?
-    var bankSelectedHandler:TrustlyViewCallback?
+@available(iOS 12.0, *)
+class WebViewManager : NSObject, WKNavigationDelegate, WKScriptMessageHandler, WKUIDelegate {
     
-    private var webSession:ASWebAuthenticationSession!
+    private var returnHandler:TrustlyViewCallback?
+    private var cancelHandler:TrustlyViewCallback?
     private var externalUrlHandler:TrustlyViewCallback?
-    
     private var changeListenerHandler:TrustlyListenerCallback?
     
-    private var returnUrl = Constants.returnURL
-    private var cancelUrl = Constants.cancelURL
+    var bankSelectedHandler:TrustlyViewCallback?
+    var establishData:[AnyHashable : Any]?
     
-    private var sessionCid = "ios wrong sessionCid"
-    private var cid = "ios wrong cid"
-    
-    override init() {
-        super.init()
-        
-        self.createNotifications()
+    private var mainWebView:WKWebView
+    private var returnUrl = Constants.RETURN_URL
+    private var cancelUrl = Constants.CANCEL_URL
+
+    init(webView: WKWebView){
+        self.mainWebView = webView
     }
-    private func notifyListener(_ eventName:String!, _ eventDetails:[AnyHashable : Any]!) {
-        if(changeListenerHandler != nil) {
-            changeListenerHandler!(eventName, eventDetails ?? [:])
-        }
-    }
-    
-    public func onChangeListener(onChangeListener: TrustlyListenerCallback?) {
-        changeListenerHandler = onChangeListener
-    }
-    
-    func notifyEvent(_ page : String, _ type : String) {
-        var eventDetails = [String:String]()
-        eventDetails["page"] = "widget"
-        eventDetails["type"] = "load"
-        
-        self.notifyListener("event", eventDetails)
-    }
+
 }
 
 // MARK: WKUIDelegate Protocol
-extension WebViewManager: WKUIDelegate{
-    
-    
+extension WebViewManager {
     //1: Handles new window creation (window.open)
     public func webView(_ webView: WKWebView,
-                   createWebViewWith configuration: WKWebViewConfiguration,
-                   for navigationAction: WKNavigationAction,
-                   windowFeatures: WKWindowFeatures) -> WKWebView? {
+                        createWebViewWith configuration: WKWebViewConfiguration,
+                        for navigationAction: WKNavigationAction,
+                        windowFeatures: WKWindowFeatures) -> WKWebView? {
         if(webView == mainWebView) {
             if navigationAction.targetFrame == nil, let url = navigationAction.request.url {
-                self.openOAuth(url: url)
+                // TODO: Fix it
+//                self.openOAuth(url: url)
             }
             
         } else {
@@ -76,63 +50,59 @@ extension WebViewManager: WKUIDelegate{
                 presentOnSFSafariViewController(url)
             }
         }
-        
-      return nil
-        
+        return nil
     }
 }
 
 // MARK: WKUserContentController Protocol
-extension WebViewManager: WKScriptMessageHandler {
-    
+extension WebViewManager {
     public func userContentController(_ userContentController:WKUserContentController, didReceive message:WKScriptMessage){
         let content = message.body as? String
         if content == nil {
             return
         }
-
+        
         if message.webView == mainWebView {
             let params:[String]! = content?.components(separatedBy: "|")
             if params.count == 0 {
                 return
             }
-
+            
             let command = params[0]
             if command.isEqual("") {
                 return
             }
-
+            
             if command.isEqual("PayWithMyBank.event") {
                 let eventName:String! = "event"
-
+                
                 var eventDetails = [String:String]()
                 eventDetails["page"] = (params.count > 2 ? params[2] : "")
                 eventDetails["type"] = (params.count > 5 ? params[5] : "")
                 eventDetails["transactionId"] = (params.count > 3 ? params[3] : "")
                 eventDetails["merchantReference"] = (params.count > 4 ? params[4] : "")
-
+                
                 let data:String! = (params.count > 6 ? params[6] : "")
                 let transfer:String! = (params.count > 7 ? params[7] : "")
-
+                
                 if data.count != 0 {
                     eventDetails["data"] = data
                 }
-
+                
                 if data.count != 0 {
                     eventDetails["transfer"] = transfer
                 }
-
+                
                 notifyListener(eventName, eventDetails)
                 
             }
         }
     }
 }
-    
+
 
 // MARK: WKNavigationDelegate Protocol
-extension WebViewManager: WKNavigationDelegate {
-    
+extension WebViewManager {
     public func webView(_ webView:WKWebView, didFinish navigation:WKNavigation!) {
 
         let contentSize:CGSize = webView.scrollView.contentSize
@@ -145,7 +115,7 @@ extension WebViewManager: WKNavigationDelegate {
             webView.scrollView.zoomScale = rw
         }
 
-        if webView.tag == Constants.widgetView {
+        if webView.tag == WidgetView {
             self.notifyEvent("widget","load")
         }
         
@@ -212,11 +182,11 @@ extension WebViewManager: WKNavigationDelegate {
                     if ("PayWithMyBank.createTransaction" == params[0]) && bankSelectedHandler != nil {
                         if params.count > 1 {
                             establishData?["paymentProviderId"] = params[1]
-                            }
+                        }
                             
-                            if let establishData = establishData {
-                                bankSelectedHandler?(establishData)
-                            }
+                        if let establishData = establishData {
+                            bankSelectedHandler?(establishData)
+                        }
                             
                         }
                         break;
@@ -248,98 +218,9 @@ extension WebViewManager: WKNavigationDelegate {
     }
 }
 
-
-// MARK: Oauth support
-@available(iOS 12.0, *)
-extension WebViewManager: ASWebAuthenticationPresentationContextProviding {
+// MARK: Utility Functions
+extension WebViewManager {
     
-    public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-        return ASPresentationAnchor()
-    }
-
-    func openOAuth(url: URL) {
-        let host = url.host!
-        let path = url.path
-        let isLocalEnvironment = false
-        
-        if isLocalEnvironment || (self.checkUrl(host: host) &&
-                                       path.contains(Constants.oauthLoginPath)) {
-
-            self.buildASWebAuthenticationSession(url: url, callbackURL: EstablishDataUtils.extractUrlSchemeFrom(establishData ?? [:]), completionHandler: { (url, error) in
-
-                if url != nil {
-                    self.proceedToChooseAccount()
-                }
-            })
-        }
-    }
-    
-    func openOAuth (url: URL, urlScheme: String) {
-        
-        self.buildASWebAuthenticationSession(url: url, callbackURL: urlScheme, completionHandler: { (url, error) in
-            
-            if let stringUrl = url?.absoluteString {
-                let returnedEstablish = EstablishDataUtils.buildEstablishFrom(urlWithParameters: stringUrl)
-
-                self.returnHandler?(returnedEstablish)
-
-            } else {
-                self.cancelHandler?([:])
-
-            }
-        })
-    }
-    
-    private func checkUrl(host: String) -> Bool {
-        
-        for url in Constants.baseUrls {
-            if host.contains(url) {
-                return true
-            }
-        }
-        
-        return false
-    }
-
-    // MARK: - Oauth autenthication
-    private func buildASWebAuthenticationSession(url: URL, callbackURL: String, completionHandler: @escaping (_ url: URL?, _ error: Error?) -> Void){
-        
-        webSession = ASWebAuthenticationSession(url: url, callbackURLScheme: callbackURL, completionHandler: { (url, error) in
-            completionHandler(url, error)
-        })
-        
-        if #available(iOS 13, *) {
-            webSession.prefersEphemeralWebBrowserSession = true
-            webSession.presentationContextProvider = self
-        }
-
-        webSession.start()
-    }
-    
-    private func proceedToChooseAccount(){
-        self.mainWebView.evaluateJavaScript("window.Trustly.proceedToChooseAccount();", completionHandler: nil)
-    }
-}
-
-// MARK: - Utility Functions
-extension WebViewManager{
-    
-    private func createNotifications(){
-        NotificationCenter.default.addObserver(self, selector: #selector(closeWebview), name: .trustlyCloseWebview, object: nil)
-    }
-    
-    @objc func closeWebview(notification: Notification){
-        
-        NotificationCenter.default.removeObserver(self, name: .trustlyCloseWebview, object: nil)
-        
-        if webSession != nil {
-            webSession.cancel()
-        }
-
-        self.proceedToChooseAccount()
-    }
-    
-    //Utility Functions
     func presentOnSFSafariViewController(_ url: URL?) {
         if url != nil {
             let vc = SFSafariViewController(url: url!)
@@ -351,9 +232,18 @@ extension WebViewManager{
            }
         }
     }
-}
+    
+    func notifyEvent(_ page : String, _ type : String) {
+        var eventDetails = [String:String]()
+        eventDetails["page"] = "widget"
+        eventDetails["type"] = "load"
 
-extension Notification.Name{
-    @available(iOS 12.0, *)
-    public static let trustlyCloseWebview = Notification.Name(Constants.trustlyCloseWebview)
+        self.notifyListener("event", eventDetails)
+    }
+    
+    private func notifyListener(_ eventName:String!, _ eventDetails:[AnyHashable : Any]!) {
+        if(changeListenerHandler != nil) {
+            changeListenerHandler!(eventName, eventDetails)
+        }
+    }
 }
