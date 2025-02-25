@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		152541E62B7E74B20029F149 /* EstablishDataUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152541E52B7E74B20029F149 /* EstablishDataUtilsTests.swift */; };
 		1587AB912A2FE043006F6FC3 /* SessionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1587AB902A2FE043006F6FC3 /* SessionManagerTests.swift */; };
-		15987B0929DEF79D00D7A395 /* TrustlyLightBoxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15987B0829DEF79D00D7A395 /* TrustlyLightBoxViewController.swift */; };
+		159A116B2D495F11009609D6 /* MerchantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159A116A2D495F11009609D6 /* MerchantViewController.swift */; };
 		15BB98602B68120100A9210B /* URLUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15BB985F2B68120100A9210B /* URLUtilsTests.swift */; };
 		15BEC9B42C383FB900050FB9 /* ValidationHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15BEC9B32C383FB900050FB9 /* ValidationHelperTests.swift */; };
 		15C29FB62C6165480037C239 /* SuccessViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15C29FB52C6165480037C239 /* SuccessViewController.xib */; };
@@ -18,7 +18,6 @@
 		15E049852B7510BA0084B71A /* JsonUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15E049842B7510BA0084B71A /* JsonUtilsTests.swift */; };
 		340657DFE7244067A8F33A0D /* Pods_TrustlySDK_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C63286550C0E975AC9573DF /* Pods_TrustlySDK_Example.framework */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
-		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
@@ -42,7 +41,7 @@
 		10C7972A664657BB9F51ED82 /* Pods-TrustlySDK_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrustlySDK_Tests.release.xcconfig"; path = "Target Support Files/Pods-TrustlySDK_Tests/Pods-TrustlySDK_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		152541E52B7E74B20029F149 /* EstablishDataUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EstablishDataUtilsTests.swift; sourceTree = "<group>"; };
 		1587AB902A2FE043006F6FC3 /* SessionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManagerTests.swift; sourceTree = "<group>"; };
-		15987B0829DEF79D00D7A395 /* TrustlyLightBoxViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrustlyLightBoxViewController.swift; sourceTree = "<group>"; };
+		159A116A2D495F11009609D6 /* MerchantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerchantViewController.swift; sourceTree = "<group>"; };
 		15BB985F2B68120100A9210B /* URLUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLUtilsTests.swift; sourceTree = "<group>"; };
 		15BEC9B32C383FB900050FB9 /* ValidationHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationHelperTests.swift; sourceTree = "<group>"; };
 		15C29FB52C6165480037C239 /* SuccessViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SuccessViewController.xib; sourceTree = "<group>"; };
@@ -56,7 +55,6 @@
 		607FACD01AFB9204008FA782 /* TrustlySDK_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrustlySDK_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		607FACD71AFB9204008FA782 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		607FACDA1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		607FACDC1AFB9204008FA782 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -98,11 +96,10 @@
 		15C29FBB2C6168B20037C239 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				607FACD71AFB9204008FA782 /* ViewController.swift */,
-				15987B0829DEF79D00D7A395 /* TrustlyLightBoxViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				15C29FB52C6165480037C239 /* SuccessViewController.xib */,
 				15C29FB72C6165570037C239 /* SuccessViewController.swift */,
+				159A116A2D495F11009609D6 /* MerchantViewController.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -266,7 +263,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 1610;
+				LastUpgradeCheck = 1620;
 				ORGANIZATIONNAME = CocoaPods;
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
@@ -390,10 +387,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				159A116B2D495F11009609D6 /* MerchantViewController.swift in Sources */,
 				15C29FB82C6165570037C239 /* SuccessViewController.swift in Sources */,
-				15987B0929DEF79D00D7A395 /* TrustlyLightBoxViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

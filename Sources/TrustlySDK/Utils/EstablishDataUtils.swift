@@ -109,4 +109,26 @@ struct EstablishDataUtils {
 //        return normalizeEstablishWithDotNotation(establish: establish)
 
     }
+    
+    static func getGrp() -> String! {
+        return getDefault(key: "Trustly.grp", def: generateGrp())
+    }
+    
+    static func getDefault(key:String, def: String) -> String{
+        let userDefaults:UserDefaults = UserDefaults.standard
+        var value = userDefaults.object(forKey: key) as? String
+        if(value == nil){
+            value = def
+            userDefaults.set(value,forKey: key)
+            userDefaults.synchronize()
+        }
+        return value ?? ""
+    }
+
+    static func generateGrp() -> String! {
+        var grp:String!
+        let grpInt:Int = Int(arc4random_uniform(100))
+        grp = String(format:"%d", grpInt)
+        return grp
+    }
 }

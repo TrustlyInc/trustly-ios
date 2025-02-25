@@ -100,4 +100,30 @@ struct URLUtils {
     static func isLocalUrl(environment: String) -> Bool {
         return !environment.isEmpty && "local" == environment
     }
+    
+    /** @abstract Validate if we are handling with local environment.
+     @param url: URL
+     @result [AnyHashable : Any]
+     */
+    static func parametersForUrl(_ url:URL) -> [AnyHashable : Any] {
+        let absoluteString = url.absoluteString
+        var queryStringDictionary = [String : String]()
+        let urlComponents = url.query?.components(separatedBy: "&")
+
+        for keyValuePair in urlComponents! {
+            let pairComponents = keyValuePair.components(separatedBy: "=")
+            let key = pairComponents.first?.removingPercentEncoding
+            let value = pairComponents.last?.removingPercentEncoding
+            queryStringDictionary[key!] = value
+         }
+
+        let regex = try! NSRegularExpression(pattern: "&requestSignature=.*", options:NSRegularExpression.Options.caseInsensitive)
+        queryStringDictionary["url"] =
+            regex.stringByReplacingMatches(in: absoluteString,
+                                           options:[],
+                                           range:NSMakeRange(0, absoluteString.count),
+                                           withTemplate:"") as String
+
+        return queryStringDictionary
+    }
 }
