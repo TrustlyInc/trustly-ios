@@ -48,6 +48,8 @@ jobs:
             sudo gem install -n /usr/local/bin xcpretty
             # Install Lizard
             brew install lizard
+            # Install Xcodebuild
+            xcode-select --install
 
       - name: Install CocoaPods
         run: |
