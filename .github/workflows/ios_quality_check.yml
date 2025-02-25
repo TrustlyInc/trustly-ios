@@ -84,12 +84,6 @@ jobs:
         run: |
           sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
           sudo xcodebuild -runFirstLaunch
-      
-      - name: Wait for Simulator to Start
-        run: |
-          xcrun simctl boot 6A3F7EC2-F53A-4D09-A280-1ADCB5D7AF17
-          sleep 10
-          echo "Simulator booted successfully."    
     
       - name: Run Sonar-Swift Script
         run: |
