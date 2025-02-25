@@ -79,6 +79,17 @@ jobs:
           rm -rf ~/Library/Caches/com.apple.dt.Xcode
           rm -rf ~/Library/Developer/CoreSimulator/Caches
           echo "Xcode caches and simulator processes cleaned up."
+
+      - name: Install Xcode dependencies
+        run: |
+          sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+          sudo xcodebuild -runFirstLaunch
+      
+      - name: Wait for Simulator to Start
+        run: |
+          xcrun simctl boot "${SIMULATOR_UDID}"
+          sleep 10
+          echo "Simulator booted successfully."    
     
       - name: Run Sonar-Swift Script
         run: |
