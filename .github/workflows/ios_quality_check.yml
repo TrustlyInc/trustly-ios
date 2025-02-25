@@ -39,7 +39,7 @@ jobs:
       - name: Install dependencies
         run: |
             # Update Homebrew
-            brew update
+            # brew update
             # Install SwiftLint
             brew install swiftlint
             # Install Tailor
@@ -87,7 +87,7 @@ jobs:
       
       - name: Wait for Simulator to Start
         run: |
-          xcrun simctl boot "${SIMULATOR_UDID}"
+          xcrun simctl boot 6A3F7EC2-F53A-4D09-A280-1ADCB5D7AF17
           sleep 10
           echo "Simulator booted successfully."    
     
