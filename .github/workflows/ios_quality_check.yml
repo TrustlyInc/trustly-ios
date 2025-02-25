@@ -53,8 +53,8 @@ jobs:
             sudo gem install -n /usr/local/bin xcpretty
             # Install Lizard
             brew install lizard
-            # sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
-            # sudo xcodebuild -license accept
+            sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
+            sudo xcodebuild -license accept
 
       - name: Install CocoaPods
         run: |
@@ -87,10 +87,10 @@ jobs:
       #     rm -rf ~/Library/Developer/CoreSimulator/Caches
       #     echo "Xcode caches and simulator processes cleaned up."
 
-      # - name: Install Xcode dependencies
-      #   run: |
-      #     sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
-      #     sudo xcodebuild -runFirstLaunch
+      - name: Install Xcode dependencies
+        run: |
+          sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+          sudo xcodebuild -runFirstLaunch
     
       - name: Run Sonar-Swift Script
         run: |
