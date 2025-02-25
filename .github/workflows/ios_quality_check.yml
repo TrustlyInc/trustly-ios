@@ -53,8 +53,8 @@ jobs:
             sudo gem install -n /usr/local/bin xcpretty
             # Install Lizard
             brew install lizard
-            sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
-            sudo xcodebuild -license accept
+            # sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
+            # sudo xcodebuild -license accept
 
       - name: Install CocoaPods
         run: |
@@ -76,21 +76,21 @@ jobs:
           echo "sonar.pullrequest.base=${{ github.base_ref }}" >> sonar-project.properties
           echo "sonar.scm.revision=${{ env.GIT_REVISION }}" >> sonar-project.properties
 
-      - name: Clean Xcode and Simulator Caches
-        run: |
-          osascript -e 'quit app "Xcode"'
-          osascript -e 'quit app "Simulator"'
-          pkill -9 -f Simulator || true
-          pkill -9 -f com.apple.CoreSimulator || true
-          rm -rf ~/Library/Developer/Xcode/DerivedData
-          rm -rf ~/Library/Caches/com.apple.dt.Xcode
-          rm -rf ~/Library/Developer/CoreSimulator/Caches
-          echo "Xcode caches and simulator processes cleaned up."
+      # - name: Clean Xcode and Simulator Caches
+      #   run: |
+      #     osascript -e 'quit app "Xcode"'
+      #     osascript -e 'quit app "Simulator"'
+      #     pkill -9 -f Simulator || true
+      #     pkill -9 -f com.apple.CoreSimulator || true
+      #     rm -rf ~/Library/Developer/Xcode/DerivedData
+      #     rm -rf ~/Library/Caches/com.apple.dt.Xcode
+      #     rm -rf ~/Library/Developer/CoreSimulator/Caches
+      #     echo "Xcode caches and simulator processes cleaned up."
 
-      - name: Install Xcode dependencies
-        run: |
-          sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
-          sudo xcodebuild -runFirstLaunch
+      # - name: Install Xcode dependencies
+      #   run: |
+      #     sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+      #     sudo xcodebuild -runFirstLaunch
     
       - name: Run Sonar-Swift Script
         run: |
