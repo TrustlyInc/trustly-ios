@@ -32,7 +32,7 @@ func buildEnvironment(resourceUrl:ResourceUrls, environment: String, localUrl: S
     
     switch resourceUrl {
     case .index:
-        if paymentType != Constants.PAYMENTTYPE_VERIFICATION {
+        if paymentType != Constants.paymentTypeVerification {
             resource = .selectBank
         }
     default:
@@ -48,7 +48,7 @@ func buildEnvironment(resourceUrl:ResourceUrls, environment: String, localUrl: S
         resource: resource.rawValue,
         isLocalUrl: isLocalUrl,
         environment: environment,
-        port: path == .selectBank ? Constants.PORT_API : Constants.PORT_FRONTEND
+        port: path == .selectBank ? Constants.portApi : Constants.portFrontend
     )
     
     if path == .selectBank {
