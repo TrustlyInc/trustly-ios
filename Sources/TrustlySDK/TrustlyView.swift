@@ -47,8 +47,8 @@ class TrustlyView : UIView, WKNavigationDelegate, WKScriptMessageHandler, WKUIDe
     private var changeListenerHandler:TrustlyListenerCallback?
     private var establishData:[AnyHashable : Any]?
     private var mainWebView:WKWebView!
-    private var returnUrl = Constants.RETURN_URL
-    private var cancelUrl = Constants.CANCEL_URL
+    private var returnUrl = Constants.returnURL
+    private var cancelUrl = Constants.cancelURL
     private var urlScheme = ""
     private var webSession: ASWebAuthenticationSession!
     private var baseUrls = ["paywithmybank.com", "trustly.one"]
@@ -141,7 +141,7 @@ class TrustlyView : UIView, WKNavigationDelegate, WKScriptMessageHandler, WKUIDe
     //TrustlySDK Protocol
     public func verify(verifyData:[AnyHashable : Any], onReturn: TrustlyViewCallback?, onCancel: TrustlyViewCallback?) -> UIView? {
         var mutableDictionary = verifyData
-        mutableDictionary["paymentType"] = Constants.PAYMENTTYPE_VERIFICATION
+        mutableDictionary["paymentType"] = Constants.paymentTypeVerification
         
         return establish(establishData: mutableDictionary, onReturn:onReturn, onCancel:onCancel)
     }
@@ -278,71 +278,6 @@ class TrustlyView : UIView, WKNavigationDelegate, WKScriptMessageHandler, WKUIDe
         }
     }
 
-    //Handles page navigation on the WKWebView
-    public func webView(_ webView:WKWebView, decidePolicyFor navigationAction:WKNavigationAction, decisionHandler:(WKNavigationActionPolicy)->Void) {
-        let request = navigationAction.request
-        let targetFrame = navigationAction.targetFrame;
-        let host = request.url?.host
-        let query = request.url?.query ?? ""
-        let scheme = request.url?.scheme ?? ""
-        let absolute = request.url?.absoluteString
-
-        if(webView == mainWebView){
-            if(absolute != nil && absolute!.hasPrefix(returnUrl)){
-                if returnHandler != nil {
-                    returnHandler!(self.parametersForUrl(request.url!))
-                }
-                self.notifyListener("close", nil)
-                decisionHandler(WKNavigationActionPolicy.cancel)
-            }
-            else if(absolute != nil && absolute!.hasPrefix(cancelUrl)){
-                if cancelHandler != nil {
-                    cancelHandler!(self.parametersForUrl(request.url!))
-                }
-                self.notifyListener("close", nil)
-                decisionHandler(WKNavigationActionPolicy.cancel)
-            } else if (scheme == "msg") {
-                //messages
-                switch(host){
-                    case "push":
-                    let params = URLUtils.urlDecode(query).components(separatedBy: "|")
-                    if ("PayWithMyBank.createTransaction" == params[0]) && bankSelectedHandler != nil {
-                        if params.count > 1 {
-                            establishData?["paymentProviderId"] = params[1]
-                            }
-                            
-                            if let establishData = establishData {
-                                bankSelectedHandler?(establishData)
-                            }
-                            
-                        }
-                        break;
-                    case .none:
-                        break;
-                    case .some(_):
-                        break;
-                }
-                decisionHandler(WKNavigationActionPolicy.cancel)
-            } else {
-                // 3: Handle external links from the main web view by opening the links on the SFSafariViewController
-                if targetFrame == nil {
-                    if (self.externalUrlHandler != nil) {
-                        var mutableDictionary = [String:String]()
-                        mutableDictionary["url"] = request.url?.absoluteString
-
-                        self.externalUrlHandler!(mutableDictionary)
-                    } else {
-                        //Open it on the SFSafariViewController
-                        presentOnSFSafariViewController(request.url)
-                    }
-                    decisionHandler(WKNavigationActionPolicy.cancel)
-                } else {
-                    decisionHandler(WKNavigationActionPolicy.allow)
-                }
-            }
-        }
-
-    }
 
     //Utility Functions
     func presentOnSFSafariViewController(_ url: URL?) {
@@ -355,28 +290,6 @@ class TrustlyView : UIView, WKNavigationDelegate, WKScriptMessageHandler, WKUIDe
               topController.present(vc, animated: true, completion: nil)
            }
         }
-    }
-
-    func parametersForUrl(_ url:URL) -> [AnyHashable : Any] {
-        let absoluteString = url.absoluteString
-        var queryStringDictionary = [String : String]()
-        let urlComponents = url.query?.components(separatedBy: "&")
-
-        for keyValuePair in urlComponents! {
-            let pairComponents = keyValuePair.components(separatedBy: "=")
-            let key = pairComponents.first?.removingPercentEncoding
-            let value = pairComponents.last?.removingPercentEncoding
-            queryStringDictionary[key!] = value
-         }
-
-        let regex = try! NSRegularExpression(pattern: "&requestSignature=.*", options:NSRegularExpression.Options.caseInsensitive)
-        queryStringDictionary["url"] =
-            regex.stringByReplacingMatches(in: absoluteString,
-                                           options:[],
-                                           range:NSMakeRange(0, absoluteString.count),
-                                           withTemplate:"") as String
-
-        return queryStringDictionary
     }
 
     func getGrp() -> String! {
@@ -540,7 +453,7 @@ extension TrustlyView {
                 getTrustlySettingsWith(establish: establish) { trustlySettings in
 
                     if let settings = trustlySettings?.settings
-                        , settings.integrationStrategy == Constants.LIGHTBOX_CONTEXT_INAPP {
+                        , settings.integrationStrategy == Constants.lightboxContentInApp {
                         
                         DispatchQueue.main.async {
                             // Update the UI on the main thread
@@ -649,7 +562,7 @@ extension TrustlyView {
         
         self.addSessionCid()
 
-        let deviceType = "\(establishData?["deviceType"] ?? Constants.DEVICE_TYPE):\(Constants.DEVICE_PLATFORM)"
+        let deviceType = "\(establishData?["deviceType"] ?? Constants.deviceType):\(Constants.devicePlatform)"
         establishData?["deviceType"] = deviceType
         
         if let lang = establishData?["metadata.lang"] as? String {
@@ -658,11 +571,11 @@ extension TrustlyView {
         
         establishData?["metadata.sdkIOSVersion"] = Constants.buildSDK
         
-        returnUrl = Constants.RETURN_URL
+        returnUrl = Constants.returnURL
         establishData?["returnUrl"] = returnUrl
-        cancelUrl = Constants.CANCEL_URL
+        cancelUrl = Constants.cancelURL
         establishData?["cancelUrl"] = cancelUrl
-        establishData?["version"] = Constants.ESTABLISH_VERSION
+        establishData?["version"] = Constants.establishVersion
         establishData?["grp"] = self.getGrp()
 
         if establishData?["paymentProviderId"] != nil {
