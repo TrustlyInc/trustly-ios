@@ -9,7 +9,7 @@ import Foundation
 
 
 struct Constants {
-    static let buildSDK = "4.0.0"
+    static let buildSDK = "3.3.0"
     static let baseDomain = "paywithmybank.com"
     
     static let returnURL = "msg://return"
@@ -27,14 +27,6 @@ struct Constants {
     static let portApi = "8000"
     static let portFrontend = "10000"
     
-    // MARK: Establish validation
-    static let requiredKeys: Set<AnyHashable> = [AnyHashable("accessId"),
-                                                 AnyHashable("merchantId"),
-                                                 AnyHashable("merchantReference"),
-                                                 AnyHashable("returnUrl"),
-                                                 AnyHashable("cancelUrl"),
-                                                 AnyHashable("requestSignature"),
-                                                 AnyHashable("customer.address.country")]
     static let inAppIntegrationContext = "InAppBrowser"
     static let messageWebviewHandler = "PayWithMyBankNativeSDK"
     
@@ -42,20 +34,5 @@ struct Constants {
     static let loadingType = "loading"
     
     static let undefinedURI = "/undefined"
-    
-    static let establishDataDocsLink = "https://amer.developers.trustly.com/payments/docs/establish-data#base-properties"
-    static let trustlyCloseWebview = "trustly.close.webView"
-    
-    static let widgetView:Int = 100
-    
-    static let oauthLoginPath = "/oauth/login/"
-    
-    static let baseUrls = ["paywithmybank.com", "trustly.one"]
-    
-    static let IN_APP_INTEGRATION_CONTEXT = "InAppBrowser"
-    static let MESSAGE_WEBVIEW_HANDLER = "PayWithMyBankNativeSDK"
-    
-    static let WIDGET_PAGE = "widget"
-    static let LOADING_TYPE = "loading"
     
 }

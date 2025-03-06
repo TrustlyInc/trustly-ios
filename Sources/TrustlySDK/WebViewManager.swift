@@ -22,8 +22,8 @@ class WebViewManager : NSObject, WKNavigationDelegate, WKScriptMessageHandler, W
     var establishData:[AnyHashable : Any]?
     
     private var mainWebView:WKWebView
-    private var returnUrl = Constants.RETURN_URL
-    private var cancelUrl = Constants.CANCEL_URL
+    private var returnUrl = Constants.returnURL
+    private var cancelUrl = Constants.cancelURL
 
     init(webView: WKWebView){
         self.mainWebView = webView
@@ -89,7 +89,7 @@ extension WebViewManager {
                     eventDetails["data"] = data
                 }
                 
-                if data.count != 0 {
+                if transfer.count != 0 {
                     eventDetails["transfer"] = transfer
                 }
                 
@@ -128,7 +128,7 @@ extension WebViewManager {
             
         } else {
            
-            if let url = webView.url, url.absoluteString.contains("/undefined") {
+            if let url = webView.url, url.absoluteString.contains(Constants.undefinedURI) {
                 webView.evaluateJavaScript("document.title", completionHandler: { result, error in
                     guard let dataHtml = result as? String else { return }
                     
@@ -144,10 +144,8 @@ extension WebViewManager {
 
     public func webView(webView:WKWebView!, didFailNavigation error:NSError!) {
 
-        if webView == mainWebView {
-            if (self.cancelHandler != nil) {
-                self.cancelHandler!([:])
-            }
+        if webView == mainWebView && self.cancelHandler != nil {
+            self.cancelHandler!([:])
         }
     }
 
@@ -190,9 +188,7 @@ extension WebViewManager {
                             
                         }
                         break;
-                    case .none:
-                        break;
-                    case .some(_):
+                    case .some(_), .none:
                         break;
                 }
                 decisionHandler(WKNavigationActionPolicy.cancel)
