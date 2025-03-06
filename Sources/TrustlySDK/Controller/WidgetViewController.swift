@@ -28,7 +28,7 @@ public protocol WidgetViewControllerProtocol: AnyObject {
 
 public class WidgetViewController: UIViewController {
     
-    private let WidgetView:Int = 100
+    private let widgetView:Int = 100
     
     private var mainWebView:WKWebView!
     private var webViewManager: WebViewManager?
@@ -55,12 +55,12 @@ public class WidgetViewController: UIViewController {
         mainWebView = WKWebView(frame:frame, configuration:configuration)
         
         webViewManager = WebViewManager(webView: mainWebView)
-        webViewManager?.notifyEvent(Constants.WIDGET_PAGE, Constants.LOADING_TYPE)
+        webViewManager?.notifyEvent(Constants.widgetPage, Constants.loadingType)
         
         let userController = WKUserContentController()
         
         if let webViewManager = webViewManager {
-            userController.add(webViewManager, name: Constants.MESSAGE_WEBVIEW_HANDLER)
+            userController.add(webViewManager, name: Constants.messageWebviewHandler)
         }
         
         configuration.userContentController = userController
@@ -76,7 +76,7 @@ public class WidgetViewController: UIViewController {
         mainWebView.scrollView.bounces = false
         mainWebView.backgroundColor = UIColor.clear
         mainWebView.isOpaque = false
-        mainWebView.tag = WidgetView
+        mainWebView.tag = widgetView
         
         if #available(iOS 16.4, *) {
             mainWebView.isInspectable = true

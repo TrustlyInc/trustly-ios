@@ -10,6 +10,9 @@ import Foundation
 
 class TrustlyService {
     
+    private let CUSTOMER_ADDRESS_COUNTRY = "customer.address.country"
+    private let CUSTOMER_ADDRESS_STATE = "customer.address.state"
+    
     private var sessionCid = "ios wrong sessionCid"
     private var cid = "ios wrong cid"
 
@@ -48,13 +51,13 @@ class TrustlyService {
         query["sessionCid"] = establishData["sessionCid"]
         query["cid"] = establishData["metadata.cid"]
         
-        if establishData["customer.address.country"] != nil {
-            query["customer.address.country"] = establishData["customer.address.country"]
+        if establishData[CUSTOMER_ADDRESS_COUNTRY] != nil {
+            query[CUSTOMER_ADDRESS_COUNTRY] = establishData[CUSTOMER_ADDRESS_COUNTRY]
         }
         
-        if (establishData["customer.address.country"] == nil || establishData["customer.address.country"] as! String == "us") &&
-            establishData["customer.address.state"] != nil{
-            query["customer.address.state"] = establishData["customer.address.state"]
+        if (establishData[CUSTOMER_ADDRESS_COUNTRY] == nil || establishData[CUSTOMER_ADDRESS_COUNTRY] as! String == "us") &&
+            establishData[CUSTOMER_ADDRESS_STATE] != nil{
+            query[CUSTOMER_ADDRESS_STATE] = establishData[CUSTOMER_ADDRESS_STATE]
         }
         
         hash["merchantReference"] = establishData["merchantReference"] ?? ""
