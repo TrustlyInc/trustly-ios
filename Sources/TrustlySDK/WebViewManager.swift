@@ -9,15 +9,17 @@ import Foundation
 @preconcurrency import WebKit
 import SafariServices
 
+public typealias TrustlyViewCallback = (_ returnParameters: [AnyHashable : Any]) -> Void;
+public typealias TrustlyListenerCallback = (_ eventName: String, _ eventDetails: [AnyHashable : Any]) -> Void;
     
 @available(iOS 12.0, *)
 class WebViewManager : NSObject, WKNavigationDelegate, WKScriptMessageHandler, WKUIDelegate {
     
-    private var returnHandler:TrustlyViewCallback?
-    private var cancelHandler:TrustlyViewCallback?
     private var externalUrlHandler:TrustlyViewCallback?
     private var changeListenerHandler:TrustlyListenerCallback?
     
+    var returnHandler:TrustlyViewCallback?
+    var cancelHandler:TrustlyViewCallback?
     var bankSelectedHandler:TrustlyViewCallback?
     var establishData:[AnyHashable : Any]?
     
@@ -163,14 +165,14 @@ extension WebViewManager {
                 if returnHandler != nil {
                     returnHandler!(URLUtils.parametersForUrl(request.url!))
                 }
-                self.notifyListener("close", nil)
+                self.notifyListener("close", [:])
                 decisionHandler(WKNavigationActionPolicy.cancel)
             }
             else if(absolute != nil && absolute!.hasPrefix(cancelUrl)){
                 if cancelHandler != nil {
                     cancelHandler!(URLUtils.parametersForUrl(request.url!))
                 }
-                self.notifyListener("close", nil)
+                self.notifyListener("close", [:])
                 decisionHandler(WKNavigationActionPolicy.cancel)
             } else if (scheme == "msg") {
                 //messages
@@ -216,6 +218,10 @@ extension WebViewManager {
 
 // MARK: Utility Functions
 extension WebViewManager {
+    
+    func onChangeListener(onChangeListener: TrustlyListenerCallback?) {
+        changeListenerHandler = onChangeListener
+    }
     
     func presentOnSFSafariViewController(_ url: URL?) {
         if url != nil {
