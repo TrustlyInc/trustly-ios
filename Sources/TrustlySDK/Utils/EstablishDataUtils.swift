@@ -128,4 +128,32 @@ struct EstablishDataUtils {
         }
         
     }
+    
+    static func prepareEstablish(establishData eD: [AnyHashable : Any], cid:String, sessionCid: String) -> [AnyHashable : Any] {
+        
+        var establishData = eD
+        
+        establishData["sessionCid"] = sessionCid
+        establishData["metadata.cid"] = cid
+
+        let deviceType = "\(establishData["deviceType"] ?? Constants.deviceType):\(Constants.devicePlatform)"
+        establishData["deviceType"] = deviceType
+        
+        if let lang = establishData["metadata.lang"] as? String {
+            establishData["lang"] = lang
+        }
+        
+        establishData["metadata.sdkIOSVersion"] = Constants.buildSDK
+
+        establishData["returnUrl"] = Constants.returnURL
+        establishData["cancelUrl"] = Constants.cancelURL
+        establishData["version"] = Constants.establishVersion
+        establishData["grp"] = self.getGrp()
+
+        if establishData["paymentProviderId"] != nil {
+            establishData["widgetLoaded"] = "true"
+        }
+        
+        return establishData
+    }
 }
