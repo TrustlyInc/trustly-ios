@@ -7,32 +7,15 @@
 
 import Foundation
 import UIKit
-import WebKit
-
-public protocol LightBoxViewControllerProtocol: AnyObject {
-    /*!
-        @brief Sets a callback to handle external URLs
-        @param onExternalUrl Called when the TrustlySDK panel must open an external URL. If not handled an internal in app WebView will show the external URL.The external URL is sent on the returnParameters entry key “url”.
-    */
-    func onExternalUrl(onExternalUrl: TrustlyViewCallback?) -> Void;
-    
-    /*!
-        @brief Sets a callback to handle event triggered by javascript
-        @param eventName Name of the event.
-        @param eventDetails Dictionary with information about the event.
-    */
-    func onChangeListener(_ eventName: String, _ eventDetails: [AnyHashable : Any]) -> Void;
-}
-
+@preconcurrency import WebKit
 
 public class LightBoxViewController: UIViewController {
     
-    public weak var delegate: LightBoxViewControllerProtocol?
+    public weak var delegate: TrustlySDKProtocol?
     
     private var mainWebView:WKWebView!
     private var webViewManager: WebViewManager?
     private let loading = UIActivityIndicatorView()
-
         
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,28 +24,19 @@ public class LightBoxViewController: UIViewController {
         
         self.webViewManager?.onChangeListener { (eventName, attributes) in
             self.delegate?.onChangeListener(eventName, attributes)
-            
-            print("onChangeListener: \(eventName) \(attributes)")
         }
-    
     }
     
     func initWebView() {
+
+        webViewManager = WebViewManager()
         
         let configuration = WKWebViewConfiguration()
-        
-        let frame = CGRect(x:0, y:0, width: self.view.frame.size.width, height: self.view.frame.size.height)
-        mainWebView = WKWebView(frame:frame, configuration:configuration)
-        
-        webViewManager = WebViewManager(webView: mainWebView)
-        webViewManager?.notifyEvent(Constants.widgetPage, Constants.loadingType)
-        
         let userController = WKUserContentController()
         
-        if let webViewManager = webViewManager {
-            userController.add(webViewManager, name: Constants.messageWebviewHandler)
-        }
+        guard let webViewManager = self.webViewManager else { return }
         
+        userController.add(webViewManager, name: Constants.messageWebviewHandler)
         configuration.userContentController = userController
         
         let wkPreferences = WKPreferences()
@@ -70,6 +44,8 @@ public class LightBoxViewController: UIViewController {
         
         configuration.preferences = wkPreferences
 
+        let frame = CGRect(x:0, y:0, width: self.view.frame.size.width, height: self.view.frame.size.height)
+        mainWebView = WKWebView(frame:frame, configuration:configuration)
         mainWebView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         mainWebView.navigationDelegate = webViewManager
         mainWebView.uiDelegate = webViewManager
@@ -77,40 +53,19 @@ public class LightBoxViewController: UIViewController {
         mainWebView.backgroundColor = UIColor.clear
         mainWebView.isOpaque = false
         
+        webViewManager.mainWebView = mainWebView
+        
         if #available(iOS 16.4, *) {
             mainWebView.isInspectable = true
         }
 
-        self.view = self.mainWebView
+        self.view.addSubview(mainWebView)
     }
 }
 
+// MARK: Support functions
 extension LightBoxViewController {
     
-    public func establish(establishData: [AnyHashable : Any], onReturn: TrustlyViewCallback?, onCancel: TrustlyViewCallback?) {
-        
-        self.startLoading()
-        
-        let service = TrustlyService()
-        service.delegate = self
-        
-        self.webViewManager?.establishData = establishData
-        self.webViewManager?.cancelHandler = onCancel
-        self.webViewManager?.returnHandler = onReturn
-        
-        service.chooseIntegrationStrategy(establishData: establishData, completionHandler: { integrationStrategy -> Void in
-          
-            if integrationStrategy == Constants.lightboxContentWebview {
-                service.establishWebView(establishData: establishData)
-                
-            } else {
-                //TODO: oAuth
-                print("oAuth")
-            }
-        })
-    }
-    
-    // MARK: Support functions
     private func startLoading() {
         self.loading.frame = CGRectMake(0.0, 0.0, 40.0, 40.0);
         self.loading.center = self.view.center
@@ -134,19 +89,59 @@ extension LightBoxViewController {
         self.loading.stopAnimating()
         self.loading.isHidden = true
     }
-
 }
 
-extension LightBoxViewController: LightboxProtocol {
+// MARK: TrustlyService protocol
+extension LightBoxViewController: TrustlyServiceProtocol {
     
     func showLightbox(data: Data?, url: URL?) {
         
         DispatchQueue.main.async {
             if let data = data, let url = url {
-                self.mainWebView?.load(data, mimeType:"text/html", characterEncodingName:"UTF-8", baseURL: url)
+                self.mainWebView.load(data, mimeType:"text/html", characterEncodingName:"UTF-8", baseURL: url)
             }
-            
             self.stopLoading()
         }
+            
     }
 }
+
+
+// MARK: Establish
+extension LightBoxViewController {
+
+    /** @abstract This function is responsible to open the lightbox, according to TrustlySettings service. If the context of the lightbox is `web view`, this function will
+     return a UIView instance with a WebView embedded, in case the context valeu be `in-app-browser`, this function will return a empty UIView, andwill open the
+     lightbox in an ASWebAuthentication instance.
+     @param establishData eD: [AnyHashable : Any]
+     @param onReturn: TrustlyViewCallback?
+     @param onCancel: TrustlyViewCallback?
+     */
+    public func establish(establishData eD: [AnyHashable : Any], onReturn: TrustlyViewCallback?, onCancel: TrustlyViewCallback?) {
+        
+        self.startLoading()
+
+        self.webViewManager?.establishData = eD
+        self.webViewManager?.returnHandler = onReturn
+        self.webViewManager?.cancelHandler = onCancel
+        
+        let service = TrustlyService()
+        service.delegate = self
+
+        service.chooseIntegrationStrategy(establishData: eD, completionHandler: { integrationStrategy -> Void in
+
+            if integrationStrategy == Constants.lightboxContentWebview {
+                service.establishWebView(establishData: eD)
+
+            } else {
+                //TODO: oAuth
+                print("oAuth")
+            }
+        })
+    }
+}
+
+//extension Notification.Name{
+//    @available(iOS 12.0, *)
+//    static let trustlyCloseWebview = Notification.Name(TrustlyView.trustlyCloseWebview)
+//}
