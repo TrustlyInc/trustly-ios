@@ -119,7 +119,7 @@ extension MerchantViewController {
 }
 
 //MARK: WidgetProtocol
-extension MerchantViewController: WidgetViewControllerProtocol {
+extension MerchantViewController: TrustlySDKProtocol {
     func onExternalUrl(onExternalUrl: TrustlyViewCallback?) {
         print("onExternalUrl")
     }
@@ -127,9 +127,4 @@ extension MerchantViewController: WidgetViewControllerProtocol {
     func onChangeListener(_ eventName: String, _ eventDetails: [AnyHashable : Any]) {
         print("eventName: \(eventName), eventDetails: \(eventDetails)")
     }
-}
-
-//MARK: LightboxProtocol
-extension MerchantViewController: LightBoxViewControllerProtocol {
-    
 }
