@@ -159,4 +159,13 @@ struct EstablishDataUtils {
         
         return establishData
     }
+    
+    static func extractUrlSchemeFrom(_ establishData: [AnyHashable : Any]) -> String {
+        
+        if let scheme = establishData["metadata.urlScheme"] as? String {
+            return scheme.components(separatedBy: ":")[0]
+        }
+        
+        return ""
+    }
 }
