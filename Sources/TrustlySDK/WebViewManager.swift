@@ -8,42 +8,61 @@
 import Foundation
 @preconcurrency import WebKit
 import SafariServices
+import AuthenticationServices
 
 public typealias TrustlyViewCallback = (_ returnParameters: [AnyHashable : Any]) -> Void;
 public typealias TrustlyListenerCallback = (_ eventName: String, _ eventDetails: [AnyHashable : Any]) -> Void;
+
+class WebViewManager: NSObject, WKNavigationDelegate, WKScriptMessageHandler, WKUIDelegate {
     
-@available(iOS 12.0, *)
-class WebViewManager : NSObject, WKNavigationDelegate, WKScriptMessageHandler, WKUIDelegate {
-    
-    private var externalUrlHandler:TrustlyViewCallback?
-    private var changeListenerHandler:TrustlyListenerCallback?
-    
+    var establishData:[AnyHashable : Any]?
+    var mainWebView:WKWebView!
     var returnHandler:TrustlyViewCallback?
     var cancelHandler:TrustlyViewCallback?
     var bankSelectedHandler:TrustlyViewCallback?
-    var establishData:[AnyHashable : Any]?
     
-    private var mainWebView:WKWebView
+    private var webSession:ASWebAuthenticationSession!
+    private var externalUrlHandler:TrustlyViewCallback?
+    
+    private var changeListenerHandler:TrustlyListenerCallback?
+    
     private var returnUrl = Constants.returnURL
     private var cancelUrl = Constants.cancelURL
 
-    init(webView: WKWebView){
-        self.mainWebView = webView
+    
+    
+    private var sessionCid = "ios wrong sessionCid"
+    private var cid = "ios wrong cid"
+    
+    
+    private func notifyListener(_ eventName:String!, _ eventDetails:[AnyHashable : Any]!) {
+        if(changeListenerHandler != nil) {
+            changeListenerHandler!(eventName, eventDetails ?? [:])
+        }
     }
+    
+    public func onChangeListener(onChangeListener: TrustlyListenerCallback?) {
+        changeListenerHandler = onChangeListener
+    }
+    
+    func notifyEvent(_ page : String, _ type : String) {
+        var eventDetails = [String:String]()
+        eventDetails["page"] = "widget"
+        eventDetails["type"] = "load"
 
-}
-
-// MARK: WKUIDelegate Protocol
-extension WebViewManager {
+        self.notifyListener("event", eventDetails)
+    }
+    
+    //WKUIDelegate Protocol
+    
     //1: Handles new window creation (window.open)
     public func webView(_ webView: WKWebView,
-                        createWebViewWith configuration: WKWebViewConfiguration,
-                        for navigationAction: WKNavigationAction,
-                        windowFeatures: WKWindowFeatures) -> WKWebView? {
+                   createWebViewWith configuration: WKWebViewConfiguration,
+                   for navigationAction: WKNavigationAction,
+                   windowFeatures: WKWindowFeatures) -> WKWebView? {
         if(webView == mainWebView) {
             if navigationAction.targetFrame == nil, let url = navigationAction.request.url {
-                // TODO: Fix it
-//                self.openOAuth(url: url)
+                self.openOAuth(url: url)
             }
             
         } else {
@@ -52,59 +71,56 @@ extension WebViewManager {
                 presentOnSFSafariViewController(url)
             }
         }
-        return nil
+      return nil
     }
-}
+    
+    //WKUserContentController Protocol
 
-// MARK: WKUserContentController Protocol
-extension WebViewManager {
     public func userContentController(_ userContentController:WKUserContentController, didReceive message:WKScriptMessage){
         let content = message.body as? String
         if content == nil {
             return
         }
-        
+
         if message.webView == mainWebView {
             let params:[String]! = content?.components(separatedBy: "|")
             if params.count == 0 {
                 return
             }
-            
+
             let command = params[0]
             if command.isEqual("") {
                 return
             }
-            
+
             if command.isEqual("PayWithMyBank.event") {
                 let eventName:String! = "event"
-                
+
                 var eventDetails = [String:String]()
                 eventDetails["page"] = (params.count > 2 ? params[2] : "")
                 eventDetails["type"] = (params.count > 5 ? params[5] : "")
                 eventDetails["transactionId"] = (params.count > 3 ? params[3] : "")
                 eventDetails["merchantReference"] = (params.count > 4 ? params[4] : "")
-                
+
                 let data:String! = (params.count > 6 ? params[6] : "")
                 let transfer:String! = (params.count > 7 ? params[7] : "")
-                
+
                 if data.count != 0 {
                     eventDetails["data"] = data
                 }
-                
-                if transfer.count != 0 {
+
+                if data.count != 0 {
                     eventDetails["transfer"] = transfer
                 }
-                
+
                 notifyListener(eventName, eventDetails)
                 
             }
         }
     }
-}
 
-
-// MARK: WKNavigationDelegate Protocol
-extension WebViewManager {
+    //WKNavigationDelegate Protocol
+    
     public func webView(_ webView:WKWebView, didFinish navigation:WKNavigation!) {
 
         let contentSize:CGSize = webView.scrollView.contentSize
@@ -117,7 +133,7 @@ extension WebViewManager {
             webView.scrollView.zoomScale = rw
         }
 
-        if webView.tag == WidgetView {
+        if webView.tag == Constants.widgetView {
             self.notifyEvent("widget","load")
         }
         
@@ -130,7 +146,7 @@ extension WebViewManager {
             
         } else {
            
-            if let url = webView.url, url.absoluteString.contains(Constants.undefinedURI) {
+            if let url = webView.url, url.absoluteString.contains("/undefined") {
                 webView.evaluateJavaScript("document.title", completionHandler: { result, error in
                     guard let dataHtml = result as? String else { return }
                     
@@ -146,8 +162,10 @@ extension WebViewManager {
 
     public func webView(webView:WKWebView!, didFailNavigation error:NSError!) {
 
-        if webView == mainWebView && self.cancelHandler != nil {
-            self.cancelHandler!([:])
+        if webView == mainWebView {
+            if (self.cancelHandler != nil) {
+                self.cancelHandler!([:])
+            }
         }
     }
 
@@ -163,16 +181,16 @@ extension WebViewManager {
         if(webView == mainWebView){
             if(absolute != nil && absolute!.hasPrefix(returnUrl)){
                 if returnHandler != nil {
-                    returnHandler!(URLUtils.parametersForUrl(request.url!))
+                    returnHandler!(self.parametersForUrl(request.url!))
                 }
-                self.notifyListener("close", [:])
+                self.notifyListener("close", nil)
                 decisionHandler(WKNavigationActionPolicy.cancel)
             }
             else if(absolute != nil && absolute!.hasPrefix(cancelUrl)){
                 if cancelHandler != nil {
-                    cancelHandler!(URLUtils.parametersForUrl(request.url!))
+                    cancelHandler!(self.parametersForUrl(request.url!))
                 }
-                self.notifyListener("close", [:])
+                self.notifyListener("close", nil)
                 decisionHandler(WKNavigationActionPolicy.cancel)
             } else if (scheme == "msg") {
                 //messages
@@ -182,15 +200,17 @@ extension WebViewManager {
                     if ("PayWithMyBank.createTransaction" == params[0]) && bankSelectedHandler != nil {
                         if params.count > 1 {
                             establishData?["paymentProviderId"] = params[1]
-                        }
+                            }
                             
-                        if let establishData = establishData {
-                            bankSelectedHandler?(establishData)
-                        }
+                            if let establishData = establishData {
+                                bankSelectedHandler?(establishData)
+                            }
                             
                         }
                         break;
-                    case .some(_), .none:
+                    case .none:
+                        break;
+                    case .some(_):
                         break;
                 }
                 decisionHandler(WKNavigationActionPolicy.cancel)
@@ -214,15 +234,8 @@ extension WebViewManager {
         }
 
     }
-}
-
-// MARK: Utility Functions
-extension WebViewManager {
     
-    func onChangeListener(onChangeListener: TrustlyListenerCallback?) {
-        changeListenerHandler = onChangeListener
-    }
-    
+    //Utility Functions
     func presentOnSFSafariViewController(_ url: URL?) {
         if url != nil {
             let vc = SFSafariViewController(url: url!)
@@ -234,18 +247,97 @@ extension WebViewManager {
            }
         }
     }
-    
-    func notifyEvent(_ page : String, _ type : String) {
-        var eventDetails = [String:String]()
-        eventDetails["page"] = "widget"
-        eventDetails["type"] = "load"
 
-        self.notifyListener("event", eventDetails)
+    func parametersForUrl(_ url:URL) -> [AnyHashable : Any] {
+        let absoluteString = url.absoluteString
+        var queryStringDictionary = [String : String]()
+        let urlComponents = url.query?.components(separatedBy: "&")
+
+        for keyValuePair in urlComponents! {
+            let pairComponents = keyValuePair.components(separatedBy: "=")
+            let key = pairComponents.first?.removingPercentEncoding
+            let value = pairComponents.last?.removingPercentEncoding
+            queryStringDictionary[key!] = value
+         }
+
+        let regex = try! NSRegularExpression(pattern: "&requestSignature=.*", options:NSRegularExpression.Options.caseInsensitive)
+        queryStringDictionary["url"] =
+            regex.stringByReplacingMatches(in: absoluteString,
+                                           options:[],
+                                           range:NSMakeRange(0, absoluteString.count),
+                                           withTemplate:"") as String
+
+        return queryStringDictionary
+    }
+}
+
+// MARK: Oauth support
+@available(iOS 12.0, *)
+extension WebViewManager: ASWebAuthenticationPresentationContextProviding {
+    
+    public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+        return ASPresentationAnchor()
+    }
+
+    func openOAuth(url: URL) {
+        let host = url.host!
+        let path = url.path
+        let isLocalEnvironment = false
+        
+        if isLocalEnvironment || (self.checkUrl(host: host) &&
+                                       path.contains(Constants.oauthLoginPath)) {
+
+            self.buildASWebAuthenticationSession(url: url, callbackURL: EstablishDataUtils.extractUrlSchemeFrom(establishData ?? [:]))
+        }
     }
     
-    private func notifyListener(_ eventName:String!, _ eventDetails:[AnyHashable : Any]!) {
-        if(changeListenerHandler != nil) {
-            changeListenerHandler!(eventName, eventDetails)
+    private func checkUrl(host: String) -> Bool {
+        
+        for url in Constants.baseUrls {
+            if host.contains(url) {
+                return true
+            }
         }
+        
+        return false
+    }
+
+    // MARK: - Oauth autenthication
+    private func buildASWebAuthenticationSession(url: URL, callbackURL: String){
+        
+        webSession = ASWebAuthenticationSession(url: url, callbackURLScheme: callbackURL, completionHandler: { (url, error) in
+            self.proceedToChooseAccount()
+        })
+        
+        if #available(iOS 13, *) {
+            webSession.prefersEphemeralWebBrowserSession = true
+            webSession.presentationContextProvider = self
+        }
+
+        webSession.start()
+    }
+
+    private func buildASWebAuthenticationSession(url: URL, callbackURL: String, onReturn: TrustlyViewCallback?, onCancel: TrustlyViewCallback?) {
+        webSession = ASWebAuthenticationSession(url: url, callbackURLScheme: callbackURL, completionHandler: { (url, error) in
+            if let stringUrl = url?.absoluteString {
+                let returnedEstablish = EstablishDataUtils.buildEstablishFrom(urlWithParameters: stringUrl)
+                
+                onReturn?(returnedEstablish)
+                
+            } else {
+                onCancel?([:])
+            }
+        })
+        
+        if #available(iOS 13, *) {
+            webSession.prefersEphemeralWebBrowserSession = true
+            webSession.presentationContextProvider = self
+        }
+
+        webSession.start()
+    }
+    
+    private func proceedToChooseAccount(){
+        self.mainWebView.evaluateJavaScript("window.Trustly.proceedToChooseAccount();", completionHandler: nil)
     }
 }
