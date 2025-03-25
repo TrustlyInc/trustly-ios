@@ -35,4 +35,12 @@ struct Constants {
     
     static let undefinedURI = "/undefined"
     
+    static let trustlyCloseWebview = "trustly.close.webView"
+    
+    static let widgetView:Int = 100
+    
+    static let oauthLoginPath = "/oauth/login/"
+    
+    static let baseUrls = ["paywithmybank.com", "trustly.one"]
+    
 }
