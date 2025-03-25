@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol LightboxProtocol {
+protocol TrustlyServiceProtocol {
     func showLightbox(data: Data?, url: URL?)
 }
 
@@ -20,7 +20,7 @@ class TrustlyService {
     private var sessionCid = "ios wrong sessionCid"
     private var cid = "ios wrong cid"
     
-    public var delegate: LightboxProtocol?
+    public var delegate: TrustlyServiceProtocol?
 
     
     init () {
