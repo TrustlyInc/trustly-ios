@@ -140,8 +140,3 @@ extension LightBoxViewController {
         })
     }
 }
-
-//extension Notification.Name{
-//    @available(iOS 12.0, *)
-//    static let trustlyCloseWebview = Notification.Name(TrustlyView.trustlyCloseWebview)
-//}
