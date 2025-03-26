@@ -13,7 +13,7 @@ import AuthenticationServices
 public typealias TrustlyViewCallback = (_ returnParameters: [AnyHashable : Any]) -> Void;
 public typealias TrustlyListenerCallback = (_ eventName: String, _ eventDetails: [AnyHashable : Any]) -> Void;
 
-class WebViewManager: NSObject, WKNavigationDelegate, WKScriptMessageHandler, WKUIDelegate {
+class WebViewManager: NSObject {
     
     var establishData:[AnyHashable : Any]?
     var mainWebView:WKWebView!
@@ -28,13 +28,15 @@ class WebViewManager: NSObject, WKNavigationDelegate, WKScriptMessageHandler, WK
     
     private var returnUrl = Constants.returnURL
     private var cancelUrl = Constants.cancelURL
-
-    
     
     private var sessionCid = "ios wrong sessionCid"
     private var cid = "ios wrong cid"
     
-    
+    override init() {
+        super.init()
+        
+        self.createNotifications()
+    }
     private func notifyListener(_ eventName:String!, _ eventDetails:[AnyHashable : Any]!) {
         if(changeListenerHandler != nil) {
             changeListenerHandler!(eventName, eventDetails ?? [:])
@@ -49,11 +51,14 @@ class WebViewManager: NSObject, WKNavigationDelegate, WKScriptMessageHandler, WK
         var eventDetails = [String:String]()
         eventDetails["page"] = "widget"
         eventDetails["type"] = "load"
-
+        
         self.notifyListener("event", eventDetails)
     }
+}
+
+// MARK: WKUIDelegate Protocol
+extension WebViewManager: WKUIDelegate{
     
-    //WKUIDelegate Protocol
     
     //1: Handles new window creation (window.open)
     public func webView(_ webView: WKWebView,
@@ -71,11 +76,15 @@ class WebViewManager: NSObject, WKNavigationDelegate, WKScriptMessageHandler, WK
                 presentOnSFSafariViewController(url)
             }
         }
+        
       return nil
+        
     }
-    
-    //WKUserContentController Protocol
+}
 
+// MARK: WKUserContentController Protocol
+extension WebViewManager: WKScriptMessageHandler {
+    
     public func userContentController(_ userContentController:WKUserContentController, didReceive message:WKScriptMessage){
         let content = message.body as? String
         if content == nil {
@@ -118,8 +127,11 @@ class WebViewManager: NSObject, WKNavigationDelegate, WKScriptMessageHandler, WK
             }
         }
     }
+}
+    
 
-    //WKNavigationDelegate Protocol
+// MARK: WKNavigationDelegate Protocol
+extension WebViewManager: WKNavigationDelegate {
     
     public func webView(_ webView:WKWebView, didFinish navigation:WKNavigation!) {
 
@@ -234,42 +246,8 @@ class WebViewManager: NSObject, WKNavigationDelegate, WKScriptMessageHandler, WK
         }
 
     }
-    
-    //Utility Functions
-    func presentOnSFSafariViewController(_ url: URL?) {
-        if url != nil {
-            let vc = SFSafariViewController(url: url!)
-            if var topController = UIApplication.shared.keyWindow?.rootViewController {
-              while let presentedViewController = topController.presentedViewController {
-                  topController = presentedViewController
-              }
-              topController.present(vc, animated: true, completion: nil)
-           }
-        }
-    }
-
-    func parametersForUrl(_ url:URL) -> [AnyHashable : Any] {
-        let absoluteString = url.absoluteString
-        var queryStringDictionary = [String : String]()
-        let urlComponents = url.query?.components(separatedBy: "&")
-
-        for keyValuePair in urlComponents! {
-            let pairComponents = keyValuePair.components(separatedBy: "=")
-            let key = pairComponents.first?.removingPercentEncoding
-            let value = pairComponents.last?.removingPercentEncoding
-            queryStringDictionary[key!] = value
-         }
-
-        let regex = try! NSRegularExpression(pattern: "&requestSignature=.*", options:NSRegularExpression.Options.caseInsensitive)
-        queryStringDictionary["url"] =
-            regex.stringByReplacingMatches(in: absoluteString,
-                                           options:[],
-                                           range:NSMakeRange(0, absoluteString.count),
-                                           withTemplate:"") as String
-
-        return queryStringDictionary
-    }
 }
+
 
 // MARK: Oauth support
 @available(iOS 12.0, *)
@@ -340,4 +318,63 @@ extension WebViewManager: ASWebAuthenticationPresentationContextProviding {
     private func proceedToChooseAccount(){
         self.mainWebView.evaluateJavaScript("window.Trustly.proceedToChooseAccount();", completionHandler: nil)
     }
+}
+
+// MARK: - Utility Functions
+extension WebViewManager{
+    
+    private func createNotifications(){
+        NotificationCenter.default.addObserver(self, selector: #selector(closeWebview), name: .trustlyCloseWebview, object: nil)
+    }
+    
+    @objc func closeWebview(notification: Notification){
+        
+        NotificationCenter.default.removeObserver(self, name: .trustlyCloseWebview, object: nil)
+        
+        if webSession != nil {
+            webSession.cancel()
+        }
+
+        self.proceedToChooseAccount()
+    }
+    
+    //Utility Functions
+    func presentOnSFSafariViewController(_ url: URL?) {
+        if url != nil {
+            let vc = SFSafariViewController(url: url!)
+            if var topController = UIApplication.shared.keyWindow?.rootViewController {
+              while let presentedViewController = topController.presentedViewController {
+                  topController = presentedViewController
+              }
+              topController.present(vc, animated: true, completion: nil)
+           }
+        }
+    }
+
+    func parametersForUrl(_ url:URL) -> [AnyHashable : Any] {
+        let absoluteString = url.absoluteString
+        var queryStringDictionary = [String : String]()
+        let urlComponents = url.query?.components(separatedBy: "&")
+
+        for keyValuePair in urlComponents! {
+            let pairComponents = keyValuePair.components(separatedBy: "=")
+            let key = pairComponents.first?.removingPercentEncoding
+            let value = pairComponents.last?.removingPercentEncoding
+            queryStringDictionary[key!] = value
+         }
+
+        let regex = try! NSRegularExpression(pattern: "&requestSignature=.*", options:NSRegularExpression.Options.caseInsensitive)
+        queryStringDictionary["url"] =
+            regex.stringByReplacingMatches(in: absoluteString,
+                                           options:[],
+                                           range:NSMakeRange(0, absoluteString.count),
+                                           withTemplate:"") as String
+
+        return queryStringDictionary
+    }
+}
+
+extension Notification.Name{
+    @available(iOS 12.0, *)
+    public static let trustlyCloseWebview = Notification.Name(Constants.trustlyCloseWebview)
 }
