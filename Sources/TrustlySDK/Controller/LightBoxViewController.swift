@@ -104,6 +104,11 @@ extension LightBoxViewController {
 // MARK: TrustlyService protocol
 extension LightBoxViewController: TrustlyServiceProtocol {
     
+    func showLightboxOAuth(url: URL, urlScheme: String) {
+        self.webViewManager?.openOAuth(url: url, urlScheme: urlScheme)
+    }
+    
+    
     func showLightbox(data: Data?, url: URL?) {
         
         DispatchQueue.main.async {
@@ -142,10 +147,8 @@ extension LightBoxViewController {
 
             if integrationStrategy == Constants.lightboxContentWebview {
                 service.establishWebView(establishData: eD)
-
             } else {
-                //TODO: oAuth
-                print("oAuth")
+                service.establishASWebAuthentication(establishData: eD, onReturn: onReturn, onCancel: onCancel)
             }
         })
     }
