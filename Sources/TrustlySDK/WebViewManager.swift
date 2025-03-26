@@ -193,14 +193,14 @@ extension WebViewManager: WKNavigationDelegate {
         if(webView == mainWebView){
             if(absolute != nil && absolute!.hasPrefix(returnUrl)){
                 if returnHandler != nil {
-                    returnHandler!(self.parametersForUrl(request.url!))
+                    returnHandler!(URLUtils.parametersForUrl(request.url!))
                 }
                 self.notifyListener("close", nil)
                 decisionHandler(WKNavigationActionPolicy.cancel)
             }
             else if(absolute != nil && absolute!.hasPrefix(cancelUrl)){
                 if cancelHandler != nil {
-                    cancelHandler!(self.parametersForUrl(request.url!))
+                    cancelHandler!(URLUtils.parametersForUrl(request.url!))
                 }
                 self.notifyListener("close", nil)
                 decisionHandler(WKNavigationActionPolicy.cancel)
@@ -265,8 +265,29 @@ extension WebViewManager: ASWebAuthenticationPresentationContextProviding {
         if isLocalEnvironment || (self.checkUrl(host: host) &&
                                        path.contains(Constants.oauthLoginPath)) {
 
-            self.buildASWebAuthenticationSession(url: url, callbackURL: EstablishDataUtils.extractUrlSchemeFrom(establishData ?? [:]))
+            self.buildASWebAuthenticationSession(url: url, callbackURL: EstablishDataUtils.extractUrlSchemeFrom(establishData ?? [:]), completionHandler: { (url, error) in
+
+                if url != nil {
+                    self.proceedToChooseAccount()
+                }
+            })
         }
+    }
+    
+    func openOAuth (url: URL, urlScheme: String) {
+        
+        self.buildASWebAuthenticationSession(url: url, callbackURL: urlScheme, completionHandler: { (url, error) in
+            
+            if let stringUrl = url?.absoluteString {
+                let returnedEstablish = EstablishDataUtils.buildEstablishFrom(urlWithParameters: stringUrl)
+
+                self.returnHandler?(returnedEstablish)
+
+            } else {
+                self.cancelHandler?([:])
+
+            }
+        })
     }
     
     private func checkUrl(host: String) -> Bool {
@@ -281,30 +302,10 @@ extension WebViewManager: ASWebAuthenticationPresentationContextProviding {
     }
 
     // MARK: - Oauth autenthication
-    private func buildASWebAuthenticationSession(url: URL, callbackURL: String){
+    private func buildASWebAuthenticationSession(url: URL, callbackURL: String, completionHandler: @escaping (_ url: URL?, _ error: Error?) -> Void){
         
         webSession = ASWebAuthenticationSession(url: url, callbackURLScheme: callbackURL, completionHandler: { (url, error) in
-            self.proceedToChooseAccount()
-        })
-        
-        if #available(iOS 13, *) {
-            webSession.prefersEphemeralWebBrowserSession = true
-            webSession.presentationContextProvider = self
-        }
-
-        webSession.start()
-    }
-
-    private func buildASWebAuthenticationSession(url: URL, callbackURL: String, onReturn: TrustlyViewCallback?, onCancel: TrustlyViewCallback?) {
-        webSession = ASWebAuthenticationSession(url: url, callbackURLScheme: callbackURL, completionHandler: { (url, error) in
-            if let stringUrl = url?.absoluteString {
-                let returnedEstablish = EstablishDataUtils.buildEstablishFrom(urlWithParameters: stringUrl)
-                
-                onReturn?(returnedEstablish)
-                
-            } else {
-                onCancel?([:])
-            }
+            completionHandler(url, error)
         })
         
         if #available(iOS 13, *) {
@@ -349,28 +350,6 @@ extension WebViewManager{
               topController.present(vc, animated: true, completion: nil)
            }
         }
-    }
-
-    func parametersForUrl(_ url:URL) -> [AnyHashable : Any] {
-        let absoluteString = url.absoluteString
-        var queryStringDictionary = [String : String]()
-        let urlComponents = url.query?.components(separatedBy: "&")
-
-        for keyValuePair in urlComponents! {
-            let pairComponents = keyValuePair.components(separatedBy: "=")
-            let key = pairComponents.first?.removingPercentEncoding
-            let value = pairComponents.last?.removingPercentEncoding
-            queryStringDictionary[key!] = value
-         }
-
-        let regex = try! NSRegularExpression(pattern: "&requestSignature=.*", options:NSRegularExpression.Options.caseInsensitive)
-        queryStringDictionary["url"] =
-            regex.stringByReplacingMatches(in: absoluteString,
-                                           options:[],
-                                           range:NSMakeRange(0, absoluteString.count),
-                                           withTemplate:"") as String
-
-        return queryStringDictionary
     }
 }
 

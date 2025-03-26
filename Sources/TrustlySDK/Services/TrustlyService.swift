@@ -9,6 +9,7 @@ import Foundation
 
 protocol TrustlyServiceProtocol {
     func showLightbox(data: Data?, url: URL?)
+    func showLightboxOAuth(url: URL, urlScheme: String)
 }
 
 
@@ -30,7 +31,7 @@ class TrustlyService {
         }
     }
     
-    public func selectBankWidget(establishData eD: [AnyHashable : Any]) -> URLRequest? {
+    func selectBankWidget(establishData eD: [AnyHashable : Any]) -> URLRequest? {
         
         var establishData = eD
         
@@ -96,7 +97,7 @@ class TrustlyService {
         return nil
     }
     
-    public func establishWebView(establishData eD: [AnyHashable : Any]) {
+    func establishWebView(establishData eD: [AnyHashable : Any]) {
         
         var establishData = EstablishDataUtils.prepareEstablish(establishData: eD, cid: cid, sessionCid: sessionCid)
         
@@ -127,6 +128,49 @@ class TrustlyService {
             print("Unexpected error: \(error).")
         }
     }
+    
+    func establishASWebAuthentication(establishData eD: [AnyHashable : Any], onReturn: TrustlyViewCallback?, onCancel: TrustlyViewCallback?) {
+        
+        var establishData = eD
+        
+        guard let scheme = establishData["metadata.urlScheme"] as? String else {
+            return
+        }
+        
+        establishData["returnUrl"] = scheme
+        establishData["cancelUrl"] = scheme
+        
+        do {
+            let environment = try buildEnvironment(
+                resourceUrl: .establish,
+                environment: (establishData["env"] ?? "") as! String,
+                localUrl: (establishData["envHost"] ?? "") as! String,
+                paymentType: (establishData["paymentType"] ?? "") as! String,
+                build: Constants.buildSDK,
+                path: .mobile
+            )
+            
+            var url = environment.url.absoluteString
+            
+            let normalizedEstablish:[String : AnyHashable] = EstablishDataUtils.normalizeEstablishWithDotNotation(establish: establishData as! [String : AnyHashable])
+            
+            if let token = JSONUtils.getJsonBase64From(dictionary: normalizedEstablish) {
+
+                url = "\(url)?token=\(token)"
+                let cleanScheme = scheme.components(separatedBy: ":")[0]
+                
+                self.delegate?.showLightboxOAuth(url: URL(string: url)!, urlScheme: cleanScheme)
+
+            }
+            
+        } catch NetworkError.invalidUrl {
+            print("Error: Invalid url.")
+            
+        } catch {
+            print("Error: building url.")
+        }
+
+     }
     
     public func chooseIntegrationStrategy(establishData: [AnyHashable : Any], completionHandler: @escaping(String) -> Void) {
         
