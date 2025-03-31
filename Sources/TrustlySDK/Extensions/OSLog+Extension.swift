@@ -31,6 +31,9 @@ extension OSLog {
     /// All logs related to trustly service
     static let trustlyService = OSLog(subsystem: subsystem, category: Constants.categoryTrustlyService)
 
+    /// All logs related to settings manager
+    static let settingsManager = OSLog(subsystem: subsystem, category: Constants.categorySettingsManager)
+    
     /// All logs related to WebViewManager
     static let webViewManager = OSLog(subsystem: subsystem, category: Constants.categoryLogLightboxVC)
     
