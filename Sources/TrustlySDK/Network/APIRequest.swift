@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os
 
 enum TrustlyAddress: String {
     case trustlySettings = "settings"
@@ -29,13 +30,15 @@ struct APIRequest {
                 
                 // Check for errors
                 if let error = error {
-                    print("Error: \(error)")
+                    OSLog.error(log: .apiRequest, message: "Error: \(error)")
+
                     return
                 }
                 
                 // Check if data is available
                 guard let responseData = data else {
-                    print("No data received")
+                    OSLog.info(log: .apiRequest, message: "No data received")
+                    
                     return
                 }
                 
@@ -45,7 +48,7 @@ struct APIRequest {
                     completionHandler(settings)
                     
                 } catch {
-                    print("Error parsing JSON: \(error)")
+                    OSLog.error(log: .apiRequest, message: "Error parsing JSON: \(error)")
                     
                     completionHandler(nil)
                 }

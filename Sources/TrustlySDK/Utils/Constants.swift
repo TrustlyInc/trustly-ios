@@ -59,5 +59,6 @@ struct Constants {
     static let categoryWebViewManager = "webViewManager"
     static let categoryDeviceHelper = "deviceHelper"
     static let categoryNetworkHelper = "networkHelper"
+    static let categoryApiRequest = "apiRequest"
 
 }
