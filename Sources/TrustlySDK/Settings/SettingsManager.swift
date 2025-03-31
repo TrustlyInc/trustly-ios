@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os
 
 
 /** @abstract Will check if sdk need to call the settings endpoint, or just return the value stored in the cache.
@@ -58,7 +59,7 @@ func getTrustlySettingsWith(establish: [AnyHashable : Any], completionHandler: @
             }
             
         } catch {
-            print("SettingsManager Error: building url.")
+            OSLog.error(log: .settingsManager, message: "SettingsManager Error: building url.")
         }
     }
 }
