@@ -16,6 +16,7 @@
 		15C29FB82C6165570037C239 /* SuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C29FB72C6165570037C239 /* SuccessViewController.swift */; };
 		15D96FB32C46E6B700296BC4 /* NetworkHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D96FB22C46E6B700296BC4 /* NetworkHelperTests.swift */; };
 		15E049852B7510BA0084B71A /* JsonUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15E049842B7510BA0084B71A /* JsonUtilsTests.swift */; };
+		15F713972D9C6EE400F259BE /* DeviceHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F713962D9C6EE400F259BE /* DeviceHelperTests.swift */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
@@ -46,6 +47,7 @@
 		15D96FB22C46E6B700296BC4 /* NetworkHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkHelperTests.swift; sourceTree = "<group>"; };
 		15E049842B7510BA0084B71A /* JsonUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonUtilsTests.swift; sourceTree = "<group>"; };
 		15EA22A92CE3D18D00C45E32 /* Unit Tests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Unit Tests.xctestplan"; sourceTree = "<group>"; };
+		15F713962D9C6EE400F259BE /* DeviceHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceHelperTests.swift; sourceTree = "<group>"; };
 		2416E32056EECA07B4C86E1B /* TrustlySDK.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = TrustlySDK.podspec; path = ../TrustlySDK.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		2FF8658D39766F946804CE82 /* Pods-TrustlySDK_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrustlySDK_Example.debug.xcconfig"; path = "Target Support Files/Pods-TrustlySDK_Example/Pods-TrustlySDK_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		3FA84CDD2D978EA6BD75B9E6 /* Pods-TrustlySDK_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrustlySDK_Tests.release.xcconfig"; path = "Target Support Files/Pods-TrustlySDK_Tests/Pods-TrustlySDK_Tests.release.xcconfig"; sourceTree = "<group>"; };
@@ -89,6 +91,7 @@
 			children = (
 				15BEC9B32C383FB900050FB9 /* ValidationHelperTests.swift */,
 				15D96FB22C46E6B700296BC4 /* NetworkHelperTests.swift */,
+				15F713962D9C6EE400F259BE /* DeviceHelperTests.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -401,6 +404,7 @@
 				15E049852B7510BA0084B71A /* JsonUtilsTests.swift in Sources */,
 				152541E62B7E74B20029F149 /* EstablishDataUtilsTests.swift in Sources */,
 				1587AB912A2FE043006F6FC3 /* SessionManagerTests.swift in Sources */,
+				15F713972D9C6EE400F259BE /* DeviceHelperTests.swift in Sources */,
 				15D96FB32C46E6B700296BC4 /* NetworkHelperTests.swift in Sources */,
 				15BB98602B68120100A9210B /* URLUtilsTests.swift in Sources */,
 			);

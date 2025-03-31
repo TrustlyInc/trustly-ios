@@ -49,6 +49,7 @@ public class WidgetViewController: UIViewController {
         }
         
         self.selectBankWidget()
+        AnalyticsHelper.sendMerchantDeviceInfo()
     }
     
     func initWebView() {

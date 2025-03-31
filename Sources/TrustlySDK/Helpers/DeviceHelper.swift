@@ -7,18 +7,53 @@
 
 import Foundation
 import os
-import UIKit
 
-
-func getDeviceUUID () -> String? {
-    
-    if let uuid = UIDevice.current.identifierForVendor?.uuidString {
-        return uuid
+class DeviceHelper {
+    static func getDeviceUUID () -> String? {
         
-    } else {
-        OSLog.info(log: .deviceHelper, message: "Unable to retrieve device ID.")
+        if let uuid = UIDevice.current.identifierForVendor?.uuidString {
+            return uuid
+            
+        } else {
+            OSLog.info(log: .deviceHelper, message: "Unable to retrieve device ID.")
+        }
 
+        return nil
     }
 
-    return nil
+    static func systemName() -> String {
+        return UIDevice.current.systemName
+    }
+
+    static func systemVersion() -> String {
+        return UIDevice.current.systemVersion
+    }
+
+    static func merchantAppBuildNumber () -> String {
+        if let buildNumber = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
+            return buildNumber
+        }
+        
+        return ""
+    }
+
+    static func merchantAppVersion () -> String {
+        if let versionNumber = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+            return versionNumber
+        }
+        
+        return ""
+    }
+
+    static func deviceModel() -> String {
+        var systemInfo = utsname()
+        uname(&systemInfo)
+        let machineMirror = Mirror(reflecting: systemInfo.machine)
+        let identifier = machineMirror.children.reduce("") { identifier, element in
+            guard let value = element.value as? Int8, value != 0 else { return identifier }
+            return identifier + String(UnicodeScalar(UInt8(value)))
+        }
+         
+        return identifier
+    }
 }
