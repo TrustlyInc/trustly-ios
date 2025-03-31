@@ -6,33 +6,19 @@
 //
 
 import Foundation
+import os
 import UIKit
 
 
-class DeviceHelper {
- 
-    static func getDeviceUUID () -> String? {
-        
-        if let uuid = UIDevice.current.identifierForVendor?.uuidString {
-            return uuid
-            
-        } else {
-            print("Unable to retrieve device ID.")
-            
-        }
-
-        return nil
-    }
-
-    static func systemName() -> String {
-        return UIDevice.current.systemName
-    }
-
-    static func systemVersion() -> String {
-        return UIDevice.current.systemVersion
-    }
+func getDeviceUUID () -> String? {
     
-    static func model() -> String {
-        return UIDevice.current.model
+    if let uuid = UIDevice.current.identifierForVendor?.uuidString {
+        return uuid
+        
+    } else {
+        OSLog.info(log: .deviceHelper, message: "Unable to retrieve device ID.")
+
     }
+
+    return nil
 }
