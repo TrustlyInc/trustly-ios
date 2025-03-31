@@ -36,6 +36,8 @@ public class LightBoxViewController: UIViewController {
         self.webViewManager?.onChangeListener { (eventName, attributes) in
             self.delegate?.onChangeListener(eventName, attributes)
         }
+        
+        AnalyticsHelper.sendMerchantDeviceInfo()
     }
     
     func initWebView() {
