@@ -16,6 +16,7 @@
 */
 
 import Foundation
+import os
 import UIKit
 @preconcurrency import WebKit
 
@@ -23,10 +24,21 @@ public class LightBoxViewController: UIViewController {
     
     public weak var delegate: TrustlySDKProtocol?
     
+    private var establishData: [AnyHashable: Any]?
     private var mainWebView:WKWebView!
     private var webViewManager: WebViewManager?
     private let loading = UIActivityIndicatorView()
+    
+    public init(establishData: [AnyHashable: Any]) {
+        super.init(nibName: nil, bundle: nil)
         
+        self.establishData = establishData
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -35,9 +47,15 @@ public class LightBoxViewController: UIViewController {
         self.webViewManager?.onChangeListener { (eventName, attributes) in
             self.delegate?.onChangeListener(eventName, attributes)
         }
+        
+        if let establishData = self.establishData {
+            self.establish(establishData: establishData)
+        }
     }
     
     func initWebView() {
+        
+        OSLog.debug(log: .lightboxVC, message: "Starting to build lightbox webview")
 
         webViewManager = WebViewManager()
         
@@ -68,8 +86,12 @@ public class LightBoxViewController: UIViewController {
         if #available(iOS 16.4, *) {
             mainWebView.isInspectable = true
         }
-
+        
+        OSLog.debug(log: .lightboxVC, message: "Adding lightbox webview into view")
+        
         self.view.addSubview(mainWebView)
+        
+        OSLog.debug(log: .lightboxVC, message: "Finishing to build lightbox webview")
     }
 }
 
@@ -113,6 +135,8 @@ extension LightBoxViewController: TrustlyServiceProtocol {
         
         DispatchQueue.main.async {
             if let data = data, let url = url {
+                OSLog.info(log: .lightboxVC, message: "Loading lightbox url: \(url)")
+                
                 self.mainWebView.load(data, mimeType:"text/html", characterEncodingName:"UTF-8", baseURL: url)
             }
             self.stopLoading()
@@ -132,13 +156,16 @@ extension LightBoxViewController {
      @param onReturn: TrustlyViewCallback?
      @param onCancel: TrustlyViewCallback?
      */
-    public func establish(establishData eD: [AnyHashable : Any], onReturn: TrustlyViewCallback?, onCancel: TrustlyViewCallback?) {
+
+    private func establish(establishData eD: [AnyHashable : Any]) {
+        
+        OSLog.debug(log: .lightboxVC, message: "Call establish with establishData: \(eD)")
         
         self.startLoading()
 
         self.webViewManager?.establishData = eD
-        self.webViewManager?.returnHandler = onReturn
-        self.webViewManager?.cancelHandler = onCancel
+        self.webViewManager?.returnHandler = self.onReturn(_:)
+        self.webViewManager?.cancelHandler = self.onCancel(_:)
         
         let service = TrustlyService()
         service.delegate = self
@@ -146,10 +173,21 @@ extension LightBoxViewController {
         service.chooseIntegrationStrategy(establishData: eD, completionHandler: { integrationStrategy -> Void in
 
             if integrationStrategy == Constants.lightboxContentWebview {
+                OSLog.info(log: .lightboxVC, message: "Calling lightbox in webview")
                 service.establishWebView(establishData: eD)
+                
             } else {
+                OSLog.info(log: .lightboxVC, message: "Calling lightbox in ASWebAuthentication")
                 service.establishASWebAuthentication(establishData: eD, onReturn: onReturn, onCancel: onCancel)
             }
         })
+    }
+    
+    private func onReturn(_ returnParameters: [AnyHashable : Any]) -> Void{
+        self.delegate?.onReturn(returnParameters)
+    }
+    
+    private func onCancel(_ returnParameters: [AnyHashable : Any]) -> Void{
+        self.delegate?.onCancel(returnParameters)
     }
 }
