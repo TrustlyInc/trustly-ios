@@ -47,6 +47,7 @@ struct Constants {
     static let categoryLogWidgetVC = "widgetViewController"
     static let categoryLogLightboxVC = "lightboxViewController"
     static let categoryWebViewManager = "webViewManager"
+    static let categoryDeviceHelper = "deviceHelper"
     static let categoryNetworkHelper = "networkHelper"
 
 }
