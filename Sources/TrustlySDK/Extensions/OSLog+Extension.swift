@@ -34,6 +34,9 @@ extension OSLog {
     /// All logs related to settings manager
     static let settingsManager = OSLog(subsystem: subsystem, category: Constants.categorySettingsManager)
     
+    /// All logs related to json utils
+    static let jsonUtils = OSLog(subsystem: subsystem, category: Constants.categoryJsonUtils)
+
     /// All logs related to WebViewManager
     static let webViewManager = OSLog(subsystem: subsystem, category: Constants.categoryLogLightboxVC)
     
