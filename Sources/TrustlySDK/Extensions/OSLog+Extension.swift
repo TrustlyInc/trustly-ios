@@ -27,6 +27,10 @@ extension OSLog {
 
     /// All logs related to lightbox ViewController
     static let apiRequest = OSLog(subsystem: subsystem, category: Constants.categoryApiRequest)
+    
+    /// All logs related to lightbox ViewController
+    static let trustlyService = OSLog(subsystem: subsystem, category: Constants.categoryTrustlyService)
+
     /// All logs related to WebViewManager
     static let webViewManager = OSLog(subsystem: subsystem, category: Constants.categoryLogLightboxVC)
     
