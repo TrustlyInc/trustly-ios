@@ -50,5 +50,6 @@ struct Constants {
     static let categoryDeviceHelper = "deviceHelper"
     static let categoryNetworkHelper = "networkHelper"
     static let categoryApiRequest = "apiRequest"
+    static let categoryTrustlyService = "trustlyService"
 
 }
