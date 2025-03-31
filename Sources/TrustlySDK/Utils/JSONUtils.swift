@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os
 
 struct JSONUtils {
     
@@ -18,7 +19,7 @@ struct JSONUtils {
             return jsonData
             
         } catch {
-            print(error.localizedDescription)
+            OSLog.error(log: .jsonUtils, message: "Error when try to get json from data: \(error.localizedDescription)")
         }
         
         return nil
@@ -53,11 +54,11 @@ struct JSONUtils {
                 return newDictionary
                 
             } else {
-                print("Not Base64")
+                OSLog.error(log: .jsonUtils, message: "Not Base64")
             }
             
         } catch {
-            print(error.localizedDescription)
+            OSLog.error(log: .jsonUtils, message: "Error when try to get dicitionary from json string base 64: \(error.localizedDescription)")
         }
         
         return nil
