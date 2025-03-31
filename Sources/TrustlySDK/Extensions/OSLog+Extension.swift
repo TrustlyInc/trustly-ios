@@ -20,6 +20,9 @@ extension OSLog {
     static let lightboxVC = OSLog(subsystem: subsystem, category: Constants.categoryLogLightboxVC)
     
     /// All logs related to lightbox ViewController
+    static let deviceHelper = OSLog(subsystem: subsystem, category: Constants.categoryDeviceHelper)
+    
+    /// All logs related to lightbox ViewController
     static let networkHelper = OSLog(subsystem: subsystem, category: Constants.categoryNetworkHelper)
     /// All logs related to WebViewManager
     static let webViewManager = OSLog(subsystem: subsystem, category: Constants.categoryLogLightboxVC)

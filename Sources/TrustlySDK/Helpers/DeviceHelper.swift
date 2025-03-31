@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os
 import UIKit
 
 
@@ -15,8 +16,8 @@ func getDeviceUUID () -> String? {
         return uuid
         
     } else {
-        print("Unable to retrieve device ID.")
-        
+        OSLog.info(log: .deviceHelper, message: "Unable to retrieve device ID.")
+
     }
 
     return nil
