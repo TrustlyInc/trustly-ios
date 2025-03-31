@@ -19,16 +19,16 @@ extension OSLog {
     /// All logs related to lightbox ViewController
     static let lightboxVC = OSLog(subsystem: subsystem, category: Constants.categoryLogLightboxVC)
     
-    /// All logs related to lightbox ViewController
+    /// All logs related to device helper
     static let deviceHelper = OSLog(subsystem: subsystem, category: Constants.categoryDeviceHelper)
     
-    /// All logs related to lightbox ViewController
+    /// All logs related to network helper
     static let networkHelper = OSLog(subsystem: subsystem, category: Constants.categoryNetworkHelper)
 
-    /// All logs related to lightbox ViewController
+    /// All logs related to api request
     static let apiRequest = OSLog(subsystem: subsystem, category: Constants.categoryApiRequest)
     
-    /// All logs related to lightbox ViewController
+    /// All logs related to trustly service
     static let trustlyService = OSLog(subsystem: subsystem, category: Constants.categoryTrustlyService)
 
     /// All logs related to WebViewManager
