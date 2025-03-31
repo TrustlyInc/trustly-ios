@@ -62,5 +62,6 @@ struct Constants {
     static let categoryApiRequest = "apiRequest"
     static let categoryTrustlyService = "trustlyService"
     static let categorySettingsManager = "settingsManager"
+    static let categoryJsonUtils = "jsonUtils"
 
 }
