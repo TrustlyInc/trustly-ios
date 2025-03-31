@@ -16,16 +16,28 @@
 */
 
 import Foundation
+import os
 import UIKit
 @preconcurrency import WebKit
 
 
 public class WidgetViewController: UIViewController {
     
+    private var establishData: [AnyHashable : Any]?
     private var mainWebView:WKWebView!
     private var webViewManager: WebViewManager?
     
     public weak var delegate: TrustlySDKProtocol?
+    
+    public init(establishData: [AnyHashable : Any]){
+        super.init(nibName: nil, bundle: nil)
+        
+        self.establishData = establishData
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,9 +47,13 @@ public class WidgetViewController: UIViewController {
         self.webViewManager?.onChangeListener { (eventName, attributes) in
             self.delegate?.onChangeListener(eventName, attributes)
         }
+        
+        self.selectBankWidget()
     }
     
     func initWebView() {
+        
+        OSLog.debug(log: .widgetVC, message: "Starting to build widget webview")
 
         webViewManager = WebViewManager()
         
@@ -69,23 +85,34 @@ public class WidgetViewController: UIViewController {
             mainWebView.isInspectable = true
         }
 
+        OSLog.debug(log: .lightboxVC, message: "Adding widget webview into view")
+        
         self.view.addSubview(mainWebView)
+        
+        OSLog.debug(log: .lightboxVC, message: "Finishing to build widget webview")
+
     }
 }
 
 extension WidgetViewController {
 
-    public func selectBankWidget(establishData: [AnyHashable : Any], onBankSelected: @escaping TrustlyViewCallback) {
+    private func selectBankWidget() {
+        
+        OSLog.debug(log: .widgetVC, message: "Call selectBankWidget with establishData: \(establishData)")
         
         let service = TrustlyService()
         
         self.webViewManager?.establishData = establishData
         
         if let urlRequest = service.selectBankWidget(establishData: establishData) {
+            
+            OSLog.info(log: .widgetVC, message: "Loading widget url: \(urlRequest)")
+            
             self.mainWebView.load(urlRequest)
         }
         
-        self.webViewManager?.bankSelectedHandler = onBankSelected
-
+        self.webViewManager?.bankSelectedHandler = { establishData in
+            self.delegate?.onBankSelected(data: establishData)
+        }
     }
 }
