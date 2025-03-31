@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os
 
 protocol TrustlyServiceProtocol {
     func showLightbox(data: Data?, url: URL?)
@@ -63,10 +64,11 @@ class TrustlyService {
             return request
             
         } catch NetworkError.invalidUrl {
-            print("Error: Invalid url.")
+            OSLog.error(log: .trustlyService, message: "Error: Invalid url.")
             
         } catch {
-            print("Unexpected error: \(error).")
+            OSLog.error(log: .trustlyService, message: "Unexpected error: \(error).")
+
         }
         
         return nil
@@ -97,10 +99,10 @@ class TrustlyService {
             }
             
         } catch NetworkError.invalidUrl {
-            print("Error: Invalid url.")
+            OSLog.error(log: .trustlyService, message: "Error: Invalid url.")
             
         } catch {
-            print("Unexpected error: \(error).")
+            OSLog.error(log: .trustlyService, message: "Unexpected error: \(error).")
         }
     }
     
@@ -139,10 +141,11 @@ class TrustlyService {
             }
             
         } catch NetworkError.invalidUrl {
-            print("Error: Invalid url.")
+            OSLog.error(log: .trustlyService, message: "Error: Invalid url.")
             
         } catch {
-            print("Error: building url.")
+            OSLog.error(log: .trustlyService, message: "Error: building url.")
+
         }
 
      }
