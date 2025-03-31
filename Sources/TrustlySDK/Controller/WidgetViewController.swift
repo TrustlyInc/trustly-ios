@@ -16,6 +16,7 @@
 */
 
 import Foundation
+import os
 import UIKit
 @preconcurrency import WebKit
 
@@ -51,6 +52,8 @@ public class WidgetViewController: UIViewController {
     }
     
     func initWebView() {
+        
+        OSLog.debug(log: .widgetVC, message: "Starting to build widget webview")
 
         webViewManager = WebViewManager()
         
@@ -82,7 +85,12 @@ public class WidgetViewController: UIViewController {
             mainWebView.isInspectable = true
         }
 
+        OSLog.debug(log: .lightboxVC, message: "Adding widget webview into view")
+        
         self.view.addSubview(mainWebView)
+        
+        OSLog.debug(log: .lightboxVC, message: "Finishing to build widget webview")
+
     }
 }
 
@@ -90,12 +98,16 @@ extension WidgetViewController {
 
     private func selectBankWidget() {
         
+        OSLog.debug(log: .widgetVC, message: "Call selectBankWidget with establishData: \(establishData)")
+        
         let service = TrustlyService()
         
         self.webViewManager?.establishData = establishData
         
-        if let establishData = establishData,
-           let urlRequest = service.selectBankWidget(establishData: establishData) {
+        if let urlRequest = service.selectBankWidget(establishData: establishData) {
+            
+            OSLog.info(log: .widgetVC, message: "Loading widget url: \(urlRequest)")
+            
             self.mainWebView.load(urlRequest)
         }
         
