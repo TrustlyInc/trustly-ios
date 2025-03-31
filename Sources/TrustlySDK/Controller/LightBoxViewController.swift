@@ -51,6 +51,7 @@ public class LightBoxViewController: UIViewController {
         if let establishData = self.establishData {
             self.establish(establishData: establishData)
         }
+        AnalyticsHelper.sendMerchantDeviceInfo()
     }
     
     func initWebView() {
