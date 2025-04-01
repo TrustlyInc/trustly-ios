@@ -40,6 +40,9 @@ extension OSLog {
     /// All logs related to WebViewManager
     static let webViewManager = OSLog(subsystem: subsystem, category: Constants.categoryLogLightboxVC)
     
+    /// All logs related to EstablishDataUtils
+    static let establishDataUtils = OSLog(subsystem: subsystem, category: Constants.categoryEstablishDataUtils)
+    
     //Debug-level logs are intended for use in a development environment while actively debugging. This level will not show in device's logs.
     static func debug(log: OSLog, message: String) {
         os_log("%@", log: log, type:.debug, message)

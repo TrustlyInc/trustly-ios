@@ -101,6 +101,13 @@ extension WidgetViewController {
         
         OSLog.debug(log: .widgetVC, message: "Call selectBankWidget with establishData: \(establishData)")
         
+        if !EstablishDataUtils.establisDataIsValid(establishData: establishData) {
+            
+            OSLog.debug(log: .widgetVC, message: "EstablishData is invalid because are missing one of this fileds: \(establishData)")
+            
+            return
+        }
+        
         let service = TrustlyService()
         
         self.webViewManager?.establishData = establishData

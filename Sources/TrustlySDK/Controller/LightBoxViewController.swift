@@ -162,6 +162,13 @@ extension LightBoxViewController {
         
         OSLog.debug(log: .lightboxVC, message: "Call establish with establishData: \(eD)")
         
+        if !EstablishDataUtils.establisDataIsValid(establishData: eD) {
+            
+            OSLog.debug(log: .lightboxVC, message: "EstablishData is invalid because are missing one of this fileds: \(eD)")
+            
+            return
+        }
+        
         self.startLoading()
 
         self.webViewManager?.establishData = eD
