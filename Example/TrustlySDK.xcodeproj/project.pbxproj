@@ -266,7 +266,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 1620;
+				LastUpgradeCheck = 1630;
 				ORGANIZATIONNAME = CocoaPods;
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
@@ -473,6 +473,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 935WTYE9VM;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -532,6 +533,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 935WTYE9VM;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -557,7 +559,6 @@
 			baseConfigurationReference = 2FF8658D39766F946804CE82 /* Pods-TrustlySDK_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 935WTYE9VM;
 				INFOPLIST_FILE = TrustlySDK/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -577,7 +578,6 @@
 			baseConfigurationReference = DE70E586E7031A62AA663C4F /* Pods-TrustlySDK_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 935WTYE9VM;
 				INFOPLIST_FILE = TrustlySDK/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -596,7 +596,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F80A8F56A1408E5CA094366C /* Pods-TrustlySDK_Tests.debug.xcconfig */;
 			buildSettings = {
-				DEVELOPMENT_TEAM = 935WTYE9VM;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -624,7 +623,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3FA84CDD2D978EA6BD75B9E6 /* Pods-TrustlySDK_Tests.release.xcconfig */;
 			buildSettings = {
-				DEVELOPMENT_TEAM = 935WTYE9VM;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",
