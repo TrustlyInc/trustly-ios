@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os
 
 
 struct EstablishDataUtils {
@@ -110,26 +111,22 @@ struct EstablishDataUtils {
 
     }
     
-    static func getGrp() -> String! {
-        return getDefault(key: "Trustly.grp", def: generateGrp())
-    }
-    
-    static func getDefault(key:String, def: String) -> String{
-        let userDefaults:UserDefaults = UserDefaults.standard
-        var value = userDefaults.object(forKey: key) as? String
-        if(value == nil){
-            value = def
-            userDefaults.set(value,forKey: key)
-            userDefaults.synchronize()
+    static func validateEstablishData(establishData: [AnyHashable : Any]) {
+        
+        var errorMsg = ""
+        
+        Constants.requiredKeys.forEach {
+            if !establishData.keys.contains(AnyHashable($0)) {
+                errorMsg += "Required attribute missing: \($0).\n"
+            }
         }
-        return value ?? ""
-    }
-
-    static func generateGrp() -> String! {
-        var grp:String!
-        let grpInt:Int = Int(arc4random_uniform(100))
-        grp = String(format:"%d", grpInt)
-        return grp
+        
+        if !errorMsg.isEmpty {
+            print("############ ESTABLISH DATA VALIDATION ############")
+            print(errorMsg)
+            print("Learn more at Trustly Docs: \(Constants.establishDataDocsLink)")
+            print("###################################################")
+        }
     }
     
     static func prepareEstablish(establishData eD: [AnyHashable : Any], cid:String, sessionCid: String) -> [AnyHashable : Any] {
@@ -167,5 +164,39 @@ struct EstablishDataUtils {
         }
         
         return ""
+    }
+    
+    static func getGrp() -> String! {
+        return getDefault(key: "Trustly.grp", def: generateGrp())
+    }
+    
+    static func getDefault(key:String, def: String) -> String{
+        let userDefaults:UserDefaults = UserDefaults.standard
+        var value = userDefaults.object(forKey: key) as? String
+        if(value == nil){
+            value = def
+            userDefaults.set(value,forKey: key)
+            userDefaults.synchronize()
+        }
+        return value ?? ""
+    }
+
+    static func generateGrp() -> String! {
+        var grp:String!
+        let grpInt:Int = Int(arc4random_uniform(100))
+        grp = String(format:"%d", grpInt)
+        return grp
+    static func establisDataIsValid(establishData: [AnyHashable : Any]) -> Bool {
+        var isValid = true
+        
+        Constants.requiredKeys.forEach {
+            if !establishData.keys.contains(AnyHashable($0)) {
+                isValid = false
+                
+                OSLog.debug(log: .establishDataUtils, message: "Missing field \"\($0)\" in establishData")
+            }
+        }
+        
+        return isValid
     }
 }

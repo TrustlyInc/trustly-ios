@@ -53,5 +53,10 @@ struct Constants {
     static let categoryTrustlyService = "trustlyService"
     static let categorySettingsManager = "settingsManager"
     static let categoryJsonUtils = "jsonUtils"
+    static let categoryEstablishDataUtils = "establishDataUtils"
+    
+    
+    // MARK: Establish validation
+    static let requiredKeys: Set<AnyHashable> = [AnyHashable("accessId")]
 
 }
