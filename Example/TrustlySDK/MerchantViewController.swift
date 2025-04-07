@@ -43,13 +43,7 @@ class MerchantViewController: UIViewController {
         view.addSubview(widgetVC.view)
         widgetVC.didMove(toParent: self)
         
-        widgetVC.selectBankWidget(establishData: establishData) { data in
-            print("returnParameters:\(data)")
-            self.establishData = data
-            
-            self.openLightbox()
-
-        }
+        widgetVC.selectBankWidget(establishData: establishData)
                 
     }
     
@@ -120,6 +114,14 @@ extension MerchantViewController {
 
 //MARK: WidgetProtocol
 extension MerchantViewController: TrustlySDKProtocol {
+    
+    func onBankSelected(data: [AnyHashable: Any]) {
+        print("returnParameters:\(data)")
+        self.establishData = data
+        
+        self.openLightbox()
+    }
+    
     func onExternalUrl(onExternalUrl: TrustlyViewCallback?) {
         print("onExternalUrl")
     }
