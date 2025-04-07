@@ -75,7 +75,7 @@ public class WidgetViewController: UIViewController {
 
 extension WidgetViewController {
 
-    public func selectBankWidget(establishData: [AnyHashable : Any], onBankSelected: @escaping TrustlyViewCallback) {
+    public func selectBankWidget(establishData: [AnyHashable : Any]) {
         
         let service = TrustlyService()
         
@@ -85,7 +85,8 @@ extension WidgetViewController {
             self.mainWebView.load(urlRequest)
         }
         
-        self.webViewManager?.bankSelectedHandler = onBankSelected
-
+        self.webViewManager?.bankSelectedHandler = { establishData in
+            self.delegate?.onBankSelected(data: establishData)
+        }
     }
 }
