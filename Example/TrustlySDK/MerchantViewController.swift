@@ -15,6 +15,8 @@ class MerchantViewController: UIViewController {
     @IBOutlet weak var amountTextView: UITextField!
     var establishData: Dictionary<AnyHashable,Any> = [:]
     
+    private var lightboxViewController: LightBoxViewController?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -55,24 +57,10 @@ class MerchantViewController: UIViewController {
             establishData["amount"] = "0.00"
         }
         
-        let lightboxViewController = LightBoxViewController()
-        lightboxViewController.delegate = self
-        
-        
-        lightboxViewController.establish(establishData: establishData,
-                                         onReturn: { returnParameters ->Void in
-            lightboxViewController.dismiss(animated: true)
-            
-            self.showSuccessView(transactionId: returnParameters["transactionId"] as! String)
+        lightboxViewController = LightBoxViewController(establishData: establishData)
+        lightboxViewController?.delegate = self
 
-        }, onCancel: { returnParameters ->Void in
-
-            lightboxViewController.dismiss(animated: true)
-            
-            self.showFailureAlert()
-        })
-
-        self.present(lightboxViewController, animated: true)
+        self.present(lightboxViewController!, animated: true)
     }
 }
 
@@ -113,6 +101,19 @@ extension MerchantViewController {
 
 //MARK: WidgetProtocol
 extension MerchantViewController: TrustlySDKProtocol {
+    func onReturn(_ returnParameters: [AnyHashable : Any]) {
+        lightboxViewController?.dismiss(animated: true)
+        
+        self.showSuccessView(transactionId: returnParameters["transactionId"] as! String)
+
+    }
+    
+    func onCancel(_ returnParameters: [AnyHashable : Any]) {
+        lightboxViewController?.dismiss(animated: true)
+        
+        self.showFailureAlert()
+
+    }
     
     func onBankSelected(data: [AnyHashable: Any]) {
         print("returnParameters:\(data)")
