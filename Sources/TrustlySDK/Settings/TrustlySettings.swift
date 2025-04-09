@@ -20,7 +20,7 @@ struct TrustlySettings: Codable, Hashable {
             let diffs = Calendar.current.dateComponents([.minute], from: createdTime, to: dateNow)
             
             if let minutes = diffs.minute {
-                return minutes < Constants.SETTINGS_CACHE_TIME_LIMIT
+                return minutes < Constants.settingsCacheTimeLimit
             }
         }
         

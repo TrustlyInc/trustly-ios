@@ -1,19 +1,19 @@
 //
-//  ViewController.swift
-//  TrustlySDK
+//  MerchantViewController.swift
+//  TrustlySDK_Example
+//
+//  Created by Marcos Rivereto on 28/01/25.
+//  Copyright © 2025 CocoaPods. All rights reserved.
 //
 
-
+import Foundation
 import UIKit
 import TrustlySDK
 
-class ViewController: UIViewController {
-
-    @IBOutlet weak var trustlyView: TrustlyView!
+class MerchantViewController: UIViewController {
+    
     @IBOutlet weak var amountTextView: UITextField!
-
-    var alertObj:UIAlertController?
-    var establishData:Dictionary<AnyHashable,Any> = [:]
+    var establishData: Dictionary<AnyHashable,Any> = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,24 +33,24 @@ class ViewController: UIViewController {
                               "description": "First Data Mobile Test",
                               "env": "<[int, sandbox, local]>",
                               "localUrl": "<YOUR LOCAL URL WHEN `ENV` PROPERTY IS `LOCAL` (ex: https://192.168.0.30:8000)>"]
-
         
-        self.trustlyView.onChangeListener { (eventName, attributes) in
-            print("onChangeListener: \(eventName) \(attributes)")
-        }
+        let widgetVC = WidgetViewController()
+        widgetVC.delegate = self
 
-        let _ = self.trustlyView.selectBankWidget(establishData: establishData) { (view, data) in
+        addChild(widgetVC)
+
+        widgetVC.view.frame = CGRect(x: 15, y: 170, width: 400, height: 500)
+        view.addSubview(widgetVC.view)
+        widgetVC.didMove(toParent: self)
+        
+        widgetVC.selectBankWidget(establishData: establishData) { data in
             print("returnParameters:\(data)")
             self.establishData = data
             
             self.openLightbox()
+
         }
-
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+                
     }
     
     private func openLightbox(){
@@ -62,27 +62,28 @@ class ViewController: UIViewController {
             establishData["amount"] = "0.00"
         }
         
-        let trustlyLightboxViewController = TrustlyLightBoxViewController()
-        trustlyLightboxViewController.delegate = self
+        let lightboxViewController = LightBoxViewController()
+        lightboxViewController.delegate = self
         
-        trustlyLightboxViewController.establishData = self.establishData
+        
+        lightboxViewController.establish(establishData: establishData,
+                                         onReturn: { returnParameters ->Void in
+            lightboxViewController.dismiss(animated: true)
+            
+            self.showSuccessView(transactionId: returnParameters["transactionId"] as! String)
 
-        self.present(trustlyLightboxViewController, animated: true)
-        
-    }    
+        }, onCancel: { returnParameters ->Void in
+
+            lightboxViewController.dismiss(animated: true)
+            
+            self.showFailureAlert()
+        })
+
+        self.present(lightboxViewController, animated: true)
+    }
 }
 
-extension ViewController: TrustlyLightboxViewProtocol {
-    
-    func onReturnWithTransactionId(transactionId: String, controller: TrustlyLightBoxViewController) {
-        controller.dismiss(animated: true)
-        self.showSuccessView(transactionId: transactionId)
-    }
-    
-    func onCancelWithTransactionId(transactionId: String, controller: TrustlyLightBoxViewController) {
-        controller.dismiss(animated: true)
-        self.showFailureAlert()
-    }
+extension MerchantViewController {
     
     // MARK: - Alert functions
     private func showAlert(title: String, message: String){
@@ -115,4 +116,15 @@ extension ViewController: TrustlyLightboxViewProtocol {
         return window
     }
 
+}
+
+//MARK: WidgetProtocol
+extension MerchantViewController: TrustlySDKProtocol {
+    func onExternalUrl(onExternalUrl: TrustlyViewCallback?) {
+        print("onExternalUrl")
+    }
+    
+    func onChangeListener(_ eventName: String, _ eventDetails: [AnyHashable : Any]) {
+        print("eventName: \(eventName), eventDetails: \(eventDetails)")
+    }
 }

@@ -120,7 +120,7 @@ final class URLUtilsTests: XCTestCase {
             resource: ResourceUrls.setup.rawValue,
             isLocalUrl: true,
             environment: "local",
-            port: Constants.PORT_FRONTEND
+            port: Constants.portFrontend
         )
         
         XCTAssertEqual(expectedUrl, urlBuiltForWidget)
@@ -162,6 +162,18 @@ final class URLUtilsTests: XCTestCase {
         let expectedResult = "\nvalue1"
         
         XCTAssertEqual(expectedResult, result)
+    }
+    
+    func testParametersForUrl() throws {
+        
+        guard let sampleUrl = URL(string: "https://www.example.com?param1=test1&param2=test2&param3=test3") else { return XCTFail() }
+        
+        let result = URLUtils.parametersForUrl(sampleUrl)
+
+        XCTAssertEqual(sampleUrl.absoluteString, result["url"] as! String)
+        XCTAssertEqual("test1", result["param1"] as! String)
+        XCTAssertEqual("test2", result["param2"] as! String)
+        XCTAssertEqual("test3", result["param3"] as! String)
     }
 
 }

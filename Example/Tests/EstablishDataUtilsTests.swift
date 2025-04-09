@@ -56,5 +56,31 @@ final class EstablishDataUtilsTests: XCTestCase {
 //        XCTAssertEqual(expectedEstablishData, normalizedEstablish)
 //                
 //    }
+    
+    func testExtractUrlSchemeFrom() throws {
+        
+        let expectedUrlScheme = "demoapp"
+        
+        let establishData: [String : AnyHashable] = [
+            "accessId": "A48B73F694C4C8EE6306",
+            "customer" : ["address": ["country": "US", "street": "ABC Avenue"]],
+            "metadata.urlScheme" : "demoapp://"
+        ]
+        
+        let urlScheme = EstablishDataUtils.extractUrlSchemeFrom(establishData)
+        
+        XCTAssertEqual(expectedUrlScheme, urlScheme)
+    }
+    
+    func testExtractUrlSchemeFromEmptyEstablish() throws {
+        
+        let expectedUrlScheme = ""
+        
+        let establishData: [String : AnyHashable] = [:]
+        
+        let urlScheme = EstablishDataUtils.extractUrlSchemeFrom(establishData)
+        
+        XCTAssertEqual(expectedUrlScheme, urlScheme)
+    }
 
 }
