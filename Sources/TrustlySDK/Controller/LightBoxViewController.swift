@@ -16,6 +16,7 @@
 */
 
 import Foundation
+import os
 import UIKit
 @preconcurrency import WebKit
 
@@ -35,9 +36,13 @@ public class LightBoxViewController: UIViewController {
         self.webViewManager?.onChangeListener { (eventName, attributes) in
             self.delegate?.onChangeListener(eventName, attributes)
         }
+        
+        AnalyticsHelper.sendMerchantDeviceInfo()
     }
     
     func initWebView() {
+        
+        OSLog.debug(log: .lightboxVC, message: "Starting to build lightbox webview")
 
         webViewManager = WebViewManager()
         
@@ -68,8 +73,12 @@ public class LightBoxViewController: UIViewController {
         if #available(iOS 16.4, *) {
             mainWebView.isInspectable = true
         }
-
+        
+        OSLog.debug(log: .lightboxVC, message: "Adding lightbox webview into view")
+        
         self.view.addSubview(mainWebView)
+        
+        OSLog.debug(log: .lightboxVC, message: "Finishing to build lightbox webview")
     }
 }
 
@@ -113,6 +122,8 @@ extension LightBoxViewController: TrustlyServiceProtocol {
         
         DispatchQueue.main.async {
             if let data = data, let url = url {
+                OSLog.info(log: .lightboxVC, message: "Loading lightbox url: \(url)")
+                
                 self.mainWebView.load(data, mimeType:"text/html", characterEncodingName:"UTF-8", baseURL: url)
             }
             self.stopLoading()
@@ -134,6 +145,15 @@ extension LightBoxViewController {
      */
     public func establish(establishData eD: [AnyHashable : Any], onReturn: TrustlyViewCallback?, onCancel: TrustlyViewCallback?) {
         
+        OSLog.debug(log: .lightboxVC, message: "Call establish with establishData: \(eD)")
+        
+        if !EstablishDataUtils.establisDataIsValid(establishData: eD) {
+            
+            OSLog.debug(log: .lightboxVC, message: "EstablishData is invalid because are missing one of this fileds: \(eD)")
+            
+            return
+        }
+        
         self.startLoading()
 
         self.webViewManager?.establishData = eD
@@ -146,8 +166,11 @@ extension LightBoxViewController {
         service.chooseIntegrationStrategy(establishData: eD, completionHandler: { integrationStrategy -> Void in
 
             if integrationStrategy == Constants.lightboxContentWebview {
+                OSLog.info(log: .lightboxVC, message: "Calling lightbox in webview")
                 service.establishWebView(establishData: eD)
+                
             } else {
+                OSLog.info(log: .lightboxVC, message: "Calling lightbox in ASWebAuthentication")
                 service.establishASWebAuthentication(establishData: eD, onReturn: onReturn, onCancel: onCancel)
             }
         })

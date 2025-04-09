@@ -43,4 +43,20 @@ struct Constants {
     
     static let baseUrls = ["paywithmybank.com", "trustly.one"]
     
+    // MARK: OsLog
+    static let categoryLogWidgetVC = "widgetViewController"
+    static let categoryLogLightboxVC = "lightboxViewController"
+    static let categoryWebViewManager = "webViewManager"
+    static let categoryDeviceHelper = "deviceHelper"
+    static let categoryNetworkHelper = "networkHelper"
+    static let categoryApiRequest = "apiRequest"
+    static let categoryTrustlyService = "trustlyService"
+    static let categorySettingsManager = "settingsManager"
+    static let categoryJsonUtils = "jsonUtils"
+    static let categoryEstablishDataUtils = "establishDataUtils"
+    
+    
+    // MARK: Establish validation
+    static let requiredKeys: Set<AnyHashable> = [AnyHashable("accessId")]
+
 }
