@@ -58,6 +58,7 @@ ___
 
 | VERSION   | DESCRIPTION   | BRANCH |
 | :-------: | :-----------  | :----------- |
+3.3.1     | Fix bug when try to send metadata properties | *main*
 3.3.0     | Implement the functionality of being able to choose webview or in-app browser in the SDK | *main*
 3.2.3     | Fix a bug when we try to send an establish data with an array value | *main*
 3.2.2     | Fix a bug when we try to check if the sdk is loading a error page(400 and 500) | *main*

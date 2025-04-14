@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'TrustlySDK'
 
-  s.version          = '3.3.0'
+  s.version          = '3.3.1'
 
   s.summary          = 'This SDK help the merchants to integrate their solutions with Trustly Widget and LightBox.'
   s.swift_version    = '5.0'
