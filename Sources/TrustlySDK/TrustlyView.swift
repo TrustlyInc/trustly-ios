@@ -116,6 +116,8 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         
         self.addSessionCid()
         
+        EstablishDataUtils.validateEstablishData(establishData: self.establishData ?? [:])
+        
         var query = [String : Any]()
         var hash = [String : Any]()
         
@@ -605,6 +607,8 @@ extension TrustlyView {
     public func establish(establishData eD: [AnyHashable : Any], onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) -> UIView? {
         
         self.prepareEstablish(establishData: eD)
+        
+        EstablishDataUtils.validateEstablishData(establishData: self.establishData ?? [:])
         
         DispatchQueue.global(qos: .background).async{
             

@@ -109,4 +109,14 @@ struct EstablishDataUtils {
 //        return normalizeEstablishWithDotNotation(establish: establish)
 
     }
+    
+    static func validateEstablishData(establishData: [AnyHashable : Any]) {
+        
+        print("############ ESTABLISH DATA VALIDATION ############")
+        Constants.requiredKeys.forEach {
+            if !establishData.keys.contains(AnyHashable($0)) {
+                print("Required attributes missing: \($0).")
+            }
+        }
+    }
 }
