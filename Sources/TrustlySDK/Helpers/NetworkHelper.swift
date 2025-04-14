@@ -21,7 +21,7 @@ enum NetworkError: Error {
  @throws NetworkError.invalidUrl
  @result (url: URL, isLocal: Bool)
  */
-func buildEnvironment(resourceUrl:ResourceUrls, environment: String, localUrl: String, paymentType: String, build: String, path:PathUrls = .selectBank, query: [String : Any]? = nil, hash: [String : Any]? = nil) throws -> (url: URL, isLocal: Bool)  {
+func buildEnvironment(resourceUrl:ResourceUrls, environment: String, localUrl: String, paymentType: String, build: String, path:PathUrls = .selectBank, query: [String : Any]? = nil, hash: [AnyHashable : Any]? = nil) throws -> (url: URL, isLocal: Bool)  {
     var resource = resourceUrl
     var subDomain = ""
     var urlString = ""
@@ -59,8 +59,9 @@ func buildEnvironment(resourceUrl:ResourceUrls, environment: String, localUrl: S
         urlString = "\(urlString)&\(URLUtils.urlEncoded(query))"
     }
     
-    if let hash = hash {
-        urlString = "\(urlString)#\(URLUtils.urlEncoded(hash))"
+    if let hash = hash,
+       let stringBase64 = JSONUtils.getJsonBase64From(dictionary: hash) {
+        urlString = "\(urlString)#\(stringBase64)"
     }
     
     guard let url = URL(string: urlString) else {
