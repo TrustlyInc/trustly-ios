@@ -125,6 +125,14 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         if let lang = establishData?["metadata.lang"] as? String {
             query["lang"] = lang
         }
+        
+        establishData?.keys.forEach { key in
+            let sKey = key as! String
+            
+            if sKey.starts(with: "metadata."){
+                query[sKey] = establishData?[sKey]
+            }
+        }
 
         query["onlinePPSubType"] = establishData?["onlinePPSubType"]
         query["accessId"] = establishData?["accessId"]
