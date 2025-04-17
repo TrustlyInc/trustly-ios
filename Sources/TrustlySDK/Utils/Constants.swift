@@ -35,4 +35,6 @@ struct Constants {
                                                  AnyHashable("cancelUrl"),
                                                  AnyHashable("requestSignature"),
                                                  AnyHashable("customer.address.country")]
+    
+    static let establishDataDocsLink = "https://amer.developers.trustly.com/payments/docs/establish-data#base-properties"
 }

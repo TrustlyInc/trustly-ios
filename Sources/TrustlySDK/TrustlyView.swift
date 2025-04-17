@@ -138,46 +138,19 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         self.addSessionCid()
         
         EstablishDataUtils.validateEstablishData(establishData: self.establishData ?? [:])
-        
-        var query = [String : Any]()
-        var hash = [String : Any]()
-        
-        let deviceType = establishData?["deviceType"] ?? "mobile" + ":ios:native"
-        query["deviceType"] = deviceType
+                
+        if establishData?["deviceType"] == nil || establishData?["deviceType"] as! String == "" {
+            establishData?["deviceType"] = "\(Constants.DEVICE_TYPE):\(Constants.DEVICE_PLATFORM)"
+        }
         
         if let lang = establishData?["metadata.lang"] as? String {
-            query["lang"] = lang
+            establishData?["lang"] = establishData?["lang"]
         }
         
-        establishData?.keys.forEach { key in
-            let sKey = key as! String
-            
-            if sKey.starts(with: "metadata."){
-                query[sKey] = establishData?[sKey]
-            }
-        }
-
-        query["onlinePPSubType"] = establishData?["onlinePPSubType"]
-        query["accessId"] = establishData?["accessId"]
-        query["merchantId"] = establishData?["merchantId"]
-        query["paymentType"] = establishData?["paymentType"] ?? "Instant"
-        query["deviceType"] = deviceType
-        query["grp"] = self.getGrp()
-        query["dynamicWidget"] = "true"
-        query["sessionCid"] = sessionCid
-        query["cid"] = cid
-        
-        if establishData?["customer.address.country"] != nil {
-            query["customer.address.country"]=establishData?["customer.address.country"]
-        }
-        
-        if (establishData?["customer.address.country"] == nil || establishData?["customer.address.country"] as! String == "us") &&
-            establishData?["customer.address.state"] != nil{
-            query["customer.address.state"]=establishData?["customer.address.state"]
-        }
-        
-        hash["merchantReference"] = establishData?["merchantReference"] ?? ""
-        hash["customer.externalId"] = establishData?["customer.externalId"] ?? ""
+        establishData?["sessionCid"] = sessionCid
+        establishData?["cid"] = cid
+        establishData?["grp"] = self.getGrp()
+        establishData?["dynamicWidget"] = "true"
         
         bankSelectedHandler = onBankSelected
 
@@ -188,12 +161,11 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
                 localUrl: (eD["envHost"] ?? "") as! String,
                 paymentType: (eD["paymentType"] ?? "") as! String,
                 build: Constants.buildSDK,
-                query: query,
-                hash: eD
+                query: establishData!
             )
             
             isLocalEnvironment = environment.isLocal
-            
+            print(environment.url)
             var request = URLRequest(url: environment.url)
             request.httpMethod = "GET"
             request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
