@@ -20,42 +20,30 @@ class MerchantViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-
-        self.establishData = [
-                        "accessId": "A48B73F694C4C8EE6306", // Required
-                        "merchantId" : "110005514", // Required
-                        "currency" : "USD",
-                        "amount" : "1.00",
-                        "merchantReference" : "cac73df7-52b4-47d7-89d3-9628d4cfb65e", // Required
-                        "paymentType" : "OnFile",
-                        "returnUrl": "/returnUrl", // Required
-                        "cancelUrl": "/cancelUrl", // Required
-                        "requestSignature": "HT5mVOqBXa8ZlvgX2USmPeLns5o=", // Required
-                        "customer.name": "John",
-                        "customer.address.country": "US", // Required
-                        "theme": "dark",
-                        "metadata.theme": "dark",
-                        "metadata.urlScheme": "demoapp://",
-                        "description": "First Data Mobile Test",
-                        "env": "sandbox"]
+        self.establishData = ["accessId": "<ACCESS_ID>",
+                              "merchantId" : "<MERCHANT_ID>",
+                              "currency" : "USD",
+                              "amount" : "1.00",
+                              "merchantReference" : "<MERCHANT_REFERENCE>",
+                              "paymentType" : "Retrieval",
+                              "returnUrl": "/returnUrl",
+                              "cancelUrl": "/cancelUrl",
+                              "requestSignature": "<REQUEST_SIGNATURE>",
+                              "customer.name": "John",
+                              "customer.address.country": "US",
+                              "theme": "dark",
+                              "metadata.theme": "dark",
+                              "metadata.urlScheme": "demoapp://",
+                              "description": "First Data Mobile Test",
+                              "env": "<[int, sandbox, local]>",
+                              "localUrl": "<YOUR LOCAL URL WHEN `ENV` PROPERTY IS `LOCAL` (ex: https://192.168.0.30:8000)>"]
         
         let widgetVC = WidgetViewController(establishData: establishData)
-
         widgetVC.delegate = self
-
-        addChild(widgetVC)
 
         widgetVC.view.frame = CGRect(x: 15, y: 170, width: 400, height: 500)
         view.addSubview(widgetVC.view)
-        widgetVC.didMove(toParent: self)
-        
-        widgetVC.selectBankWidget(establishData: establishData) { data in
-            print("returnParameters:\(data)")
-            self.establishData = data
-            
-            self.openLightbox()
-
-        }       
+       
     }
     
     private func openLightbox(){
