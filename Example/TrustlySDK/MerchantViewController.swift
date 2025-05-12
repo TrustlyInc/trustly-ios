@@ -33,6 +33,8 @@ class MerchantViewController: UIViewController {
                         "requestSignature": "HT5mVOqBXa8ZlvgX2USmPeLns5o=", // Required
                         "customer.name": "John",
                         "customer.address.country": "US", // Required
+                        "theme": "dark",
+                        "metadata.theme": "dark",
                         "metadata.urlScheme": "demoapp://",
                         "description": "First Data Mobile Test",
                         "env": "sandbox"]
