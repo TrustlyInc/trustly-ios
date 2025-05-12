@@ -29,4 +29,22 @@ public protocol TrustlySDKProtocol: AnyObject {
         @param eventDetails Dictionary with information about the event.
     */
     func onChangeListener(_ eventName: String, _ eventDetails: [AnyHashable : Any]) -> Void;
+    
+    /*!
+        @brief Sets a callback to handle event triggered by javascript
+        @param data Establish data values.
+    */
+    func onBankSelected(data: [AnyHashable : Any]);
+    
+    /*!
+        @brief Sets a callback to handle event triggered by javascript
+        @param data Establish data values.
+    */
+    func onReturn(_ returnParameters: [AnyHashable : Any]) -> Void;
+    
+    /*!
+        @brief Sets a callback to handle event triggered by javascript
+        @param data Establish data values.
+    */
+    func onCancel(_ returnParameters: [AnyHashable : Any]) -> Void;
 }
