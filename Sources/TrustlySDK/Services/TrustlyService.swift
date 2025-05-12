@@ -15,9 +15,6 @@ protocol TrustlyServiceProtocol {
 
 class TrustlyService {
     
-    private let CUSTOMER_ADDRESS_COUNTRY = "customer.address.country"
-    private let CUSTOMER_ADDRESS_STATE = "customer.address.state"
-    
     private var sessionCid = "ios wrong sessionCid"
     private var cid = "ios wrong cid"
     
@@ -38,37 +35,19 @@ class TrustlyService {
         establishData["sessionCid"] = sessionCid
         establishData["metadata.cid"] = cid
         
-        var query = [String : Any]()
-        var hash = [String : Any]()
-        
         let deviceType = establishData["deviceType"] ?? "mobile" + ":ios:native"
-        query["deviceType"] = deviceType
+        establishData["deviceType"] = deviceType
         
         if let lang = establishData["metadata.lang"] as? String {
-            query["lang"] = lang
+            establishData["lang"] = lang
         }
 
-        query["onlinePPSubType"] = establishData["onlinePPSubType"]
-        query["accessId"] = establishData["accessId"]
-        query["merchantId"] = establishData["merchantId"]
-        query["paymentType"] = establishData["paymentType"] ?? "Instant"
-        query["deviceType"] = deviceType
-        query["grp"] = EstablishDataUtils.getGrp()
-        query["dynamicWidget"] = "true"
-        query["sessionCid"] = establishData["sessionCid"]
-        query["cid"] = establishData["metadata.cid"]
+        establishData["grp"] = EstablishDataUtils.getGrp()
+        establishData["dynamicWidget"] = "true"
+        establishData["sessionCid"] = establishData["sessionCid"]
+        establishData["cid"] = establishData["metadata.cid"]
         
-        if establishData[CUSTOMER_ADDRESS_COUNTRY] != nil {
-            query[CUSTOMER_ADDRESS_COUNTRY] = establishData[CUSTOMER_ADDRESS_COUNTRY]
-        }
-        
-        if (establishData[CUSTOMER_ADDRESS_COUNTRY] == nil || establishData[CUSTOMER_ADDRESS_COUNTRY] as! String == "us") &&
-            establishData[CUSTOMER_ADDRESS_STATE] != nil{
-            query[CUSTOMER_ADDRESS_STATE] = establishData[CUSTOMER_ADDRESS_STATE]
-        }
-        
-        hash["merchantReference"] = establishData["merchantReference"] ?? ""
-        hash["customer.externalId"] = establishData["customer.externalId"] ?? ""
+        EstablishDataUtils.validateEstablishData(establishData: establishData)
 
         do {
             let environment = try buildEnvironment(
@@ -77,8 +56,7 @@ class TrustlyService {
                 localUrl: (establishData["envHost"] ?? "") as! String,
                 paymentType: (establishData["paymentType"] ?? "") as! String,
                 build: Constants.buildSDK,
-                query: query,
-                hash: hash
+                query: establishData
             )
             
             var request = URLRequest(url: environment.url)
