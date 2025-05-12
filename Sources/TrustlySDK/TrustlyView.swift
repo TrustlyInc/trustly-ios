@@ -50,7 +50,28 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
     private var cid = "ios wrong cid"
     private var isLocalEnvironment = false
     private var trustlySettings: TrustlySettings? = nil
-    private let loading = UIActivityIndicatorView()
+    private var loading: UIActivityIndicatorView = {
+
+        let indicator = UIActivityIndicatorView()
+        
+        indicator.autoresizingMask = [
+            .flexibleLeftMargin, .flexibleRightMargin,
+            .flexibleTopMargin, .flexibleBottomMargin
+        ]
+        
+        indicator.hidesWhenStopped = true
+        indicator.color = .gray
+        
+        if #available(iOS 13.0, *) {
+            indicator.style = .large
+        } else {
+            indicator.style = .gray
+        }
+        
+        indicator.startAnimating()
+        
+        return indicator
+    }()
 
     
     //Constructors
@@ -116,37 +137,20 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
         
         self.addSessionCid()
         
-        var query = [String : Any]()
-        var hash = [String : Any]()
-        
-        let deviceType = establishData?["deviceType"] ?? "mobile" + ":ios:native"
-        query["deviceType"] = deviceType
+        EstablishDataUtils.validateEstablishData(establishData: self.establishData ?? [:])
+                
+        if establishData?["deviceType"] == nil || establishData?["deviceType"] as! String == "" {
+            establishData?["deviceType"] = "\(Constants.DEVICE_TYPE):\(Constants.DEVICE_PLATFORM)"
+        }
         
         if let lang = establishData?["metadata.lang"] as? String {
-            query["lang"] = lang
-        }
-
-        query["onlinePPSubType"] = establishData?["onlinePPSubType"]
-        query["accessId"] = establishData?["accessId"]
-        query["merchantId"] = establishData?["merchantId"]
-        query["paymentType"] = establishData?["paymentType"] ?? "Instant"
-        query["deviceType"] = deviceType
-        query["grp"] = self.getGrp()
-        query["dynamicWidget"] = "true"
-        query["sessionCid"] = sessionCid
-        query["cid"] = cid
-        
-        if establishData?["customer.address.country"] != nil {
-            query["customer.address.country"]=establishData?["customer.address.country"]
+            establishData?["lang"] = establishData?["lang"]
         }
         
-        if (establishData?["customer.address.country"] == nil || establishData?["customer.address.country"] as! String == "us") &&
-            establishData?["customer.address.state"] != nil{
-            query["customer.address.state"]=establishData?["customer.address.state"]
-        }
-        
-        hash["merchantReference"] = establishData?["merchantReference"] ?? ""
-        hash["customer.externalId"] = establishData?["customer.externalId"] ?? ""
+        establishData?["sessionCid"] = sessionCid
+        establishData?["cid"] = cid
+        establishData?["grp"] = self.getGrp()
+        establishData?["dynamicWidget"] = "true"
         
         bankSelectedHandler = onBankSelected
 
@@ -157,12 +161,11 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
                 localUrl: (eD["envHost"] ?? "") as! String,
                 paymentType: (eD["paymentType"] ?? "") as! String,
                 build: Constants.buildSDK,
-                query: query,
-                hash: hash
+                query: establishData!
             )
             
             isLocalEnvironment = environment.isLocal
-            
+            print(environment.url)
             var request = URLRequest(url: environment.url)
             request.httpMethod = "GET"
             request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
@@ -562,21 +565,12 @@ extension TrustlyView {
     }
     
     private func startLoading() {
-        self.loading.frame = CGRectMake(0.0, 0.0, 40.0, 40.0);
-        self.loading.center = self.center
-        self.loading.hidesWhenStopped = true
-        self.loading.color = .gray
-        self.loading.hidesWhenStopped = true
-        
-        if #available(iOS 13.0, *) {
-            self.loading.style = .large
-        } else {
-            self.loading.style = .gray
-        }
+        self.loading.center = CGPoint(
+            x: self.bounds.midX,
+            y: self.bounds.midY
+        )
         
         self.addSubview(self.loading)
-        
-        self.loading.startAnimating()
     }
 
     private func stopLoading() {
@@ -596,15 +590,15 @@ extension TrustlyView {
      */
     public func establish(establishData eD: [AnyHashable : Any], onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) -> UIView? {
         
+        self.startLoading()
+        
         self.prepareEstablish(establishData: eD)
+        
+        EstablishDataUtils.validateEstablishData(establishData: self.establishData ?? [:])
         
         DispatchQueue.global(qos: .background).async{
             
             if let establish = self.establishData {
-                
-                DispatchQueue.main.async{
-                    self.startLoading()
-                }
                 
                 getTrustlySettingsWith(establish: establish) { trustlySettings in
 

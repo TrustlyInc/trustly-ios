@@ -109,4 +109,23 @@ struct EstablishDataUtils {
 //        return normalizeEstablishWithDotNotation(establish: establish)
 
     }
+    
+    static func validateEstablishData(establishData: [AnyHashable : Any]) {
+        
+        var errorMsg = ""
+        
+        Constants.requiredKeys.forEach {
+            if !establishData.keys.contains(AnyHashable($0)) {
+                errorMsg += "Required attribute missing: \($0).\n"
+            }
+        }
+        
+        if !errorMsg.isEmpty {
+            print("############ ESTABLISH DATA VALIDATION ############")
+            print(errorMsg)
+            print("Learn more at Trustly Docs: \(Constants.establishDataDocsLink)")
+            print("###################################################")
+        }
+        
+    }
 }

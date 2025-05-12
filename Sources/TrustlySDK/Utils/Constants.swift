@@ -9,7 +9,7 @@ import Foundation
 
 
 struct Constants {
-    static let buildSDK = "3.3.0"
+    static let buildSDK = "3.3.1"
     static let baseDomain = "paywithmybank.com"
     
     static let RETURN_URL = "msg://return"
@@ -27,4 +27,14 @@ struct Constants {
     static let PORT_API = "8000"
     static let PORT_FRONTEND = "10000"
     
+    // MARK: Establish validation
+    static let requiredKeys: Set<AnyHashable> = [AnyHashable("accessId"),
+                                                 AnyHashable("merchantId"),
+                                                 AnyHashable("merchantReference"),
+                                                 AnyHashable("returnUrl"),
+                                                 AnyHashable("cancelUrl"),
+                                                 AnyHashable("requestSignature"),
+                                                 AnyHashable("customer.address.country")]
+    
+    static let establishDataDocsLink = "https://amer.developers.trustly.com/payments/docs/establish-data#base-properties"
 }
