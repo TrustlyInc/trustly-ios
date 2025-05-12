@@ -15,6 +15,8 @@ class MerchantViewController: UIViewController {
     @IBOutlet weak var amountTextView: UITextField!
     var establishData: Dictionary<AnyHashable,Any> = [:]
     
+    private var lightboxViewController: LightBoxViewController?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -29,28 +31,19 @@ class MerchantViewController: UIViewController {
                               "requestSignature": "<REQUEST_SIGNATURE>",
                               "customer.name": "John",
                               "customer.address.country": "US",
+                              "theme": "dark",
+                              "metadata.theme": "dark",
                               "metadata.urlScheme": "demoapp://",
                               "description": "First Data Mobile Test",
                               "env": "<[int, sandbox, local]>",
                               "localUrl": "<YOUR LOCAL URL WHEN `ENV` PROPERTY IS `LOCAL` (ex: https://192.168.0.30:8000)>"]
         
-        let widgetVC = WidgetViewController()
+        let widgetVC = WidgetViewController(establishData: establishData)
         widgetVC.delegate = self
-
-        addChild(widgetVC)
 
         widgetVC.view.frame = CGRect(x: 15, y: 170, width: 400, height: 500)
         view.addSubview(widgetVC.view)
-        widgetVC.didMove(toParent: self)
-        
-        widgetVC.selectBankWidget(establishData: establishData) { data in
-            print("returnParameters:\(data)")
-            self.establishData = data
-            
-            self.openLightbox()
-
-        }
-                
+       
     }
     
     private func openLightbox(){
@@ -62,24 +55,10 @@ class MerchantViewController: UIViewController {
             establishData["amount"] = "0.00"
         }
         
-        let lightboxViewController = LightBoxViewController()
-        lightboxViewController.delegate = self
-        
-        
-        lightboxViewController.establish(establishData: establishData,
-                                         onReturn: { returnParameters ->Void in
-            lightboxViewController.dismiss(animated: true)
-            
-            self.showSuccessView(transactionId: returnParameters["transactionId"] as! String)
+        lightboxViewController = LightBoxViewController(establishData: establishData)
+        lightboxViewController?.delegate = self
 
-        }, onCancel: { returnParameters ->Void in
-
-            lightboxViewController.dismiss(animated: true)
-            
-            self.showFailureAlert()
-        })
-
-        self.present(lightboxViewController, animated: true)
+        self.present(lightboxViewController!, animated: true)
     }
 }
 
@@ -120,6 +99,27 @@ extension MerchantViewController {
 
 //MARK: WidgetProtocol
 extension MerchantViewController: TrustlySDKProtocol {
+    func onReturn(_ returnParameters: [AnyHashable : Any]) {
+        lightboxViewController?.dismiss(animated: true)
+        
+        self.showSuccessView(transactionId: returnParameters["transactionId"] as! String)
+
+    }
+    
+    func onCancel(_ returnParameters: [AnyHashable : Any]) {
+        lightboxViewController?.dismiss(animated: true)
+        
+        self.showFailureAlert()
+
+    }
+    
+    func onBankSelected(data: [AnyHashable: Any]) {
+        print("returnParameters:\(data)")
+        self.establishData = data
+        
+        self.openLightbox()
+    }
+    
     func onExternalUrl(onExternalUrl: TrustlyViewCallback?) {
         print("onExternalUrl")
     }
