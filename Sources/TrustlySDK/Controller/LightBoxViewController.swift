@@ -50,7 +50,6 @@ public class LightBoxViewController: UIViewController {
         if let establishData = self.establishData {
             self.establish(establishData: establishData)
         }
-        
     }
     
     func initWebView() {
@@ -148,6 +147,7 @@ extension LightBoxViewController {
      @param onReturn: TrustlyViewCallback?
      @param onCancel: TrustlyViewCallback?
      */
+
     private func establish(establishData eD: [AnyHashable : Any]) {
         
         self.startLoading()

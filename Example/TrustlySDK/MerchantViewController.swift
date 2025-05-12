@@ -40,6 +40,7 @@ class MerchantViewController: UIViewController {
                         "env": "sandbox"]
         
         let widgetVC = WidgetViewController(establishData: establishData)
+
         widgetVC.delegate = self
 
         addChild(widgetVC)
@@ -47,7 +48,14 @@ class MerchantViewController: UIViewController {
         widgetVC.view.frame = CGRect(x: 15, y: 170, width: 400, height: 500)
         view.addSubview(widgetVC.view)
         widgetVC.didMove(toParent: self)
-                
+        
+        widgetVC.selectBankWidget(establishData: establishData) { data in
+            print("returnParameters:\(data)")
+            self.establishData = data
+            
+            self.openLightbox()
+
+        }       
     }
     
     private func openLightbox(){

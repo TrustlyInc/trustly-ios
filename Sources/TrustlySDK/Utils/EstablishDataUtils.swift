@@ -126,7 +126,6 @@ struct EstablishDataUtils {
             print("Learn more at Trustly Docs: \(Constants.establishDataDocsLink)")
             print("###################################################")
         }
-        
     }
     
     static func prepareEstablish(establishData eD: [AnyHashable : Any], cid:String, sessionCid: String) -> [AnyHashable : Any] {
