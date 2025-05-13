@@ -31,10 +31,7 @@ class TrustlyService {
     func selectBankWidget(establishData eD: [AnyHashable : Any]) -> URLRequest? {
         
         var establishData = eD
-        
-        establishData["sessionCid"] = sessionCid
-        establishData["metadata.cid"] = cid
-        
+                
         let deviceType = establishData["deviceType"] ?? "mobile" + ":ios:native"
         establishData["deviceType"] = deviceType
         
@@ -44,8 +41,8 @@ class TrustlyService {
 
         establishData["grp"] = EstablishDataUtils.getGrp()
         establishData["dynamicWidget"] = "true"
-        establishData["sessionCid"] = establishData["sessionCid"]
-        establishData["cid"] = establishData["metadata.cid"]
+        establishData["sessionCid"] = sessionCid
+        establishData["metadata.cid"] = cid
         
         EstablishDataUtils.validateEstablishData(establishData: establishData)
 
