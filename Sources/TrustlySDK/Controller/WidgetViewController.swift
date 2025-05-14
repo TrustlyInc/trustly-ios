@@ -22,10 +22,21 @@ import UIKit
 
 public class WidgetViewController: UIViewController {
     
+    private var establishData: [AnyHashable : Any]?
     private var mainWebView:WKWebView!
     private var webViewManager: WebViewManager?
     
     public weak var delegate: TrustlySDKProtocol?
+    
+    public init(establishData: [AnyHashable : Any]){
+        super.init(nibName: nil, bundle: nil)
+        
+        self.establishData = establishData
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,6 +46,8 @@ public class WidgetViewController: UIViewController {
         self.webViewManager?.onChangeListener { (eventName, attributes) in
             self.delegate?.onChangeListener(eventName, attributes)
         }
+        
+        self.selectBankWidget()
     }
     
     func initWebView() {
@@ -75,17 +88,19 @@ public class WidgetViewController: UIViewController {
 
 extension WidgetViewController {
 
-    public func selectBankWidget(establishData: [AnyHashable : Any], onBankSelected: @escaping TrustlyViewCallback) {
+    private func selectBankWidget() {
         
         let service = TrustlyService()
         
         self.webViewManager?.establishData = establishData
         
-        if let urlRequest = service.selectBankWidget(establishData: establishData) {
+        if let establishData = establishData,
+           let urlRequest = service.selectBankWidget(establishData: establishData) {
             self.mainWebView.load(urlRequest)
         }
         
-        self.webViewManager?.bankSelectedHandler = onBankSelected
-
+        self.webViewManager?.bankSelectedHandler = { establishData in
+            self.delegate?.onBankSelected(data: establishData)
+        }
     }
 }

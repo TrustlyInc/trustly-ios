@@ -23,10 +23,21 @@ public class LightBoxViewController: UIViewController {
     
     public weak var delegate: TrustlySDKProtocol?
     
+    private var establishData: [AnyHashable: Any]?
     private var mainWebView:WKWebView!
     private var webViewManager: WebViewManager?
     private let loading = UIActivityIndicatorView()
+    
+    public init(establishData: [AnyHashable: Any]) {
+        super.init(nibName: nil, bundle: nil)
         
+        self.establishData = establishData
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -34,6 +45,10 @@ public class LightBoxViewController: UIViewController {
         
         self.webViewManager?.onChangeListener { (eventName, attributes) in
             self.delegate?.onChangeListener(eventName, attributes)
+        }
+        
+        if let establishData = self.establishData {
+            self.establish(establishData: establishData)
         }
     }
     
@@ -132,13 +147,14 @@ extension LightBoxViewController {
      @param onReturn: TrustlyViewCallback?
      @param onCancel: TrustlyViewCallback?
      */
-    public func establish(establishData eD: [AnyHashable : Any], onReturn: TrustlyViewCallback?, onCancel: TrustlyViewCallback?) {
+
+    private func establish(establishData eD: [AnyHashable : Any]) {
         
         self.startLoading()
 
         self.webViewManager?.establishData = eD
-        self.webViewManager?.returnHandler = onReturn
-        self.webViewManager?.cancelHandler = onCancel
+        self.webViewManager?.returnHandler = self.onReturn(_:)
+        self.webViewManager?.cancelHandler = self.onCancel(_:)
         
         let service = TrustlyService()
         service.delegate = self
@@ -148,8 +164,16 @@ extension LightBoxViewController {
             if integrationStrategy == Constants.lightboxContentWebview {
                 service.establishWebView(establishData: eD)
             } else {
-                service.establishASWebAuthentication(establishData: eD, onReturn: onReturn, onCancel: onCancel)
+                service.establishASWebAuthentication(establishData: eD, onReturn: self.onReturn(_:), onCancel: self.onCancel(_:))
             }
         })
+    }
+    
+    private func onReturn(_ returnParameters: [AnyHashable : Any]) -> Void{
+        self.delegate?.onReturn(returnParameters)
+    }
+    
+    private func onCancel(_ returnParameters: [AnyHashable : Any]) -> Void{
+        self.delegate?.onCancel(returnParameters)
     }
 }
