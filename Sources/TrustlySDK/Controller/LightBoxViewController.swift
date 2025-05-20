@@ -160,14 +160,7 @@ extension LightBoxViewController {
 
     private func establish(establishData eD: [AnyHashable : Any]) {
         
-        OSLog.debug(log: .lightboxVC, message: "Call establish with establishData: \(eD)")
-        
-        if !EstablishDataUtils.establisDataIsValid(establishData: eD) {
-            
-            OSLog.debug(log: .lightboxVC, message: "EstablishData is invalid because are missing one of this fileds: \(eD)")
-            
-            return
-        }
+        Logs.debug(log: Logs.lightboxVC, message: "Call establish with establishData: \(eD)")
         
         self.startLoading()
 
