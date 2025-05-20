@@ -54,7 +54,7 @@ public class WidgetViewController: UIViewController {
     
     func initWebView() {
         
-        OSLog.debug(log: .widgetVC, message: "Starting to build widget webview")
+        Logs.debug(log: Logs.widgetVC, message: "Starting to build widget webview")
 
         webViewManager = WebViewManager()
         
@@ -86,11 +86,11 @@ public class WidgetViewController: UIViewController {
             mainWebView.isInspectable = true
         }
 
-        OSLog.debug(log: .lightboxVC, message: "Adding widget webview into view")
+        Logs.debug(log: Logs.lightboxVC, message: "Adding widget webview into view")
         
         self.view.addSubview(mainWebView)
         
-        OSLog.debug(log: .lightboxVC, message: "Finishing to build widget webview")
+        Logs.debug(log: Logs.lightboxVC, message: "Finishing to build widget webview")
 
     }
 }
@@ -107,7 +107,7 @@ extension WidgetViewController {
         
         if let urlRequest = service.selectBankWidget(establishData: establishData) {
             
-            OSLog.info(log: .widgetVC, message: "Loading widget url: \(urlRequest)")
+            Logs.info(log: Logs.widgetVC, message: "Loading widget url: \(urlRequest)")
             
             self.mainWebView.load(urlRequest)
         }

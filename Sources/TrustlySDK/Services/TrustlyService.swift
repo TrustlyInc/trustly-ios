@@ -64,10 +64,10 @@ class TrustlyService {
             return request
             
         } catch NetworkError.invalidUrl {
-            OSLog.error(log: .trustlyService, message: "Error: Invalid url.")
+            Logs.error(log: Logs.trustlyService, message: "Error: Invalid url.")
             
         } catch {
-            OSLog.error(log: .trustlyService, message: "Unexpected error: \(error).")
+            Logs.error(log: Logs.trustlyService, message: "Unexpected error: \(error).")
 
         }
         
@@ -99,10 +99,10 @@ class TrustlyService {
             }
             
         } catch NetworkError.invalidUrl {
-            OSLog.error(log: .trustlyService, message: "Error: Invalid url.")
+            Logs.error(log: Logs.trustlyService, message: "Error: Invalid url.")
             
         } catch {
-            OSLog.error(log: .trustlyService, message: "Unexpected error: \(error).")
+            Logs.error(log: Logs.trustlyService, message: "Unexpected error: \(error).")
         }
     }
     
@@ -141,10 +141,10 @@ class TrustlyService {
             }
             
         } catch NetworkError.invalidUrl {
-            OSLog.error(log: .trustlyService, message: "Error: Invalid url.")
+            Logs.error(log: Logs.trustlyService, message: "Error: Invalid url.")
             
         } catch {
-            OSLog.error(log: .trustlyService, message: "Error: building url.")
+            Logs.error(log: Logs.trustlyService, message: "Error: building url.")
 
         }
 

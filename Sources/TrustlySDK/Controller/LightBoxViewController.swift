@@ -56,7 +56,7 @@ public class LightBoxViewController: UIViewController {
     
     func initWebView() {
         
-        OSLog.debug(log: .lightboxVC, message: "Starting to build lightbox webview")
+        Logs.debug(log: Logs.lightboxVC, message: "Starting to build lightbox webview")
 
         webViewManager = WebViewManager()
         
@@ -88,11 +88,11 @@ public class LightBoxViewController: UIViewController {
             mainWebView.isInspectable = true
         }
         
-        OSLog.debug(log: .lightboxVC, message: "Adding lightbox webview into view")
+        Logs.debug(log: Logs.lightboxVC, message: "Adding lightbox webview into view")
         
         self.view.addSubview(mainWebView)
         
-        OSLog.debug(log: .lightboxVC, message: "Finishing to build lightbox webview")
+        Logs.debug(log: Logs.lightboxVC, message: "Finishing to build lightbox webview")
     }
 }
 
@@ -136,7 +136,7 @@ extension LightBoxViewController: TrustlyServiceProtocol {
         
         DispatchQueue.main.async {
             if let data = data, let url = url {
-                OSLog.info(log: .lightboxVC, message: "Loading lightbox url: \(url)")
+                Logs.info(log: Logs.lightboxVC, message: "Loading lightbox url: \(url)")
                 
                 self.mainWebView.load(data, mimeType:"text/html", characterEncodingName:"UTF-8", baseURL: url)
             }
@@ -174,12 +174,12 @@ extension LightBoxViewController {
         service.chooseIntegrationStrategy(establishData: eD, completionHandler: { integrationStrategy -> Void in
 
             if integrationStrategy == Constants.lightboxContentWebview {
-                OSLog.info(log: .lightboxVC, message: "Calling lightbox in webview")
+                Logs.info(log: Logs.lightboxVC, message: "Calling lightbox in webview")
                 service.establishWebView(establishData: eD)
                 
             } else {
-                OSLog.info(log: .lightboxVC, message: "Calling lightbox in ASWebAuthentication")
-                service.establishASWebAuthentication(establishData: eD, onReturn: onReturn, onCancel: onCancel)
+                Logs.info(log: Logs.lightboxVC, message: "Calling lightbox in ASWebAuthentication")
+                service.establishASWebAuthentication(establishData: eD, onReturn: self.onReturn, onCancel: self.onCancel)
             }
         })
     }

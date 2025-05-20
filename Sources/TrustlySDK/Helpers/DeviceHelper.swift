@@ -15,7 +15,7 @@ class DeviceHelper {
             return uuid
             
         } else {
-            OSLog.info(log: .deviceHelper, message: "Unable to retrieve device ID.")
+            Logs.info(log: Logs.deviceHelper, message: "Unable to retrieve device ID.")
         }
 
         return nil
