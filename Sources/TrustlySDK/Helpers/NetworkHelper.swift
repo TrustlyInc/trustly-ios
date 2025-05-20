@@ -63,7 +63,7 @@ func buildEnvironment(resourceUrl:ResourceUrls, environment: String, localUrl: S
     }
     
     guard let url = URL(string: urlString) else {
-        OSLog.fault(log: .networkHelper, message: "Invalid url: \(urlString)")
+        Logs.fault(log: Logs.networkHelper, message: "Invalid url: \(urlString)")
         throw NetworkError.invalidUrl
     }
         

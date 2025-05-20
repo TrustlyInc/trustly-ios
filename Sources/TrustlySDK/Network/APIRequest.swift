@@ -30,14 +30,14 @@ struct APIRequest {
                 
                 // Check for errors
                 if let error = error {
-                    OSLog.error(log: .apiRequest, message: "Error: \(error)")
+                    Logs.error(log: Logs.apiRequest, message: "Error: \(error)")
 
                     return
                 }
                 
                 // Check if data is available
                 guard let responseData = data else {
-                    OSLog.info(log: .apiRequest, message: "No data received")
+                    Logs.info(log: Logs.apiRequest, message: "No data received")
                     
                     return
                 }
@@ -48,7 +48,7 @@ struct APIRequest {
                     completionHandler(settings)
                     
                 } catch {
-                    OSLog.error(log: .apiRequest, message: "Error parsing JSON: \(error)")
+                    Logs.error(log: Logs.apiRequest, message: "Error parsing JSON: \(error)")
                     
                     completionHandler(nil)
                 }

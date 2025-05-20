@@ -51,7 +51,7 @@ func getTrustlySettingsWith(establish: [AnyHashable : Any], completionHandler: @
             }
             
         } catch {
-            OSLog.error(log: .settingsManager, message: "SettingsManager Error: building url.")
+            Logs.error(log: Logs.settingsManager, message: "SettingsManager Error: building url.")
         }
     }
 }
