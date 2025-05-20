@@ -99,14 +99,7 @@ extension WidgetViewController {
 
     private func selectBankWidget() {
         
-        OSLog.debug(log: .widgetVC, message: "Call selectBankWidget with establishData: \(establishData)")
-        
-        if !EstablishDataUtils.establisDataIsValid(establishData: establishData) {
-            
-            OSLog.debug(log: .widgetVC, message: "EstablishData is invalid because are missing one of this fileds: \(establishData)")
-            
-            return
-        }
+        Logs.debug(log: Logs.widgetVC, message: "Call selectBankWidget with establishData: \(establishData)")
         
         let service = TrustlyService()
         

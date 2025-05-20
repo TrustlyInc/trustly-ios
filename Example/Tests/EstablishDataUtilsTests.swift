@@ -82,46 +82,4 @@ final class EstablishDataUtilsTests: XCTestCase {
         
         XCTAssertEqual(expectedUrlScheme, urlScheme)
     }
-    
-    func testEstablisDataIsValidSuccess() throws {
-        
-        let establishData = [
-                        "accessId": "798A789A7A8SD98",
-                        "merchantId" : "8748934238723",
-                        "currency" : "USD",
-                        "amount" : "1.00",
-                        "merchantReference" : "cac73df7-52b4-47d7-89d3-9628d4cfb65e",
-                        "paymentType" : "Retrieval",
-                        "returnUrl": "/returnUrl",
-                        "cancelUrl": "/cancelUrl",
-                        "requestSignature": "HT5mVOqBXa8ZlvgX2USmPeLns5o=",
-                        "customer.name": "John",
-                        "customer.address.country": "US",
-                        "metadata.urlScheme": "demoapp://",
-                        "description": "First Data Mobile Test",
-                        "env": "sandbox"]
-                
-        XCTAssertEqual(true, EstablishDataUtils.establisDataIsValid(establishData: establishData))
-    }
-    
-    func testEstablisDataIsValidFailureMissingAccessId() throws {
-        
-        let establishData = [
-                        "merchantId" : "6276276246",
-                        "currency" : "USD",
-                        "amount" : "1.00",
-                        "merchantReference" : "cac73df7-52b4-47d7-89d3-9628d4cfb65e",
-                        "paymentType" : "Retrieval",
-                        "returnUrl": "/returnUrl",
-                        "cancelUrl": "/cancelUrl",
-                        "requestSignature": "HT5mVOqBXa8ZlvgX2USmPeLns5o=",
-                        "customer.name": "John",
-                        "customer.address.country": "US",
-                        "metadata.urlScheme": "demoapp://",
-                        "description": "First Data Mobile Test",
-                        "env": "sandbox"]
-                
-        XCTAssertEqual(false, EstablishDataUtils.establisDataIsValid(establishData: establishData))
-    }
-
 }
