@@ -19,7 +19,7 @@ struct JSONUtils {
             return jsonData
             
         } catch {
-            OSLog.error(log: .jsonUtils, message: "Error when try to get json from data: \(error.localizedDescription)")
+            Logs.error(log: Logs.jsonUtils, message: "Error when try to get json from data: \(error.localizedDescription)")
         }
         
         return nil
@@ -54,11 +54,11 @@ struct JSONUtils {
                 return newDictionary
                 
             } else {
-                OSLog.error(log: .jsonUtils, message: "Not Base64")
+                Logs.error(log: Logs.jsonUtils, message: "Not Base64")
             }
             
         } catch {
-            OSLog.error(log: .jsonUtils, message: "Error when try to get dicitionary from json string base 64: \(error.localizedDescription)")
+            Logs.error(log: Logs.jsonUtils, message: "Error when try to get dicitionary from json string base 64: \(error.localizedDescription)")
         }
         
         return nil
