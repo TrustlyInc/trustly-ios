@@ -200,18 +200,6 @@ struct EstablishDataUtils {
         let grpInt:Int = Int(arc4random_uniform(100))
         grp = String(format:"%d", grpInt)
         return grp
-    static func establisDataIsValid(establishData: [AnyHashable : Any]) -> Bool {
-        var isValid = true
-        
-        Constants.requiredKeys.forEach {
-            if !establishData.keys.contains(AnyHashable($0)) {
-                isValid = false
-                
-                OSLog.debug(log: .establishDataUtils, message: "Missing field \"\($0)\" in establishData")
-            }
-        }
-        
-        return isValid
     }
     
     static func prepareEstablish(establishData eD: [AnyHashable : Any], cid:String, sessionCid: String) -> [AnyHashable : Any] {
