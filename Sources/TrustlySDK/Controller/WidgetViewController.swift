@@ -48,7 +48,10 @@ public class WidgetViewController: UIViewController {
             self.delegate?.onChangeListener(eventName, attributes)
         }
         
-        self.selectBankWidget()
+        if let establishData = establishData {
+            self.selectBankWidget(establishData: establishData)
+        }
+        
         AnalyticsHelper.sendMerchantDeviceInfo()
     }
     
@@ -97,15 +100,15 @@ public class WidgetViewController: UIViewController {
 
 extension WidgetViewController {
 
-    private func selectBankWidget() {
+    private func selectBankWidget(establishData eD: [AnyHashable : Any]) {
         
-        Logs.debug(log: Logs.widgetVC, message: "Call selectBankWidget with establishData: \(establishData)")
+        Logs.debug(log: Logs.widgetVC, message: "Call selectBankWidget with establishData: \(eD)")
         
         let service = TrustlyService()
         
-        self.webViewManager?.establishData = establishData
+        self.webViewManager?.establishData = eD
         
-        if let urlRequest = service.selectBankWidget(establishData: establishData) {
+        if let urlRequest = service.selectBankWidget(establishData: eD) {
             
             Logs.info(log: Logs.widgetVC, message: "Loading widget url: \(urlRequest)")
             
