@@ -26,15 +26,7 @@ struct Constants {
     
     static let portApi = "8000"
     static let portFrontend = "10000"
-    
-    // MARK: Establish validation
-    static let requiredKeys: Set<AnyHashable> = [AnyHashable("accessId"),
-                                                 AnyHashable("merchantId"),
-                                                 AnyHashable("merchantReference"),
-                                                 AnyHashable("returnUrl"),
-                                                 AnyHashable("cancelUrl"),
-                                                 AnyHashable("requestSignature"),
-                                                 AnyHashable("customer.address.country")]
+
     static let inAppIntegrationContext = "InAppBrowser"
     static let messageWebviewHandler = "PayWithMyBankNativeSDK"
     
@@ -67,6 +59,12 @@ struct Constants {
     
     
     // MARK: Establish validation
-    static let requiredKeys: Set<AnyHashable> = [AnyHashable("accessId")]
+    static let requiredKeys: Set<AnyHashable> = [AnyHashable("accessId"),
+                                                 AnyHashable("merchantId"),
+                                                 AnyHashable("merchantReference"),
+                                                 AnyHashable("returnUrl"),
+                                                 AnyHashable("cancelUrl"),
+                                                 AnyHashable("requestSignature"),
+                                                 AnyHashable("customer.address.country")]
 
 }
