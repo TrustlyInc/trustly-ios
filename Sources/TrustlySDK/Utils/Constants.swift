@@ -26,7 +26,7 @@ struct Constants {
     
     static let portApi = "8000"
     static let portFrontend = "10000"
-    
+
     static let inAppIntegrationContext = "InAppBrowser"
     static let messageWebviewHandler = "PayWithMyBankNativeSDK"
     
@@ -35,6 +35,8 @@ struct Constants {
     
     static let undefinedURI = "/undefined"
     
+    static let establishDataDocsLink = "https://amer.developers.trustly.com/payments/docs/establish-data#base-properties"
+
     static let trustlyCloseWebview = "trustly.close.webView"
     
     static let widgetView:Int = 100
@@ -57,6 +59,12 @@ struct Constants {
     
     
     // MARK: Establish validation
-    static let requiredKeys: Set<AnyHashable> = [AnyHashable("accessId")]
+    static let requiredKeys: Set<AnyHashable> = [AnyHashable("accessId"),
+                                                 AnyHashable("merchantId"),
+                                                 AnyHashable("merchantReference"),
+                                                 AnyHashable("returnUrl"),
+                                                 AnyHashable("cancelUrl"),
+                                                 AnyHashable("requestSignature"),
+                                                 AnyHashable("customer.address.country")]
 
 }
