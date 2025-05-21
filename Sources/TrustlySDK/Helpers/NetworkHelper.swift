@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os
 
 enum NetworkError: Error {
     case invalidUrl
@@ -62,7 +63,7 @@ func buildEnvironment(resourceUrl:ResourceUrls, environment: String, localUrl: S
     }
     
     guard let url = URL(string: urlString) else {
-        print("Invalid url: \(urlString)")
+        Logs.fault(log: Logs.networkHelper, message: "Invalid url: \(urlString)")
         throw NetworkError.invalidUrl
     }
         

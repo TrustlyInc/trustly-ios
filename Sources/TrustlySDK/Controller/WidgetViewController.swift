@@ -16,6 +16,7 @@
 */
 
 import Foundation
+import os
 import UIKit
 @preconcurrency import WebKit
 
@@ -47,10 +48,16 @@ public class WidgetViewController: UIViewController {
             self.delegate?.onChangeListener(eventName, attributes)
         }
         
-        self.selectBankWidget()
+        if let establishData = establishData {
+            self.selectBankWidget(establishData: establishData)
+        }
+        
+        AnalyticsHelper.sendMerchantDeviceInfo()
     }
     
     func initWebView() {
+        
+        Logs.debug(log: Logs.widgetVC, message: "Starting to build widget webview")
 
         webViewManager = WebViewManager()
         
@@ -82,20 +89,29 @@ public class WidgetViewController: UIViewController {
             mainWebView.isInspectable = true
         }
 
+        Logs.debug(log: Logs.lightboxVC, message: "Adding widget webview into view")
+        
         self.view.addSubview(mainWebView)
+        
+        Logs.debug(log: Logs.lightboxVC, message: "Finishing to build widget webview")
+
     }
 }
 
 extension WidgetViewController {
 
-    private func selectBankWidget() {
+    private func selectBankWidget(establishData eD: [AnyHashable : Any]) {
+        
+        Logs.debug(log: Logs.widgetVC, message: "Call selectBankWidget with establishData: \(eD)")
         
         let service = TrustlyService()
         
-        self.webViewManager?.establishData = establishData
+        self.webViewManager?.establishData = eD
         
-        if let establishData = establishData,
-           let urlRequest = service.selectBankWidget(establishData: establishData) {
+        if let urlRequest = service.selectBankWidget(establishData: eD) {
+            
+            Logs.info(log: Logs.widgetVC, message: "Loading widget url: \(urlRequest)")
+            
             self.mainWebView.load(urlRequest)
         }
         

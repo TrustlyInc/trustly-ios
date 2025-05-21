@@ -82,5 +82,4 @@ final class EstablishDataUtilsTests: XCTestCase {
         
         XCTAssertEqual(expectedUrlScheme, urlScheme)
     }
-
 }
