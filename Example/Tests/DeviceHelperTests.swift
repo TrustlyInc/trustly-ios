@@ -27,7 +27,7 @@ final class DeviceHelperTests: XCTestCase {
     }
 
     func testSystemVersion() throws {
-        XCTAssertEqual("18.0", DeviceHelper.systemVersion())
+        XCTAssertEqual(UIDevice.current.systemVersion, DeviceHelper.systemVersion())
     }
 
     func testMerchantAppVersion() throws {
