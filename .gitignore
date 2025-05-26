@@ -44,3 +44,6 @@ sonar-reports/*
 compile_commands.json
 Coverage.xml
 *.log
+
+# Fastlane
+test_output/
