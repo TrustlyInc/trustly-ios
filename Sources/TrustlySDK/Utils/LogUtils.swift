@@ -45,16 +45,12 @@ struct Logs {
     
     //Debug-level logs are intended for use in a development environment while actively debugging. This level will not show in device's logs.
     static func debug(log: OSLog, message: String) {
-        #if DEBUG
-            printLog(log: log, type:.debug, message: message)
-        #endif
+        printLog(log: log, type:.debug, message: message)
     }
 
     //Use this log to capture information that may be helpful, but isn’t essential, for troubleshooting. This level will not show in device's logs.
     static func info(log: OSLog, message: String) {
-        #if DEBUG
-            printLog(log: log, type:.info, message: message)
-        #endif
+        printLog(log: log, type:.info, message: message)
     }
     
     //Error-level logs are intended for reporting critical errors and failures. This level will show in device's logs.
@@ -68,6 +64,8 @@ struct Logs {
     }
     
     private static func printLog(log: OSLog, type: OSLogType, message: String) {
-        os_log("%@", log: log, type: type, message)
+        #if DEBUG
+            os_log("%@", log: log, type: type, message)
+        #endif
     }
 }
