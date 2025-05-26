@@ -16,6 +16,7 @@
 */
 
 import Foundation
+import os
 import UIKit
 @preconcurrency import WebKit
 
@@ -50,9 +51,12 @@ public class LightBoxViewController: UIViewController {
         if let establishData = self.establishData {
             self.establish(establishData: establishData)
         }
+        AnalyticsHelper.sendMerchantDeviceInfo()
     }
     
     func initWebView() {
+        
+        Logs.debug(log: Logs.lightboxVC, message: "Starting to build lightbox webview")
 
         webViewManager = WebViewManager()
         
@@ -83,8 +87,12 @@ public class LightBoxViewController: UIViewController {
         if #available(iOS 16.4, *) {
             mainWebView.isInspectable = true
         }
-
+        
+        Logs.debug(log: Logs.lightboxVC, message: "Adding lightbox webview into view")
+        
         self.view.addSubview(mainWebView)
+        
+        Logs.debug(log: Logs.lightboxVC, message: "Finishing to build lightbox webview")
     }
 }
 
@@ -128,6 +136,8 @@ extension LightBoxViewController: TrustlyServiceProtocol {
         
         DispatchQueue.main.async {
             if let data = data, let url = url {
+                Logs.info(log: Logs.lightboxVC, message: "Loading lightbox url: \(url)")
+                
                 self.mainWebView.load(data, mimeType:"text/html", characterEncodingName:"UTF-8", baseURL: url)
             }
             self.stopLoading()
@@ -150,6 +160,8 @@ extension LightBoxViewController {
 
     private func establish(establishData eD: [AnyHashable : Any]) {
         
+        Logs.debug(log: Logs.lightboxVC, message: "Call establish with establishData: \(eD)")
+        
         self.startLoading()
 
         self.webViewManager?.establishData = eD
@@ -162,9 +174,12 @@ extension LightBoxViewController {
         service.chooseIntegrationStrategy(establishData: eD, completionHandler: { integrationStrategy -> Void in
 
             if integrationStrategy == Constants.lightboxContentWebview {
+                Logs.info(log: Logs.lightboxVC, message: "Calling lightbox in webview")
                 service.establishWebView(establishData: eD)
+                
             } else {
-                service.establishASWebAuthentication(establishData: eD, onReturn: self.onReturn(_:), onCancel: self.onCancel(_:))
+                Logs.info(log: Logs.lightboxVC, message: "Calling lightbox in ASWebAuthentication")
+                service.establishASWebAuthentication(establishData: eD, onReturn: self.onReturn, onCancel: self.onCancel)
             }
         })
     }

@@ -26,15 +26,7 @@ struct Constants {
     
     static let portApi = "8000"
     static let portFrontend = "10000"
-    
-    // MARK: Establish validation
-    static let requiredKeys: Set<AnyHashable> = [AnyHashable("accessId"),
-                                                 AnyHashable("merchantId"),
-                                                 AnyHashable("merchantReference"),
-                                                 AnyHashable("returnUrl"),
-                                                 AnyHashable("cancelUrl"),
-                                                 AnyHashable("requestSignature"),
-                                                 AnyHashable("customer.address.country")]
+
     static let inAppIntegrationContext = "InAppBrowser"
     static let messageWebviewHandler = "PayWithMyBankNativeSDK"
     
@@ -53,4 +45,26 @@ struct Constants {
     
     static let baseUrls = ["paywithmybank.com", "trustly.one"]
     
+    // MARK: OsLog
+    static let categoryLogWidgetVC = "widgetViewController"
+    static let categoryLogLightboxVC = "lightboxViewController"
+    static let categoryWebViewManager = "webViewManager"
+    static let categoryDeviceHelper = "deviceHelper"
+    static let categoryNetworkHelper = "networkHelper"
+    static let categoryApiRequest = "apiRequest"
+    static let categoryTrustlyService = "trustlyService"
+    static let categorySettingsManager = "settingsManager"
+    static let categoryJsonUtils = "jsonUtils"
+    static let categoryEstablishDataUtils = "establishDataUtils"
+    
+    
+    // MARK: Establish validation
+    static let requiredKeys: Set<AnyHashable> = [AnyHashable("accessId"),
+                                                 AnyHashable("merchantId"),
+                                                 AnyHashable("merchantReference"),
+                                                 AnyHashable("returnUrl"),
+                                                 AnyHashable("cancelUrl"),
+                                                 AnyHashable("requestSignature"),
+                                                 AnyHashable("customer.address.country")]
+
 }
