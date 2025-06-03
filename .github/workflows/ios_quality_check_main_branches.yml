@@ -34,6 +34,7 @@ jobs:
           sudo gem install -n /usr/local/bin xcpretty
           brew install lizard
           gem install cocoapods
+          brew install fastlane
           pod install --project-directory=Example
           brew install sonar-scanner
 
@@ -56,3 +57,7 @@ jobs:
           else
             echo "Coverage report not found!" && exit 1
           fi
+      - name: Publish new SDK version
+        run: |
+          bundle exec fastlane publish
+          pod trunk push ./TrustlySDK.podspec
