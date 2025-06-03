@@ -1,0 +1,50 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+TAG_VERSION = ENV["TAG_VERSION"] # Git tag version
+
+platform :ios do
+  lane :publish do
+    lint
+    build_and_run_tests
+    add_git_tag(
+      tag: TAG_VERSION
+    )
+    push_git_tags(
+      tag: TAG_VERSION
+    )
+  end
+
+  # Unit tests
+  desc "Build the application and run tests"
+  lane :build_and_run_tests do
+    scan(
+      workspace: "./Example/TrustlySDK.xcworkspace",
+      scheme: 'TrustlySDK-Example',
+      devices: ["iPhone 16"],
+      clean: true
+    )
+  end
+
+  desc "Apply swift linting"
+  lane :lint do
+    swiftlint(
+      output_file: "sonar-reports/TrustlySDK-Example-swiftlint.txt",
+      ignore_exit_status: true
+    )
+  end
+end
