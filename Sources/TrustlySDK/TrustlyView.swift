@@ -133,39 +133,25 @@ public class TrustlyView : UIView, TrustlyProtocol, WKNavigationDelegate, WKScri
 
     //TrustlySDK Protocol
     public func selectBankWidget(establishData eD:[AnyHashable : Any], onBankSelected: TrustlyCallback?) -> UIView? {
-        establishData = eD
         
-        self.addSessionCid()
+        prepareEstablish(establishData: eD)
         
         EstablishDataUtils.validateEstablishData(establishData: self.establishData ?? [:])
-                
-        if establishData?["deviceType"] == nil || establishData?["deviceType"] as! String == "" {
-            establishData?["deviceType"] = "\(Constants.DEVICE_TYPE):\(Constants.DEVICE_PLATFORM)"
-        }
-        
-        if let lang = establishData?["metadata.lang"] as? String {
-            establishData?["lang"] = establishData?["lang"]
-        }
-        
-        establishData?["sessionCid"] = sessionCid
-        establishData?["cid"] = cid
-        establishData?["grp"] = self.getGrp()
-        establishData?["dynamicWidget"] = "true"
         
         bankSelectedHandler = onBankSelected
 
         do {
             let environment = try buildEnvironment(
                 resourceUrl: .widget,
-                environment: (eD["env"] ?? "") as! String,
-                localUrl: (eD["envHost"] ?? "") as! String,
-                paymentType: (eD["paymentType"] ?? "") as! String,
+                environment: (self.establishData?["env"] ?? "") as! String,
+                localUrl: (self.establishData?["envHost"] ?? "") as! String,
+                paymentType: (self.establishData?["paymentType"] ?? "") as! String,
                 build: Constants.buildSDK,
-                query: establishData!
+                query: self.establishData!
             )
             
             isLocalEnvironment = environment.isLocal
-            print(environment.url)
+
             var request = URLRequest(url: environment.url)
             request.httpMethod = "GET"
             request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
@@ -727,6 +713,8 @@ extension TrustlyView {
         establishData?["cancelUrl"] = cancelUrl
         establishData?["version"] = Constants.ESTABLISH_VERSION
         establishData?["grp"] = self.getGrp()
+        establishData?["dynamicWidget"] = "true"
+        establishData?["storage"] = Constants.STORAGE_SUPPORTED
 
         if establishData?["paymentProviderId"] != nil {
             establishData?["widgetLoaded"] = "true"
