@@ -595,6 +595,8 @@ extension TrustlyView {
                     )
                     
                     self.isLocalEnvironment = environment.isLocal
+                    
+                    self.prepareEstablish(establishData: establish)
                                         
                     getTrustlySettingsWith(establish: establish) { trustlySettings in
                         
