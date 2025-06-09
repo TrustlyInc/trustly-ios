@@ -31,7 +31,6 @@ class TrustlyLightBoxViewController: UIViewController {
         if let establishData = self.establishData {
             self.view = trustlyLightboxPanel.establish(establishData: establishData,
                                                        onReturn: {(payWithMyBank, returnParameters)->Void in
-                print("Teste transactionId: \(returnParameters["transactionId"] as! String)")
                 
                 if let delegate = self.delegate {
                     delegate.onReturnWithTransactionId(transactionId: returnParameters["transactionId"] as! String, controller: self)
