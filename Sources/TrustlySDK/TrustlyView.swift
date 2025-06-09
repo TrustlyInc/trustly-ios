@@ -576,124 +576,106 @@ extension TrustlyView {
      */
     public func establish(establishData eD: [AnyHashable : Any], onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) -> UIView? {
         
+        let establish = eD
+        
         self.startLoading()
         
-        self.prepareEstablish(establishData: eD)
-        
-        EstablishDataUtils.validateEstablishData(establishData: self.establishData ?? [:])
+        EstablishDataUtils.validateEstablishData(establishData: establish)
         
         DispatchQueue.global(qos: .background).async{
             
-            if let establish = self.establishData {
-                
-                getTrustlySettingsWith(establish: establish) { trustlySettings in
-
-                    if let settings = trustlySettings?.settings
-                        , settings.integrationStrategy == Constants.LIGHTBOX_CONTEXT_INAPP {
+                do {
+                    
+                    let environment = try buildEnvironment(
+                        resourceUrl: .index,
+                        environment: (establish["env"] ?? "") as! String,
+                        localUrl: (establish["envHost"] ?? "") as! String,
+                        paymentType: (establish["paymentType"] ?? "") as! String,
+                        build: Constants.buildSDK
+                    )
+                    
+                    self.isLocalEnvironment = environment.isLocal
+                                        
+                    getTrustlySettingsWith(establish: establish) { trustlySettings in
                         
-                        DispatchQueue.main.async {
-                            // Update the UI on the main thread
-                            self.establishASWebAuthentication(onReturn: onReturn, onCancel: onCancel)
+                        guard let settings = trustlySettings?.settings else { return }
+                        
+                        self.prepareEstablish(establishData: establish, inAppBrowser: settings.isInAppBrowserEnabled())
+                        
+                        loadLightbox(establish: self.establishData!, url: environment.url) { (data, response, error) in
+                            
+                            if error == nil, let url = response?.url, let data = data {
+                                DispatchQueue.main.async {
+                                    if settings.isInAppBrowserEnabled() {
+                                        self.establishASWebAuthentication(url: url, onReturn: onReturn, onCancel: onCancel)
+                                    
+                                    } else {
+                                        self.establishWebView(data: data, url: url, onReturn: onReturn, onCancel: onCancel)
+                                        
+                                    }
+                                }
+                                
+                            } else {
+                                self.cancelHandler!(self, [:])
+                                
+                            }
                         }
-                        
-                    } else {
-                        self.establishWebView(onReturn: onReturn, onCancel: onCancel)
                     }
+                    
+                } catch NetworkError.invalidUrl {
+                    print("Error: Invalid url.")
+                    
+                } catch {
+                    print("Error: building url.")
                 }
+                
+                
+                
+                
+                
+                
+                
+                
+//                getTrustlySettingsWith(establish: establish) { trustlySettings in
+//
+//                    if true{//let settings = trustlySettings?.settings
+//                        //, settings.integrationStrategy == Constants.LIGHTBOX_CONTEXT_INAPP {
+//                        
+//                        DispatchQueue.main.async {
+//                            // Update the UI on the main thread
+//                            self.establishASWebAuthentication(onReturn: onReturn, onCancel: onCancel)
+//                        }
+//                        
+//                    } else {
+//                        self.establishWebView(onReturn: onReturn, onCancel: onCancel)
+//                    }
+//                }
             }
-        }
+//        }
 
         return self
     }
 
-    private func establishWebView(onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) {
-        
-        if establishData?.index(forKey: "metadata.integrationContext") == nil {
-            establishData?["metadata.integrationContext"] = inAppIntegrationContext
-        }
+    private func establishWebView(data: Data, url: URL, onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) {
         
         returnHandler = onReturn
         cancelHandler = onCancel
         externalUrlHandler = nil
-        
-        do {
-            let environment = try buildEnvironment(
-                resourceUrl: .index,
-                environment: (establishData?["env"] ?? "") as! String,
-                localUrl: (establishData?["envHost"] ?? "") as! String,
-                paymentType: (establishData?["paymentType"] ?? "") as! String,
-                build: Constants.buildSDK
-            )
-            
-            isLocalEnvironment = environment.isLocal
-            
-            if let establish = establishData {
-                
-                loadLightbox(establish: establish, url: environment.url) { (data, response, error) in
-                    DispatchQueue.main.async{
-                        if(error == nil){
-                            self.mainWebView?.load(data!, mimeType:"text/html", characterEncodingName:"UTF-8", baseURL: (response?.url)!)
-                            self.stopLoading()
-                            
-                        } else {
-                            self.cancelHandler!(self, [:])
-                            
-                        }
-                    }
-                }
-            }
-            
-        } catch NetworkError.invalidUrl {
-            print("Error: Invalid url.")
-            
-        } catch {
-            print("Unexpected error: \(error).")
-        }
+
+        self.mainWebView?.load(data, mimeType:"text/html", characterEncodingName:"UTF-8", baseURL: url)
+        self.stopLoading()
+
     }
     
-    private func establishASWebAuthentication(onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) {
-         
-         if let scheme = establishData?["metadata.urlScheme"] as? String {
-             self.urlScheme = scheme.components(separatedBy: ":")[0]
-             establishData?["returnUrl"] = scheme
-             establishData?["cancelUrl"] = scheme
-         }
+    private func establishASWebAuthentication(url: URL, onReturn: TrustlyCallback?, onCancel: TrustlyCallback?) {
+
+        self.buildASWebAuthenticationSession(url: url, callbackURL: self.urlScheme, onReturn: onReturn, onCancel: onCancel)
         
-        do {
-            let environment = try buildEnvironment(
-                resourceUrl: .establish,
-                environment: (establishData?["env"] ?? "") as! String,
-                localUrl: (establishData?["envHost"] ?? "") as! String,
-                paymentType: (establishData?["paymentType"] ?? "") as! String,
-                build: Constants.buildSDK,
-                path: .mobile
-            )
-            
-            isLocalEnvironment = environment.isLocal
-            
-            var url = environment.url.absoluteString
-            
-            let normalizedEstablish:[String : AnyHashable] = EstablishDataUtils.normalizeEstablishWithDotNotation(establish: establishData as! [String : AnyHashable])
-            
-            if let token = JSONUtils.getJsonBase64From(dictionary: normalizedEstablish) {
-
-                url = "\(url)?token=\(token)"
-
-                self.buildASWebAuthenticationSession(url: URL(string: url)!, callbackURL: urlScheme, onReturn: onReturn, onCancel: onCancel)
-                
-                self.stopLoading()
-            }
-            
-        } catch NetworkError.invalidUrl {
-            print("Error: Invalid url.")
-            
-        } catch {
-            print("Error: building url.")
-        }
-
+        self.stopLoading()
+        
      }
     
-    private func prepareEstablish(establishData eD: [AnyHashable : Any]) {
+    private func prepareEstablish(establishData eD: [AnyHashable : Any], inAppBrowser: Bool = false) {
         establishData = eD
         
         self.addSessionCid()
@@ -722,8 +704,17 @@ extension TrustlyView {
         
         if let scheme = establishData?["metadata.urlScheme"] as? String {
             self.urlScheme = scheme.components(separatedBy: ":")[0]
+
+            if inAppBrowser {
+                self.establishData?["returnUrl"] = scheme
+                self.establishData?["cancelUrl"] = scheme
+                
+            } else {
+                if establishData?.index(forKey: "metadata.integrationContext") == nil {
+                    establishData?["metadata.integrationContext"] = inAppIntegrationContext
+                }
+            }
         }
-        
     }
 }
 
