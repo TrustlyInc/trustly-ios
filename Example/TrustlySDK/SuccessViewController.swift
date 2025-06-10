@@ -22,7 +22,7 @@ class SuccessViewController: UIViewController {
     
     @IBAction func newTransaction(_ sender: Any){
         self.view.window?.rootViewController = UIStoryboard(name: "Main", bundle: nil)
-            .instantiateViewController(withIdentifier: "MerchantViewController")
+            .instantiateViewController(withIdentifier: "InitialViewController")
     }
 
 }
