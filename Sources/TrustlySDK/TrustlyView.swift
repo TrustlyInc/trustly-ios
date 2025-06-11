@@ -630,30 +630,8 @@ extension TrustlyView {
                 } catch {
                     print("Error: building url.")
                 }
-                
-                
-                
-                
-                
-                
-                
-                
-//                getTrustlySettingsWith(establish: establish) { trustlySettings in
-//
-//                    if true{//let settings = trustlySettings?.settings
-//                        //, settings.integrationStrategy == Constants.LIGHTBOX_CONTEXT_INAPP {
-//                        
-//                        DispatchQueue.main.async {
-//                            // Update the UI on the main thread
-//                            self.establishASWebAuthentication(onReturn: onReturn, onCancel: onCancel)
-//                        }
-//                        
-//                    } else {
-//                        self.establishWebView(onReturn: onReturn, onCancel: onCancel)
-//                    }
-//                }
+
             }
-//        }
 
         return self
     }
