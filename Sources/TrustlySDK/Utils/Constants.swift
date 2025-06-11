@@ -18,6 +18,7 @@ struct Constants {
     static let DEVICE_TYPE = "mobile"
     static let DEVICE_PLATFORM = "ios:native"
     static let PAYMENTTYPE_VERIFICATION = "Verification"
+    static let STORAGE_SUPPORTED = "supported"
     
     static let LIGHTBOX_CONTEXT_INAPP = "in-app-browser"
     static let LIGHTBOX_CONTEXT_WEBVIEW = "webview"

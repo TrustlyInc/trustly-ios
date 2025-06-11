@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="c6z-kY-n46">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -11,7 +11,7 @@
         <!--View Controller-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
-                <viewController storyboardIdentifier="MainViewController" id="vXZ-lx-hvc" customClass="ViewController" customModule="TrustlySDK_Example" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="vXZ-lx-hvc" customClass="ViewController" customModule="TrustlySDK_Example" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
@@ -61,6 +61,7 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <navigationItem key="navigationItem" id="dXJ-PU-PQT"/>
                     <connections>
                         <outlet property="amountTextView" destination="Iqf-hK-a3I" id="g7Q-KP-B1p"/>
                         <outlet property="trustlyView" destination="guD-xS-eey" id="YxX-cB-xV5"/>
@@ -68,7 +69,105 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="139.69465648854961" y="0.0"/>
+            <point key="canvasLocation" x="-364" y="-332"/>
+        </scene>
+        <!--Trustly Light Box View Controller-->
+        <scene sceneID="0wb-v0-9jB">
+            <objects>
+                <viewController id="2WQ-CO-9GU" customClass="TrustlyLightBoxViewController" customModule="TrustlySDK_Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="2t0-FR-4PO"/>
+                        <viewControllerLayoutGuide type="bottom" id="hnF-A1-esg"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="sUb-hs-cpb">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="LDO-08-VOI"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rmo-Y2-vuo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-364" y="450"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="JYb-Y8-JWl">
+            <objects>
+                <navigationController storyboardIdentifier="MainViewController" id="c6z-kY-n46" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="7Pb-Qk-wrl">
+                        <rect key="frame" x="0.0" y="118" width="393" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="J1N-7g-tqz" kind="relationship" relationship="rootViewController" id="IqV-et-RmR"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vb1-vH-ahN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2370" y="0.0"/>
+        </scene>
+        <!--Initial View Controller-->
+        <scene sceneID="AUg-YC-cRv">
+            <objects>
+                <viewController id="J1N-7g-tqz" customClass="InitialViewController" customModule="TrustlySDK_Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="iZo-7d-aZY"/>
+                        <viewControllerLayoutGuide type="bottom" id="0ex-JN-KtI"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="6Sv-E1-P13">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose the experience to test:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TEl-Xd-GEY">
+                                <rect key="frame" x="16" y="170" width="327" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="hsf-JX-iLw"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q6D-QS-UfM">
+                                <rect key="frame" x="43" y="264" width="307" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="jgl-AH-2lI"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="gray" title="Widget + Lightbox"/>
+                                <connections>
+                                    <segue destination="vXZ-lx-hvc" kind="show" identifier="widget" id="jt3-vJ-LZd"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ejv-L4-pGC">
+                                <rect key="frame" x="43" y="365" width="307" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="dKw-8L-CE3"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="gray" title="Lightbox"/>
+                                <connections>
+                                    <segue destination="2WQ-CO-9GU" kind="show" identifier="lightbox" id="b9w-J8-ztc"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="TEl-Xd-GEY" firstAttribute="leading" secondItem="6Sv-E1-P13" secondAttribute="leadingMargin" id="EZo-So-qLu"/>
+                            <constraint firstItem="q6D-QS-UfM" firstAttribute="leading" secondItem="6Sv-E1-P13" secondAttribute="leadingMargin" constant="27" id="QKg-fE-Kyc"/>
+                            <constraint firstItem="ejv-L4-pGC" firstAttribute="leading" secondItem="6Sv-E1-P13" secondAttribute="leadingMargin" constant="27" id="QP3-cY-Oe6"/>
+                            <constraint firstItem="ejv-L4-pGC" firstAttribute="top" secondItem="q6D-QS-UfM" secondAttribute="bottom" constant="66" id="Qpi-SF-ewz"/>
+                            <constraint firstItem="q6D-QS-UfM" firstAttribute="top" secondItem="TEl-Xd-GEY" secondAttribute="bottom" constant="64" id="T9k-HD-RlS"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="ejv-L4-pGC" secondAttribute="trailing" constant="27" id="by9-jq-xvU"/>
+                            <constraint firstItem="q6D-QS-UfM" firstAttribute="centerX" secondItem="6Sv-E1-P13" secondAttribute="centerX" id="dEt-R2-IWe"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="q6D-QS-UfM" secondAttribute="trailing" constant="27" id="kCS-nR-V8E"/>
+                            <constraint firstItem="TEl-Xd-GEY" firstAttribute="top" secondItem="iZo-7d-aZY" secondAttribute="bottom" constant="8" symbolic="YES" id="kbS-bt-NS3"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="igl-ht-gAX"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0le-I7-b3K" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1347.3282442748091" y="0.0"/>
         </scene>
     </scenes>
     <resources>

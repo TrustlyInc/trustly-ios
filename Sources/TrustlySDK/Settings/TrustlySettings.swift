@@ -30,4 +30,8 @@ struct TrustlySettings: Codable, Hashable {
 
 struct Settings: Codable, Hashable {
     let integrationStrategy: String
+    
+    func isInAppBrowserEnabled() -> Bool {
+        return self.integrationStrategy == Constants.LIGHTBOX_CONTEXT_INAPP
+    }
 }
