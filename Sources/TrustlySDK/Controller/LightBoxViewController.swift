@@ -128,9 +128,12 @@ extension LightBoxViewController {
 extension LightBoxViewController: TrustlyServiceProtocol {
     
     func showLightboxOAuth(url: URL, urlScheme: String) {
-        self.webViewManager?.openOAuth(url: url, urlScheme: urlScheme)
+        Logs.info(log: Logs.lightboxVC, message: "Loading lightbox OAuth url: \(url)")
+        
+        DispatchQueue.main.async {
+            self.webViewManager?.openOAuth(url: url, urlScheme: urlScheme)
+        }
     }
-    
     
     func showLightbox(data: Data?, url: URL?) {
         
@@ -171,16 +174,8 @@ extension LightBoxViewController {
         let service = TrustlyService()
         service.delegate = self
 
-        service.chooseIntegrationStrategy(establishData: eD, completionHandler: { integrationStrategy -> Void in
-
-            if integrationStrategy == Constants.lightboxContentWebview {
-                Logs.info(log: Logs.lightboxVC, message: "Calling lightbox in webview")
-                service.establishWebView(establishData: eD)
-                
-            } else {
-                Logs.info(log: Logs.lightboxVC, message: "Calling lightbox in ASWebAuthentication")
-                service.establishASWebAuthentication(establishData: eD, onReturn: self.onReturn, onCancel: self.onCancel)
-            }
+        service.chooseIntegrationStrategy(establishData: eD, completionHandler: { settings -> Void in
+            service.establish(establishData: eD, isInAppbrowser: settings?.isInAppBrowserEnabled() ?? false)
         })
     }
     
