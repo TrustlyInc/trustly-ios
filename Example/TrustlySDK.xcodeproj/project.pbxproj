@@ -8,8 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		152541E62B7E74B20029F149 /* EstablishDataUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152541E52B7E74B20029F149 /* EstablishDataUtilsTests.swift */; };
+		15268E012DF8A2BA00EC94E0 /* InitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15268E002DF8A2BA00EC94E0 /* InitialViewController.swift */; };
+		15268E022DF8A2BA00EC94E0 /* InitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15268E002DF8A2BA00EC94E0 /* InitialViewController.swift */; };
+		15268E042DF8A34200EC94E0 /* MerchantLightBoxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15268E032DF8A34200EC94E0 /* MerchantLightBoxViewController.swift */; };
+		15268E052DF8A34200EC94E0 /* MerchantLightBoxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15268E032DF8A34200EC94E0 /* MerchantLightBoxViewController.swift */; };
+		15268E062DF8A5B900EC94E0 /* MerchantWidgetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159A116A2D495F11009609D6 /* MerchantWidgetViewController.swift */; };
+		15268E072DF8A5C000EC94E0 /* SuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C29FB72C6165570037C239 /* SuccessViewController.swift */; };
+		15268E092DF8ACFE00EC94E0 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15268E082DF8ACFE00EC94E0 /* BaseViewController.swift */; };
+		15268E0A2DF8ACFE00EC94E0 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15268E082DF8ACFE00EC94E0 /* BaseViewController.swift */; };
 		1587AB912A2FE043006F6FC3 /* SessionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1587AB902A2FE043006F6FC3 /* SessionManagerTests.swift */; };
-		159A116B2D495F11009609D6 /* MerchantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159A116A2D495F11009609D6 /* MerchantViewController.swift */; };
+		159A116B2D495F11009609D6 /* MerchantWidgetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159A116A2D495F11009609D6 /* MerchantWidgetViewController.swift */; };
 		15BB98602B68120100A9210B /* URLUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15BB985F2B68120100A9210B /* URLUtilsTests.swift */; };
 		15BEC9B42C383FB900050FB9 /* ValidationHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15BEC9B32C383FB900050FB9 /* ValidationHelperTests.swift */; };
 		15C29FB62C6165480037C239 /* SuccessViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15C29FB52C6165480037C239 /* SuccessViewController.xib */; };
@@ -38,8 +46,11 @@
 /* Begin PBXFileReference section */
 		14209D0774438AF2DC6E58C0 /* Pods_TrustlySDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TrustlySDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		152541E52B7E74B20029F149 /* EstablishDataUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EstablishDataUtilsTests.swift; sourceTree = "<group>"; };
+		15268E002DF8A2BA00EC94E0 /* InitialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialViewController.swift; sourceTree = "<group>"; };
+		15268E032DF8A34200EC94E0 /* MerchantLightBoxViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerchantLightBoxViewController.swift; sourceTree = "<group>"; };
+		15268E082DF8ACFE00EC94E0 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		1587AB902A2FE043006F6FC3 /* SessionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManagerTests.swift; sourceTree = "<group>"; };
-		159A116A2D495F11009609D6 /* MerchantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerchantViewController.swift; sourceTree = "<group>"; };
+		159A116A2D495F11009609D6 /* MerchantWidgetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerchantWidgetViewController.swift; sourceTree = "<group>"; };
 		15BB985F2B68120100A9210B /* URLUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLUtilsTests.swift; sourceTree = "<group>"; };
 		15BEC9B32C383FB900050FB9 /* ValidationHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationHelperTests.swift; sourceTree = "<group>"; };
 		15C29FB52C6165480037C239 /* SuccessViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SuccessViewController.xib; sourceTree = "<group>"; };
@@ -102,7 +113,10 @@
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				15C29FB52C6165480037C239 /* SuccessViewController.xib */,
 				15C29FB72C6165570037C239 /* SuccessViewController.swift */,
-				159A116A2D495F11009609D6 /* MerchantViewController.swift */,
+				159A116A2D495F11009609D6 /* MerchantWidgetViewController.swift */,
+				15268E002DF8A2BA00EC94E0 /* InitialViewController.swift */,
+				15268E032DF8A34200EC94E0 /* MerchantLightBoxViewController.swift */,
+				15268E082DF8ACFE00EC94E0 /* BaseViewController.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -391,8 +405,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
-				159A116B2D495F11009609D6 /* MerchantViewController.swift in Sources */,
+				15268E042DF8A34200EC94E0 /* MerchantLightBoxViewController.swift in Sources */,
+				159A116B2D495F11009609D6 /* MerchantWidgetViewController.swift in Sources */,
 				15C29FB82C6165570037C239 /* SuccessViewController.swift in Sources */,
+				15268E012DF8A2BA00EC94E0 /* InitialViewController.swift in Sources */,
+				15268E092DF8ACFE00EC94E0 /* BaseViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -402,11 +419,16 @@
 			files = (
 				15BEC9B42C383FB900050FB9 /* ValidationHelperTests.swift in Sources */,
 				15E049852B7510BA0084B71A /* JsonUtilsTests.swift in Sources */,
+				15268E062DF8A5B900EC94E0 /* MerchantWidgetViewController.swift in Sources */,
+				15268E072DF8A5C000EC94E0 /* SuccessViewController.swift in Sources */,
 				152541E62B7E74B20029F149 /* EstablishDataUtilsTests.swift in Sources */,
+				15268E0A2DF8ACFE00EC94E0 /* BaseViewController.swift in Sources */,
 				1587AB912A2FE043006F6FC3 /* SessionManagerTests.swift in Sources */,
 				15F713972D9C6EE400F259BE /* DeviceHelperTests.swift in Sources */,
+				15268E052DF8A34200EC94E0 /* MerchantLightBoxViewController.swift in Sources */,
 				15D96FB32C46E6B700296BC4 /* NetworkHelperTests.swift in Sources */,
 				15BB98602B68120100A9210B /* URLUtilsTests.swift in Sources */,
+				15268E022DF8A2BA00EC94E0 /* InitialViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

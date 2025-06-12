@@ -129,12 +129,9 @@ struct EstablishDataUtils {
         }
     }
     
-    static func prepareEstablish(establishData eD: [AnyHashable : Any], cid:String, sessionCid: String) -> [AnyHashable : Any] {
+    static func prepareEstablish(establishData eD: [AnyHashable : Any], cid:String, sessionCid: String, inAppBrowser: Bool = false) -> [AnyHashable : Any] {
         
         var establishData = eD
-        
-        establishData["sessionCid"] = sessionCid
-        establishData["metadata.cid"] = cid
 
         let deviceType = "\(establishData["deviceType"] ?? Constants.deviceType):\(Constants.devicePlatform)"
         establishData["deviceType"] = deviceType
@@ -148,10 +145,27 @@ struct EstablishDataUtils {
         establishData["returnUrl"] = Constants.returnURL
         establishData["cancelUrl"] = Constants.cancelURL
         establishData["version"] = Constants.establishVersion
+        establishData["sessionCid"] = sessionCid
+        establishData["metadata.cid"] = cid
         establishData["grp"] = self.getGrp()
+        establishData["dynamicWidget"] = "true"
+        establishData["storage"] = Constants.storageSupported
 
         if establishData["paymentProviderId"] != nil {
             establishData["widgetLoaded"] = "true"
+        }
+        
+        if let scheme = establishData["metadata.urlScheme"] as? String {
+
+            if inAppBrowser {
+                establishData["returnUrl"] = scheme
+                establishData["cancelUrl"] = scheme
+
+            } else {
+                if establishData.index(forKey: "metadata.integrationContext") == nil {
+                    establishData["metadata.integrationContext"] = Constants.inAppIntegrationContext
+                }
+            }
         }
         
         return establishData
