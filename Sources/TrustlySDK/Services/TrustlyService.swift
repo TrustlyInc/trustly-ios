@@ -31,19 +31,7 @@ class TrustlyService {
     
     func selectBankWidget(establishData eD: [AnyHashable : Any]) -> URLRequest? {
         
-        var establishData = eD
-                
-        let deviceType = establishData["deviceType"] ?? "mobile" + ":ios:native"
-        establishData["deviceType"] = deviceType
-        
-        if let lang = establishData["metadata.lang"] as? String {
-            establishData["lang"] = lang
-        }
-
-        establishData["grp"] = EstablishDataUtils.getGrp()
-        establishData["dynamicWidget"] = "true"
-        establishData["sessionCid"] = sessionCid
-        establishData["metadata.cid"] = cid
+        let establishData = EstablishDataUtils.prepareEstablish(establishData: eD, cid: cid, sessionCid: sessionCid)
         
         EstablishDataUtils.validateEstablishData(establishData: establishData)
 
@@ -74,13 +62,9 @@ class TrustlyService {
         return nil
     }
     
-    func establishWebView(establishData eD: [AnyHashable : Any]) {
-        
-        var establishData = EstablishDataUtils.prepareEstablish(establishData: eD, cid: cid, sessionCid: sessionCid)
-        
-        if establishData.index(forKey: "metadata.integrationContext") == nil {
-            establishData["metadata.integrationContext"] = Constants.inAppIntegrationContext
-        }
+    func establish(establishData eD: [AnyHashable : Any], isInAppbrowser: Bool) {
+    
+        let establishData = EstablishDataUtils.prepareEstablish(establishData: eD, cid: self.cid, sessionCid: self.sessionCid, inAppBrowser: isInAppbrowser)
         
         do {
             let environment = try buildEnvironment(
@@ -93,8 +77,14 @@ class TrustlyService {
 
             loadLightbox(establish: establishData, url: environment.url) { (data, response, error) in
                 
-                if error == nil, let response = response {
-                    self.delegate?.showLightbox(data: data, url: response.url)
+                if error == nil, let url = response?.url, let data = data {
+                    print(url)
+                    if isInAppbrowser {
+                        self.delegate?.showLightboxOAuth(url: url, urlScheme: EstablishDataUtils.extractUrlSchemeFrom(establishData))
+                        
+                    } else {
+                        self.delegate?.showLightbox(data: data, url: url)
+                    }
                 }
             }
             
@@ -104,62 +94,13 @@ class TrustlyService {
         } catch {
             Logs.error(log: Logs.trustlyService, message: "Unexpected error: \(error).")
         }
+        
     }
     
-    func establishASWebAuthentication(establishData eD: [AnyHashable : Any], onReturn: TrustlyViewCallback?, onCancel: TrustlyViewCallback?) {
-        
-        var establishData = eD
-        
-        guard let scheme = establishData["metadata.urlScheme"] as? String else {
-            return
-        }
-        
-        establishData["returnUrl"] = scheme
-        establishData["cancelUrl"] = scheme
-        
-        do {
-            let environment = try buildEnvironment(
-                resourceUrl: .establish,
-                environment: (establishData["env"] ?? "") as! String,
-                localUrl: (establishData["envHost"] ?? "") as! String,
-                paymentType: (establishData["paymentType"] ?? "") as! String,
-                build: Constants.buildSDK,
-                path: .mobile
-            )
-            
-            var url = environment.url.absoluteString
-            
-            let normalizedEstablish:[String : AnyHashable] = EstablishDataUtils.normalizeEstablishWithDotNotation(establish: establishData as! [String : AnyHashable])
-            
-            if let token = JSONUtils.getJsonBase64From(dictionary: normalizedEstablish) {
-
-                url = "\(url)?token=\(token)"
-                let cleanScheme = scheme.components(separatedBy: ":")[0]
-                
-                self.delegate?.showLightboxOAuth(url: URL(string: url)!, urlScheme: cleanScheme)
-
-            }
-            
-        } catch NetworkError.invalidUrl {
-            Logs.error(log: Logs.trustlyService, message: "Error: Invalid url.")
-            
-        } catch {
-            Logs.error(log: Logs.trustlyService, message: "Error: building url.")
-
-        }
-
-     }
-    
-    public func chooseIntegrationStrategy(establishData: [AnyHashable : Any], completionHandler: @escaping(String) -> Void) {
+    public func chooseIntegrationStrategy(establishData: [AnyHashable : Any], completionHandler: @escaping(Settings?) -> Void) {
         
         getTrustlySettingsWith(establish: establishData) { trustlySettings in
-
-            if let settings = trustlySettings?.settings {
-                completionHandler(settings.integrationStrategy)
-                
-            } else {
-                completionHandler(Constants.lightboxContentWebview)
-            }
+            completionHandler(trustlySettings?.settings)
         }
     }
 }
