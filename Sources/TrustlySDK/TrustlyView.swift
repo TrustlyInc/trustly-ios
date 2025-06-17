@@ -593,14 +593,15 @@ extension TrustlyView {
                         paymentType: (establish["paymentType"] ?? "") as! String,
                         build: Constants.buildSDK
                     )
-                    
+
                     self.isLocalEnvironment = environment.isLocal
-                    
+
                     self.prepareEstablish(establishData: establish)
                                         
                     getTrustlySettingsWith(establish: establish) { trustlySettings in
                         
-                        guard let settings = trustlySettings?.settings else { return }
+                        guard var settings = trustlySettings?.settings else { return }
+                        settings.webviewUserAgent = (self.mainWebView?.value(forKey: "userAgent") as! String)
                         
                         self.prepareEstablish(establishData: establish, inAppBrowser: settings.isInAppBrowserEnabled())
                         

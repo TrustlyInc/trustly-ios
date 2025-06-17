@@ -29,13 +29,22 @@ struct TrustlySettings: Codable, Hashable {
 }
 
 struct Settings: Codable, Hashable {
+    var webviewUserAgent = ""
+    var inAppUserAgent: String {
+        "Mozilla/5.0 (\(DeviceHelper.model()); CPU iPhone OS \(DeviceHelper.systemVersion().replacingOccurrences(of: ".", with: "_")) like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) InAppBrowser/1.0 Mobile/15E148 Safari/605.1.15"
+    }
+
     let integrationStrategy: String
     
     var userAgent: String {
-        self.isInAppBrowserEnabled() ? ApiSettings.inAppBrowser : ApiSettings.webview
+        self.isInAppBrowserEnabled() ? self.inAppUserAgent : self.webviewUserAgent
     }
     
     func isInAppBrowserEnabled() -> Bool {
-        return self.integrationStrategy == Constants.LIGHTBOX_CONTEXT_INAPP
+        return false//self.integrationStrategy == Constants.LIGHTBOX_CONTEXT_INAPP
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case integrationStrategy
     }
 }
