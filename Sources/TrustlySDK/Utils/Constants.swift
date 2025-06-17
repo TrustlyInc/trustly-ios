@@ -69,3 +69,8 @@ struct Constants {
                                                  AnyHashable("customer.address.country")]
 
 }
+
+enum ApiSettings {
+    static let webview = "WebView"
+    static let inAppBrowser = "In-app Browser"
+}
