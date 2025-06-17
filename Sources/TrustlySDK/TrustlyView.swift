@@ -604,7 +604,7 @@ extension TrustlyView {
                         
                         self.prepareEstablish(establishData: establish, inAppBrowser: settings.isInAppBrowserEnabled())
                         
-                        loadLightbox(establish: self.establishData!, url: environment.url) { (data, response, error) in
+                        loadLightbox(establish: self.establishData!, url: environment.url, settings: settings) { (data, response, error) in
                             
                             if error == nil, let url = response?.url, let data = data {
                                 DispatchQueue.main.async {
