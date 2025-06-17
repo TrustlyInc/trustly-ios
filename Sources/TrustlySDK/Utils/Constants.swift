@@ -39,8 +39,3 @@ struct Constants {
     
     static let establishDataDocsLink = "https://amer.developers.trustly.com/payments/docs/establish-data#base-properties"
 }
-
-enum ApiSettings {
-    static let webview = "WebView"
-    static let inAppBrowser = "In-app Browser"
-}
