@@ -41,7 +41,7 @@ struct Settings: Codable, Hashable {
     }
     
     func isInAppBrowserEnabled() -> Bool {
-        return false//self.integrationStrategy == Constants.LIGHTBOX_CONTEXT_INAPP
+        return self.integrationStrategy == Constants.LIGHTBOX_CONTEXT_INAPP
     }
     
     enum CodingKeys: String, CodingKey {
