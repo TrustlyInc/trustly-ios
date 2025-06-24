@@ -21,12 +21,6 @@ platform :ios do
   lane :publish do
     lint
     build_and_run_tests
-    add_git_tag(
-      tag: TAG_VERSION
-    )
-    push_git_tags(
-      tag: TAG_VERSION
-    )
   end
 
   # Unit tests
