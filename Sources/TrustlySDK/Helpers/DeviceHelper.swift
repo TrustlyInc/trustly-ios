@@ -56,4 +56,8 @@ class DeviceHelper {
          
         return identifier
     }
+    
+    static func model() -> String {
+        return UIDevice.current.model
+    }
 }
