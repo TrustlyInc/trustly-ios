@@ -78,7 +78,6 @@ class TrustlyService {
             loadLightbox(establish: establishData, url: environment.url, settings: settings) { (data, response, error) in
                 
                 if error == nil, let url = response?.url, let data = data {
-                    print(url)
                     if settings.isInAppBrowserEnabled() {
                         self.delegate?.showLightboxOAuth(url: url, urlScheme: EstablishDataUtils.extractUrlSchemeFrom(establishData))
                         
