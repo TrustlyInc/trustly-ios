@@ -62,9 +62,9 @@ class TrustlyService {
         return nil
     }
     
-    func establish(establishData eD: [AnyHashable : Any], isInAppbrowser: Bool) {
+    func establish(establishData eD: [AnyHashable : Any], settings: Settings) {
     
-        let establishData = EstablishDataUtils.prepareEstablish(establishData: eD, cid: self.cid, sessionCid: self.sessionCid, inAppBrowser: isInAppbrowser)
+        let establishData = EstablishDataUtils.prepareEstablish(establishData: eD, cid: self.cid, sessionCid: self.sessionCid, inAppBrowser: settings.isInAppBrowserEnabled())
         
         do {
             let environment = try buildEnvironment(
@@ -75,11 +75,11 @@ class TrustlyService {
                 build: Constants.buildSDK
             )
 
-            loadLightbox(establish: establishData, url: environment.url) { (data, response, error) in
+            loadLightbox(establish: establishData, url: environment.url, settings: settings) { (data, response, error) in
                 
                 if error == nil, let url = response?.url, let data = data {
                     print(url)
-                    if isInAppbrowser {
+                    if settings.isInAppBrowserEnabled() {
                         self.delegate?.showLightboxOAuth(url: url, urlScheme: EstablishDataUtils.extractUrlSchemeFrom(establishData))
                         
                     } else {
@@ -97,10 +97,14 @@ class TrustlyService {
         
     }
     
-    public func chooseIntegrationStrategy(establishData: [AnyHashable : Any], completionHandler: @escaping(Settings?) -> Void) {
+    public func chooseIntegrationStrategy(establishData: [AnyHashable : Any], completionHandler: @escaping(Settings) -> Void) {
         
         getTrustlySettingsWith(establish: establishData) { trustlySettings in
-            completionHandler(trustlySettings?.settings)
+            if let settings = trustlySettings?.settings {
+                completionHandler(settings)
+            } else {
+                completionHandler(Settings(integrationStrategy: Constants.lightboxContentWebview))
+            }
         }
     }
 }

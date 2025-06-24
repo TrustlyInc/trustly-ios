@@ -10,15 +10,17 @@ import Foundation
 /** @abstract Will call trustly core to render the lightbox.
  @param establish: [AnyHashable : Any]
  @param url: URL
+ @param settings: Settings
  @param completionHandler: @escaping(Data?, URLResponse?, Error?) -> Void
  */
-func loadLightbox(establish: [AnyHashable : Any], url: URL, completionHandler: @escaping(Data?, URLResponse?, Error?) -> Void) {
+func loadLightbox(establish: [AnyHashable : Any], url: URL, settings: Settings, completionHandler: @escaping(Data?, URLResponse?, Error?) -> Void) {
         
         var request = URLRequest(url: url)
 
         request.httpMethod = "POST"
         request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField:"Accept")
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField:"Content-Type")
+        request.setValue(settings.userAgent, forHTTPHeaderField:"user-agent")
 
         let requestData = URLUtils.urlEncoded(establish).data(using: .utf8)
 

@@ -175,7 +175,10 @@ extension LightBoxViewController {
         service.delegate = self
 
         service.chooseIntegrationStrategy(establishData: eD, completionHandler: { settings -> Void in
-            service.establish(establishData: eD, isInAppbrowser: settings?.isInAppBrowserEnabled() ?? false)
+            var customSettings = settings
+            
+            customSettings.webviewUserAgent = (self.mainWebView?.value(forKey: "userAgent") as! String)
+            service.establish(establishData: eD, settings: customSettings)
         })
     }
     
