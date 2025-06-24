@@ -60,4 +60,3 @@ jobs:
       - name: Publish new SDK version
         run: |
           bundle exec fastlane publish
-          pod trunk push ./TrustlySDK.podspec
