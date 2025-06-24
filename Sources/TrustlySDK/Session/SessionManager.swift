@@ -33,7 +33,7 @@ struct SessionCid: Codable {
  */
 func generateCid() -> String? {
     
-    guard let uuid = getFingerPrint(deviceUUID: getDeviceUUID()) else { return nil }
+    guard let uuid = getFingerPrint(deviceUUID: DeviceHelper.getDeviceUUID()) else { return nil }
     guard let random = getRandomKey(randomUUID: UUID().uuidString) else { return nil }
     guard let timestampBase36 = getTimestampBase36(timeInMilliseconds: Date().millisecondsReferenceDate)  else { return nil }
     
