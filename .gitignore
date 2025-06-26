@@ -36,3 +36,5 @@ Carthage/Build
 #
 */Podfile.lock
 */Pods/
+
+.build/
