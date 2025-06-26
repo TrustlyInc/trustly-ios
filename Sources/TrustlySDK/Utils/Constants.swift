@@ -18,6 +18,7 @@ struct Constants {
     static let deviceType = "mobile"
     static let devicePlatform = "ios:native"
     static let paymentTypeVerification = "Verification"
+    static let storageSupported = "supported"
     
     static let lightboxContentInApp = "in-app-browser"
     static let lightboxContentWebview = "webview"
