@@ -70,7 +70,7 @@ func getFingerPrint(deviceUUID: String?) -> String? {
     return String(deviceUUID.split(separator: "-")[1])
 }
 
-func getRandomKey(randomUUID: String) -> String? {    
+func getRandomKey(randomUUID: String) -> String? {
     return String(randomUUID.split(separator: "-")[2])
 }
 
