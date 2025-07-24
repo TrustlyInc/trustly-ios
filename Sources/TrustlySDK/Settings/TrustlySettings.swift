@@ -39,10 +39,6 @@ struct Settings: Codable, Hashable {
         self.isInAppBrowserEnabled() ? inAppUserAgent : webviewUserAgent
     }
     
-    var userAgent: String {
-        self.isInAppBrowserEnabled() ? ApiSettings.inAppBrowser : ApiSettings.webview
-    }
-    
     func isInAppBrowserEnabled() -> Bool {
         return self.integrationStrategy == Constants.lightboxContentInApp
     }
