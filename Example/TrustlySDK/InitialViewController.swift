@@ -18,15 +18,15 @@ class InitialViewController: UIViewController {
         super.viewDidLoad()
 
         self.establishData = [
-            "accessId": "A48B73F694C4C8EE6306",
-            "merchantId" : "110005514",
+            "accessId": "<ACCESS_ID>",
+            "merchantId" : "<MERCHANT_ID>",
             "currency" : "USD",
             "amount" : "1.00",
-            "merchantReference" : "cac73df7-52b4-47d7-89d3-9628d4cfb65e",
+            "merchantReference" : "<MERCHANT_REFERENCE>",
             "paymentType" : "Retrieval",
             "returnUrl": "/returnUrl",
             "cancelUrl": "/cancelUrl",
-            "requestSignature": "HT5mVOqBXa8ZlvgX2USmPeLns5o=",
+            "requestSignature": "<REQUEST_SIGNATURE>",
             "customer.name": "John",
             "customer.address.country": "US",
             "theme": "dark",
@@ -34,8 +34,8 @@ class InitialViewController: UIViewController {
             "metadata.urlScheme": "demoapp://",
             "description": "First Data Mobile Test",
             "flowType": "",
-            "env": "sandbox",
-            "env”Host": "192.168.0.13:8000"
+            "env": "<[int, sandbox, local]>",
+            "localUrl": "<YOUR LOCAL URL WHEN `ENV` PROPERTY IS `LOCAL` (ex: https://192.168.0.30:8000)>"
         ]
 
     }

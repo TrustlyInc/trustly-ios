@@ -61,8 +61,4 @@ class DeviceHelper {
     static func model() -> String {
         return UIDevice.current.model
     }
-    
-    static func model() -> String {
-        return UIDevice.current.model
-    }
 }
