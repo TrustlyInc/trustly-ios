@@ -22,7 +22,7 @@ enum NetworkError: Error {
  @throws NetworkError.invalidUrl
  @result (url: URL, isLocal: Bool)
  */
-func buildEnvironment(resourceUrl:ResourceUrls, environment: String, localUrl: String, paymentType: String, build: String, path:PathUrls = .selectBank, query: [String : Any]? = nil, hash: [String : Any]? = nil) throws -> (url: URL, isLocal: Bool)  {
+func buildEnvironment(resourceUrl:ResourceUrls, environment: String, localUrl: String, paymentType: String, build: String, path:PathUrls = .selectBank, query: [AnyHashable : Any]? = nil, hash: [AnyHashable : Any]? = nil) throws -> (url: URL, isLocal: Bool)  {
     var resource = resourceUrl
     var subDomain = ""
     var urlString = ""
