@@ -34,11 +34,11 @@ func getTrustlySettingsWith(establish: [AnyHashable : Any], completionHandler: @
             var tokenDictionary:Dictionary<AnyHashable,Any> = [:]
             tokenDictionary["merchantId"] = establish["merchantId"]
             tokenDictionary["grp"] = establish["grp"]
-            
+
             if establish["flowType"] != nil {
                 tokenDictionary["flowType"] = establish["flowType"]
             }
-            
+
             let normalizedEstablish = EstablishDataUtils.normalizeEstablishWithDotNotation(establish: tokenDictionary as! [String : AnyHashable])
             
             if let token = JSONUtils.getJsonBase64From(dictionary: normalizedEstablish) {
