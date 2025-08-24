@@ -160,7 +160,7 @@ struct EstablishDataUtils {
             if inAppBrowser {
                 establishData["returnUrl"] = scheme
                 establishData["cancelUrl"] = scheme
-
+                establishData["metadata.integrationContext"] = Constants.secureBrowserIntegrationContext
             } else {
                 if establishData.index(forKey: "metadata.integrationContext") == nil {
                     establishData["metadata.integrationContext"] = Constants.inAppIntegrationContext

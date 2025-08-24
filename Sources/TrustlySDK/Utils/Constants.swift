@@ -29,6 +29,7 @@ struct Constants {
     static let portFrontend = "10000"
 
     static let inAppIntegrationContext = "InAppBrowser"
+    static let secureBrowserIntegrationContext = "SecureBrowser"
     static let messageWebviewHandler = "PayWithMyBankNativeSDK"
     
     static let widgetPage = "widget"
