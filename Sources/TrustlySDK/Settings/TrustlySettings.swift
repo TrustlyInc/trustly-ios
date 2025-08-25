@@ -20,7 +20,7 @@ struct TrustlySettings: Codable, Hashable {
             let diffs = Calendar.current.dateComponents([.minute], from: createdTime, to: dateNow)
             
             if let minutes = diffs.minute {
-                return minutes < Constants.SETTINGS_CACHE_TIME_LIMIT
+                return minutes < Constants.settingsCacheTimeLimit
             }
         }
         
@@ -29,19 +29,18 @@ struct TrustlySettings: Codable, Hashable {
 }
 
 struct Settings: Codable, Hashable {
+    let integrationStrategy: String
     var webviewUserAgent = ""
     var inAppUserAgent: String {
         "Mozilla/5.0 (\(DeviceHelper.model()); CPU iPhone OS \(DeviceHelper.systemVersion().replacingOccurrences(of: ".", with: "_")) like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) InAppBrowser/1.0 Mobile/15E148 Safari/605.1.15"
     }
-
-    let integrationStrategy: String
     
     var userAgent: String {
-        self.isInAppBrowserEnabled() ? self.inAppUserAgent : self.webviewUserAgent
+        self.isInAppBrowserEnabled() ? inAppUserAgent : webviewUserAgent
     }
     
     func isInAppBrowserEnabled() -> Bool {
-        return self.integrationStrategy == Constants.LIGHTBOX_CONTEXT_INAPP
+        return self.integrationStrategy == Constants.lightboxContentInApp
     }
     
     enum CodingKeys: String, CodingKey {

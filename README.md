@@ -48,6 +48,24 @@ For production reason choose the `main` branch, but for test or validation choos
 
 ## Usage
 
+> [!NOTE]
+> **What's New in v4.0.0:**
+> 
+> **- New Architecture:** A completely redesigned foundation for improved stability and future scalability.
+> 
+> **- Enhanced Asynchronous Call Management:** Better handling of the SDK's internal > asynchronous operations, leading to smoother performance.
+> 
+> **- More Flexible Architectural Design:** Provides developers with greater adaptability for diverse integration needs.
+> 
+> **- Improvements for In-App Browser Support:** Streamlined performance and reliability when using the SDK within an in-app browser environment.
+
+> [!IMPORTANT]
+> **Key Changes from v3 to v4:**
+> 
+> **- View Components Refactored:** TrustlyView has been replaced with a more modular approach, now utilizing ViewControllers, WidgetViewController, and LightBoxViewController.
+> 
+> **- Callback Handling Updated:** Methods previously relying on completionHandler have been superseded by the new TrustlySDKProtocol for more consistent and robust callback management.
+> 
 To quickly get up and running with this SDK see the [iOS Quickstart](https://amer.developers.trustly.com/payments/docs/ios-quickstart) in the Trustly Developer Documentation.
 
 
@@ -58,6 +76,7 @@ ___
 
 | VERSION   | DESCRIPTION   | BRANCH |
 | :-------: | :-----------  | :----------- |
+4.0.0     | Change the SDK design to work with controllers | *main*
 3.3.2     | Fix bug to provide some data to analytics | *main*
 3.3.1     | Fix bug when try to send metadata properties | *main*
 3.3.0     | Implement the functionality of being able to choose webview or in-app browser in the SDK | *main*

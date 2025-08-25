@@ -16,7 +16,9 @@ struct SessionCid: Codable {
     func isValid(expirationTimeLimit: Int) -> Bool {
         let dateNow = Date()
         
+
         let diffs = Calendar.current.dateComponents([.hour], from: expirationTime, to: dateNow)
+        
         
         if let hours = diffs.hour {
             return hours < expirationTimeLimit
@@ -68,7 +70,7 @@ func getFingerPrint(deviceUUID: String?) -> String? {
     return String(deviceUUID.split(separator: "-")[1])
 }
 
-func getRandomKey(randomUUID: String) -> String? {    
+func getRandomKey(randomUUID: String) -> String? {
     return String(randomUUID.split(separator: "-")[2])
 }
 

@@ -50,14 +50,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Determine who sent the URL.
         if url.absoluteString == "demoapp://" {
-            NotificationCenter.default.post(name: Notification.Name(TrustlyView.trustlyCloseWebview), object: nil)
+            NotificationCenter.default.post(name: .trustlyCloseWebview, object: nil)
             
             return true
         }
         
         return false
     }
-
-
 }
-

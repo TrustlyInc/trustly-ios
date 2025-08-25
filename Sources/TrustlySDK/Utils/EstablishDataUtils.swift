@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os
 
 
 struct EstablishDataUtils {
@@ -126,6 +127,78 @@ struct EstablishDataUtils {
             print("Learn more at Trustly Docs: \(Constants.establishDataDocsLink)")
             print("###################################################")
         }
+    }
+    
+    static func prepareEstablish(establishData eD: [AnyHashable : Any], cid:String, sessionCid: String, inAppBrowser: Bool = false) -> [AnyHashable : Any] {
         
+        var establishData = eD
+
+        let deviceType = "\(establishData["deviceType"] ?? Constants.deviceType):\(Constants.devicePlatform)"
+        establishData["deviceType"] = deviceType
+        
+        if let lang = establishData["metadata.lang"] as? String {
+            establishData["lang"] = lang
+        }
+        
+        establishData["metadata.sdkIOSVersion"] = Constants.buildSDK
+
+        establishData["returnUrl"] = Constants.returnURL
+        establishData["cancelUrl"] = Constants.cancelURL
+        establishData["version"] = Constants.establishVersion
+        establishData["sessionCid"] = sessionCid
+        establishData["metadata.cid"] = cid
+        establishData["grp"] = self.getGrp()
+        establishData["dynamicWidget"] = "true"
+        establishData["storage"] = Constants.storageSupported
+
+        if establishData["paymentProviderId"] != nil {
+            establishData["widgetLoaded"] = "true"
+        }
+        
+        if let scheme = establishData["metadata.urlScheme"] as? String {
+
+            if inAppBrowser {
+                establishData["returnUrl"] = scheme
+                establishData["cancelUrl"] = scheme
+
+            } else {
+                if establishData.index(forKey: "metadata.integrationContext") == nil {
+                    establishData["metadata.integrationContext"] = Constants.inAppIntegrationContext
+                }
+            }
+        }
+        
+        return establishData
+    }
+    
+    static func extractUrlSchemeFrom(_ establishData: [AnyHashable : Any]) -> String {
+        
+        if let scheme = establishData["metadata.urlScheme"] as? String {
+            return scheme.components(separatedBy: ":")[0]
+        }
+        
+        return ""
+    }
+    
+    static func getGrp() -> String! {
+        return getDefault(key: "Trustly.grp", def: generateGrp())
+    }
+    
+    static func getDefault(key:String, def: String) -> String{
+        let userDefaults:UserDefaults = UserDefaults.standard
+        var value = userDefaults.object(forKey: key) as? String
+        if(value == nil){
+            value = def
+            userDefaults.set(value,forKey: key)
+            userDefaults.synchronize()
+        }
+        return value ?? ""
+    }
+
+    static func generateGrp() -> String! {
+        var grp:String!
+        let grpInt:Int = Int(arc4random_uniform(100))
+        grp = String(format:"%d", grpInt)
+        return grp
     }
 }
