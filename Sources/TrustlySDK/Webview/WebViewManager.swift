@@ -330,13 +330,21 @@ extension WebViewManager{
     
     @objc func closeWebview(notification: Notification){
         
-        NotificationCenter.default.removeObserver(self, name: .trustlyCloseWebview, object: nil)
-        
-        if webSession != nil {
-            webSession.cancel()
+        if let trustlySettings: TrustlySettings = readDataFrom(keyStorage: .settings),
+           trustlySettings.isValid() {
+            
+            if trustlySettings.settings.isWebViewEnabled() {
+                NotificationCenter.default.removeObserver(self, name: .trustlyCloseWebview, object: nil)
+                
+                if webSession != nil {
+                    webSession.cancel()
+                }
+                
+                self.proceedToChooseAccount()
+            }
+            
         }
-
-        self.proceedToChooseAccount()
+        
     }
     
     //Utility Functions

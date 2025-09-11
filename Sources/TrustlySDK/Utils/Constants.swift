@@ -9,7 +9,7 @@ import Foundation
 
 
 struct Constants {
-    static let buildSDK = "4.0.0"
+    static let buildSDK = "4.1.0"
     static let baseDomain = "paywithmybank.com"
     
     static let returnURL = "msg://return"
@@ -29,6 +29,7 @@ struct Constants {
     static let portFrontend = "10000"
 
     static let inAppIntegrationContext = "InAppBrowser"
+    static let secureBrowserIntegrationContext = "SecureBrowser"
     static let messageWebviewHandler = "PayWithMyBankNativeSDK"
     
     static let widgetPage = "widget"
