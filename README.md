@@ -76,6 +76,7 @@ ___
 
 | VERSION   | DESCRIPTION   | BRANCH |
 | :-------: | :-----------  | :----------- |
+4.1.0     | Change inAppBrowser integration | *main*
 4.0.0     | Change the SDK design to work with controllers | *main*
 3.3.2     | Fix bug to provide some data to analytics | *main*
 3.3.1     | Fix bug when try to send metadata properties | *main*
