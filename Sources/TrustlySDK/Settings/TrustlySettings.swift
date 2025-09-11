@@ -43,6 +43,10 @@ struct Settings: Codable, Hashable {
         return self.integrationStrategy == Constants.lightboxContentInApp
     }
     
+    func isWebViewEnabled() -> Bool {
+        return self.integrationStrategy == Constants.lightboxContentWebview
+    }
+    
     enum CodingKeys: String, CodingKey {
         case integrationStrategy
     }
