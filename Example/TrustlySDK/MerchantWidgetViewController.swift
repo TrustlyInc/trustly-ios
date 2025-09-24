@@ -23,7 +23,7 @@ class MerchantWidgetViewController: BaseViewController {
         let widgetVC = WidgetViewController(establishData: establishData)
         widgetVC.delegate = self
 
-        widgetVC.view.frame = CGRect(x: 15, y: 210, width: 400, height: 500)
+        widgetVC.view.frame = CGRect(x: 15, y: 210, width: self.view.frame.width - 40, height: 500)
         view.addSubview(widgetVC.view)
        
     }
