@@ -309,7 +309,7 @@ extension WebViewManager: ASWebAuthenticationPresentationContextProviding {
         })
         
         if #available(iOS 13, *) {
-            webSession.prefersEphemeralWebBrowserSession = true
+            webSession.prefersEphemeralWebBrowserSession = false
             webSession.presentationContextProvider = self
         }
 
