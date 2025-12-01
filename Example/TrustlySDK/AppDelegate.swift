@@ -57,4 +57,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return false
     }
+    
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+
+            // 1. Verificar se a activity é um Universal Link (navegação web)
+            guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+                  let url = userActivity.webpageURL else {
+                return false // Não é um Universal Link ou a URL é nula
+            }
+
+            // 2. Aqui você implementa sua lógica para rotear a URL
+            print("Universal Link: \(url.absoluteString)")
+
+            // Exemplo de lógica de roteamento:
+            handleUniversalLink(url: url)
+
+            // Retorna 'true' para indicar que o AppDelegate lidou com a atividade
+            return true
+        }
+
+        // Função auxiliar para processar a URL
+        private func handleUniversalLink(url: URL) {
+            // Obtenha os componentes do URL
+            guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
+                return
+            }
+
+            // Exemplo: Checar o caminho (path) para rotear para uma tela específica
+            if components.path == "/start/oauth/app/" {
+                NotificationCenter.default.post(name: .trustlyCloseWebview, object: nil)
+            } else {
+                // Lógica padrão ou ignorar
+                print("Caminho não reconhecido: \(components.path)")
+            }
+        }
 }
