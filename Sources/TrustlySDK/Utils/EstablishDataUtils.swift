@@ -155,6 +155,10 @@ struct EstablishDataUtils {
             establishData["widgetLoaded"] = "true"
         }
         
+        if !establishData.keys.contains("metadata.urlScheme") {
+            establishData["metadata.urlScheme"] = Constants.trustly_url_scheme
+        }
+
         if let scheme = establishData["metadata.urlScheme"] as? String {
 
             if inAppBrowser {
