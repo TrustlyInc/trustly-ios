@@ -31,14 +31,13 @@ class InitialViewController: UIViewController {
             "customer.address.country": "US",
             "theme": "dark",
             "metadata.theme": "dark",
-            "metadata.deepLinkStrategy": "universal-link",
-            "metadata.universalLink": "https://alpha-merchant.tools.devent.trustly.one/start/oauth/app/",
-            // We comment the url scheme to validate when metadata.deepLinkStrategy is universal-link
-//            "metadata.urlScheme": "demoapp://",
+            "metadata.deepLinkStrategy": "<[url-scheme, universal-link]>",
+            "metadata.universalLink": "<custom universal link url>",
+            "metadata.urlScheme": "demoapp://",
             "description": "First Data Mobile Test",
             "flowType": "",
-            "env": "dynamic",
-            "envHost": "dev-285707"
+            "env": "<[int, sandbox, local]>",
+            "localUrl": "<YOUR LOCAL URL WHEN `ENV` PROPERTY IS `LOCAL` (ex: https://192.168.0.30)>"
         ]
 
     }
