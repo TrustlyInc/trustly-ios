@@ -74,12 +74,12 @@ final class EstablishDataUtilsTests: XCTestCase {
     
     func testExtractUrlSchemeFromEmptyEstablish() throws {
         
-        let expectedUrlScheme = ""
+        let expectedUrlScheme = Constants.trustly_url_scheme
         
         let establishData: [String : AnyHashable] = [:]
         
         let urlScheme = EstablishDataUtils.extractUrlSchemeFrom(establishData)
         
-        XCTAssertEqual(expectedUrlScheme, urlScheme)
+        XCTAssertEqual(expectedUrlScheme, "\(urlScheme)://")
     }
 }
