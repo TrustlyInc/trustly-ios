@@ -62,7 +62,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
             guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
                   let url = userActivity.webpageURL else {
-                return false // Não é um Universal Link ou a URL é nula
+                return false
             }
 
             print("Universal Link: \(url.absoluteString)")
