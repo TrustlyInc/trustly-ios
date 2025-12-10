@@ -132,6 +132,7 @@ struct EstablishDataUtils {
     static func prepareEstablish(establishData eD: [AnyHashable : Any], cid:String, sessionCid: String, inAppBrowser: Bool = false) -> [AnyHashable : Any] {
         
         var establishData = eD
+        var urlScheme = ""
 
         let deviceType = "\(establishData["deviceType"] ?? Constants.deviceType):\(Constants.devicePlatform)"
         establishData["deviceType"] = deviceType
@@ -155,11 +156,18 @@ struct EstablishDataUtils {
             establishData["widgetLoaded"] = "true"
         }
         
-        if let scheme = establishData["metadata.urlScheme"] as? String {
+        if !establishData.keys.contains("metadata.urlScheme") {
+            urlScheme = Constants.trustly_url_scheme
+            
+        } else {
+            urlScheme = establishData["metadata.urlScheme"] as! String
+        }
+
+        if !urlScheme.isEmpty {
 
             if inAppBrowser {
-                establishData["returnUrl"] = scheme
-                establishData["cancelUrl"] = scheme
+                establishData["returnUrl"] = urlScheme
+                establishData["cancelUrl"] = urlScheme
                 establishData["metadata.integrationContext"] = Constants.secureBrowserIntegrationContext
             } else {
                 if establishData.index(forKey: "metadata.integrationContext") == nil {
@@ -173,11 +181,16 @@ struct EstablishDataUtils {
     
     static func extractUrlSchemeFrom(_ establishData: [AnyHashable : Any]) -> String {
         
+        var urlScheme = ""
+        
         if let scheme = establishData["metadata.urlScheme"] as? String {
-            return scheme.components(separatedBy: ":")[0]
+            urlScheme = scheme
+            
+        } else {
+            urlScheme = Constants.trustly_url_scheme
         }
         
-        return ""
+        return urlScheme.components(separatedBy: ":")[0]
     }
     
     static func getGrp() -> String! {

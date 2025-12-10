@@ -68,5 +68,7 @@ struct Constants {
                                                  AnyHashable("cancelUrl"),
                                                  AnyHashable("requestSignature"),
                                                  AnyHashable("customer.address.country")]
+    
+    static let trustly_url_scheme = "trustly-url-scheme://"
 
 }

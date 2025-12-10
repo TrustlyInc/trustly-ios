@@ -57,4 +57,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return false
     }
+    
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+
+            guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+                  let url = userActivity.webpageURL else {
+                return false
+            }
+
+            print("Universal Link: \(url.absoluteString)")
+
+            handleUniversalLink(url: url)
+
+            return true
+        }
+
+        private func handleUniversalLink(url: URL) {
+            guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
+                return
+            }
+
+            if components.path == "/start/oauth/app/" {
+                NotificationCenter.default.post(name: .trustlyCloseWebview, object: nil)
+            } else {
+                print("Unrecognized path: \(components.path)")
+            }
+        }
 }
