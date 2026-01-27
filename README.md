@@ -76,6 +76,7 @@ ___
 
 | VERSION   | DESCRIPTION   | BRANCH |
 | :-------: | :-----------  | :----------- |
+4.2.0     | Add universal link support | *main*
 4.1.0     | Change inAppBrowser integration | *main*
 4.0.0     | Change the SDK design to work with controllers | *main*
 3.3.2     | Fix bug to provide some data to analytics | *main*
