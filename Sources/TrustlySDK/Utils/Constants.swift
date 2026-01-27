@@ -9,7 +9,7 @@ import Foundation
 
 
 struct Constants {
-    static let buildSDK = "4.1.0"
+    static let buildSDK = "4.2.0"
     static let baseDomain = "paywithmybank.com"
     
     static let returnURL = "msg://return"
@@ -68,5 +68,7 @@ struct Constants {
                                                  AnyHashable("cancelUrl"),
                                                  AnyHashable("requestSignature"),
                                                  AnyHashable("customer.address.country")]
+    
+    static let trustly_url_scheme = "trustly-url-scheme://"
 
 }
