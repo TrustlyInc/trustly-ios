@@ -35,7 +35,7 @@ class InitialViewController: UIViewController {
             "metadata.universalLink": "<custom universal link url>",
             "metadata.urlScheme": "demoapp://",
             "description": "First Data Mobile Test",
-            "flowType": "",
+//            "metadata.flowType": "" // Uncomment and set a value in order to use a specific payment flow
             "env": "<[int, sandbox, local]>",
             "localUrl": "<YOUR LOCAL URL WHEN `ENV` PROPERTY IS `LOCAL` (ex: https://192.168.0.30)>"
         ]
