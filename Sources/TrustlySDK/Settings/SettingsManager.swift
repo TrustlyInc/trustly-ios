@@ -35,8 +35,8 @@ func getTrustlySettingsWith(establish: [AnyHashable : Any], completionHandler: @
             tokenDictionary["merchantId"] = establish["merchantId"]
             tokenDictionary["grp"] = establish["grp"]
 
-            if establish["flowType"] != nil {
-                tokenDictionary["flowType"] = establish["flowType"]
+            if let flowType = establish["metadata.flowType"] {
+                tokenDictionary["flowType"] = flowType
             }
 
             let normalizedEstablish = EstablishDataUtils.normalizeEstablishWithDotNotation(establish: tokenDictionary as! [String : AnyHashable])
