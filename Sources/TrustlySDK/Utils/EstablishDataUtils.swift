@@ -151,6 +151,8 @@ struct EstablishDataUtils {
         establishData["grp"] = self.getGrp()
         establishData["dynamicWidget"] = "true"
         establishData["storage"] = Constants.storageSupported
+        establishData["trustlyContext"] = self.getTrustlyContext()
+        establishData["metadata.trustlyContext"] = self.getTrustlyContext()
 
         if establishData["paymentProviderId"] != nil {
             establishData["widgetLoaded"] = "true"
@@ -195,6 +197,10 @@ struct EstablishDataUtils {
     
     static func getGrp() -> String! {
         return getDefault(key: "Trustly.grp", def: generateGrp())
+    }
+    
+    static func getTrustlyContext() -> String! {
+        return getDefault(key: "Trustly.trustlyContext", def: "")
     }
     
     static func getDefault(key:String, def: String) -> String{
