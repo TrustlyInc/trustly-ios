@@ -212,13 +212,12 @@ extension WebViewManager: WKNavigationDelegate {
                     if ("PayWithMyBank.createTransaction" == params[0]) && bankSelectedHandler != nil {
                         if params.count > 1 {
                             establishData?["paymentProviderId"] = params[1]
-                            }
-                            
-                            if let establishData = establishData {
-                                bankSelectedHandler?(establishData)
-                            }
-                            
                         }
+                            
+                        if let establishData = establishData {
+                            bankSelectedHandler?(establishData)
+                        }
+                    }
                         break;
                     case .none:
                         break;
