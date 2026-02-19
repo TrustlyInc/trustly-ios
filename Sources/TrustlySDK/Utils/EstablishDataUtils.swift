@@ -148,11 +148,9 @@ struct EstablishDataUtils {
         establishData["version"] = Constants.establishVersion
         establishData["sessionCid"] = sessionCid
         establishData["metadata.cid"] = cid
-        establishData["grp"] = self.getGrp()
+        establishData["grp"] = getGrp()
         establishData["dynamicWidget"] = "true"
         establishData["storage"] = Constants.storageSupported
-        establishData["trustlyContext"] = self.getTrustlyContext()
-        establishData["metadata.trustlyContext"] = self.getTrustlyContext()
 
         if establishData["paymentProviderId"] != nil {
             establishData["widgetLoaded"] = "true"
@@ -195,29 +193,5 @@ struct EstablishDataUtils {
         return urlScheme.components(separatedBy: ":")[0]
     }
     
-    static func getGrp() -> String! {
-        return getDefault(key: "Trustly.grp", def: generateGrp())
-    }
-    
-    static func getTrustlyContext() -> String! {
-        return getDefault(key: "Trustly.trustlyContext", def: "")
-    }
-    
-    static func getDefault(key:String, def: String) -> String{
-        let userDefaults:UserDefaults = UserDefaults.standard
-        var value = userDefaults.object(forKey: key) as? String
-        if(value == nil){
-            value = def
-            userDefaults.set(value,forKey: key)
-            userDefaults.synchronize()
-        }
-        return value ?? ""
-    }
 
-    static func generateGrp() -> String! {
-        var grp:String!
-        let grpInt:Int = Int(arc4random_uniform(100))
-        grp = String(format:"%d", grpInt)
-        return grp
-    }
 }

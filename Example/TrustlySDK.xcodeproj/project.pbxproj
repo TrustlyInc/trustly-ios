@@ -22,6 +22,8 @@
 		15BEC9B42C383FB900050FB9 /* ValidationHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15BEC9B32C383FB900050FB9 /* ValidationHelperTests.swift */; };
 		15C29FB62C6165480037C239 /* SuccessViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15C29FB52C6165480037C239 /* SuccessViewController.xib */; };
 		15C29FB82C6165570037C239 /* SuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C29FB72C6165570037C239 /* SuccessViewController.swift */; };
+		15D1A45F2F47B664007E5B28 /* LocalStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D1A45E2F47B664007E5B28 /* LocalStorageTests.swift */; };
+		15D1A4622F47B7C1007E5B28 /* TrustlyCommonFunctionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D1A4612F47B7C1007E5B28 /* TrustlyCommonFunctionsTests.swift */; };
 		15D96FB32C46E6B700296BC4 /* NetworkHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D96FB22C46E6B700296BC4 /* NetworkHelperTests.swift */; };
 		15E049852B7510BA0084B71A /* JsonUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15E049842B7510BA0084B71A /* JsonUtilsTests.swift */; };
 		15F713972D9C6EE400F259BE /* DeviceHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F713962D9C6EE400F259BE /* DeviceHelperTests.swift */; };
@@ -57,6 +59,8 @@
 		15BEC9B32C383FB900050FB9 /* ValidationHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationHelperTests.swift; sourceTree = "<group>"; };
 		15C29FB52C6165480037C239 /* SuccessViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SuccessViewController.xib; sourceTree = "<group>"; };
 		15C29FB72C6165570037C239 /* SuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessViewController.swift; sourceTree = "<group>"; };
+		15D1A45E2F47B664007E5B28 /* LocalStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStorageTests.swift; sourceTree = "<group>"; };
+		15D1A4612F47B7C1007E5B28 /* TrustlyCommonFunctionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrustlyCommonFunctionsTests.swift; sourceTree = "<group>"; };
 		15D96FB22C46E6B700296BC4 /* NetworkHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkHelperTests.swift; sourceTree = "<group>"; };
 		15E049842B7510BA0084B71A /* JsonUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonUtilsTests.swift; sourceTree = "<group>"; };
 		15EA22A92CE3D18D00C45E32 /* Unit Tests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Unit Tests.xctestplan"; sourceTree = "<group>"; };
@@ -141,6 +145,22 @@
 			name = Session;
 			sourceTree = "<group>";
 		};
+		15D1A4642F47B8E5007E5B28 /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				15D1A45E2F47B664007E5B28 /* LocalStorageTests.swift */,
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
+		15D1A4652F47B924007E5B28 /* Commons */ = {
+			isa = PBXGroup;
+			children = (
+				15D1A4612F47B7C1007E5B28 /* TrustlyCommonFunctionsTests.swift */,
+			);
+			path = Commons;
+			sourceTree = "<group>";
+		};
 		2FFBEBF127FEF263CF329C6F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -198,10 +218,12 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				15D1A4652F47B924007E5B28 /* Commons */,
 				15BEC9B22C383F3600050FB9 /* Helpers */,
-				15C29FBC2C6533520037C239 /* Utils */,
+				15D1A4642F47B8E5007E5B28 /* Repository */,
 				15C29FBD2C65336B0037C239 /* Session */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
+				15C29FBC2C6533520037C239 /* Utils */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -421,6 +443,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				15D1A45F2F47B664007E5B28 /* LocalStorageTests.swift in Sources */,
+				15D1A4622F47B7C1007E5B28 /* TrustlyCommonFunctionsTests.swift in Sources */,
 				15BEC9B42C383FB900050FB9 /* ValidationHelperTests.swift in Sources */,
 				15E049852B7510BA0084B71A /* JsonUtilsTests.swift in Sources */,
 				15268E062DF8A5B900EC94E0 /* MerchantWidgetViewController.swift in Sources */,
