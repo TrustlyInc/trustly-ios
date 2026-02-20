@@ -20,3 +20,18 @@ func generateGrp() -> String {
     grp = String(format:"%d", grpInt)
     return grp
 }
+
+func getLastBankUsedFrom(country: String) -> String {
+    
+    let trustlyContextBase64 = getTrustlyContext()
+    
+    if !trustlyContextBase64.isEmpty {
+        let trustlyContext = trustlyContextBase64.base64ToDictionary()
+        
+        if let lastUsed = trustlyContext["lastUsed"] as? [String: String] {
+            return lastUsed[country] ?? ""
+        }
+    }
+    
+    return ""
+}
