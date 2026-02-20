@@ -31,13 +31,13 @@ class InitialViewController: UIViewController {
             "customer.address.country": "US",
             "theme": "dark",
             "metadata.theme": "dark",
-            "metadata.deepLinkStrategy": "<[url-scheme, universal-link]>",
-            "metadata.universalLink": "<custom universal link url>",
+            "metadata.deepLinkStrategy": "<[url-scheme, deeplink-url]>",
+            "metadata.deepLinkUrl": "<custom deeplink url>",
             "metadata.urlScheme": "demoapp://",
             "description": "First Data Mobile Test",
 //            "metadata.flowType": "" // Uncomment and set a value in order to use a specific payment flow
             "env": "<[int, sandbox, local]>",
-            "localUrl": "<YOUR LOCAL URL WHEN `ENV` PROPERTY IS `LOCAL` (ex: https://192.168.0.30)>"
+            "envHost": "<YOUR LOCAL URL WHEN `ENV` PROPERTY IS `LOCAL` (ex: https://192.168.0.30)>"
         ]
 
     }
