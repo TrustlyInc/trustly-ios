@@ -183,6 +183,11 @@ extension LightBoxViewController {
     }
     
     private func onReturn(_ returnParameters: [AnyHashable : Any]) -> Void{
+        
+        if let trustlyContext = returnParameters["trustlyContext"] as? String  {
+            LocalStorage.save(trustlyContext, forKey: Constants.repositoryTrustlyContext)
+        }
+        
         self.delegate?.onReturn(returnParameters)
     }
     
