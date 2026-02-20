@@ -53,7 +53,14 @@ func buildEnvironment(resourceUrl:ResourceUrls, environment: String, localUrl: S
     )
     
     if path == .selectBank {
+        
         urlString = "\(urlString)?v=\(build)-ios-sdk"
+        
+        let lastUsed = getLastBankUsedFrom(country: query?["customer.address.country"] as? String ?? "")
+        if !lastUsed.isEmpty {
+            urlString = "\(urlString)&lastUsed=\(lastUsed)"
+        }
+        
     }
     
     if let query = query {
