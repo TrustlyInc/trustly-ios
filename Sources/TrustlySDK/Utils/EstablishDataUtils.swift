@@ -169,7 +169,12 @@ struct EstablishDataUtils {
                 establishData["returnUrl"] = urlScheme
                 establishData["cancelUrl"] = urlScheme
                 establishData["metadata.integrationContext"] = Constants.secureBrowserIntegrationContext
-                establishData["metadata.trustlyContext"] = getTrustlyContext()
+                
+                let trustlyContext = getTrustlyContext()
+                if !trustlyContext.isEmpty {
+                    establishData["metadata.trustlyContext"] = trustlyContext
+                }
+                
             } else {
                 if establishData.index(forKey: "metadata.integrationContext") == nil {
                     establishData["metadata.integrationContext"] = Constants.inAppIntegrationContext
@@ -193,12 +198,5 @@ struct EstablishDataUtils {
         
         return urlScheme.components(separatedBy: ":")[0]
     }
-    
-//    static func getLastBankUsedFrom(county: String) -> String {
-//        
-//        let trustlyContext:String = getTrustlyContext()
-//        
-//        return ""
-//    }
 
 }
