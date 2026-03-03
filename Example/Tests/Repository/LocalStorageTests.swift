@@ -38,12 +38,12 @@ final class LocalStorageTests: XCTestCase {
 
         let retrievedValue = LocalStorage.getFrom(key: "non_existent_key", defaultValue: defaultValue)
         
-        XCTAssertEqual(retrievedValue, defaultValue, "Deve retornar o valor padrão quando a chave não existe.")
+        XCTAssertEqual(retrievedValue, defaultValue, "It should return the default value when the key does not exist.")
     }
     
     func testGetFrom_WithoutProvidingDefaultValue_ShouldReturnEmptyString() {
         let retrievedValue = LocalStorage.getFrom(key: "non_existent_key")
         
-        XCTAssertEqual(retrievedValue, "", "O valor padrão default da assinatura deve ser uma String vazia.")
+        XCTAssertEqual(retrievedValue, "", "The default value for the signature should be an empty String.")
     }
 }
