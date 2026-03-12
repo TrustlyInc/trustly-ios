@@ -18,4 +18,26 @@ extension String {
 
         return base64String
     }
+    
+    func base64ToDictionary() -> [String: Any] {
+
+        guard let data = Data(base64Encoded: self) else {
+            Logs.debug(log: Logs.stringExtensions, message: "Error: Could not decode Base64 string to Data")
+            return [:]
+        }
+
+        do {
+            let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
+            
+            if let dictionary = jsonObject as? [String: Any] {
+                return dictionary
+            } else {
+                Logs.debug(log: Logs.stringExtensions, message: "Error: JSON object is not a dictionary")
+                return [:]
+            }
+        } catch {
+            Logs.debug(log: Logs.stringExtensions, message: "Error: Could not deserialize Data to JSON object: \(error.localizedDescription)")
+            return [:]
+        }
+    }
 }
