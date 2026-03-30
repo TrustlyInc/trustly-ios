@@ -5,6 +5,8 @@
 //  Created by Marcos Rivereto on 19/02/26.
 //
 
+import Foundation
+
 class LocalStorage {
     
     static let userDefaults:UserDefaults = UserDefaults.standard

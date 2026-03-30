@@ -5,6 +5,7 @@
 //  Created by Marcos Rivereto on 19/02/26.
 //
 
+import Foundation
 
 func getTrustlyContext() -> String {
     return LocalStorage.getFrom(key: Constants.repositoryTrustlyContext, defaultValue: "")
