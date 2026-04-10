@@ -61,7 +61,7 @@ jobs:
       - name: Install CocoaPods
         run: |
             gem install cocoapods
-            pod install --project-directory=Example
+            pod install --project-directory=ExampleApp/ExampleAppUIKit
 
       - name: Install sonnar-scanner
         run: |

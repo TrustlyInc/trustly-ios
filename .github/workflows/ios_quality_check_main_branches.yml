@@ -36,7 +36,7 @@ jobs:
           brew install lizard
           gem install cocoapods
           brew install fastlane
-          pod install --project-directory=Example
+          pod install --project-directory=ExampleApp/ExampleAppUIKit
           brew install sonar-scanner
 
       - name: Run SonarQube Analysis
