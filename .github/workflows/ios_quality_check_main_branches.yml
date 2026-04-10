@@ -37,7 +37,14 @@ jobs:
           brew install fastlane
           brew install sonar-scanner
 
+      - name: Reset SonarScanner cache
+        run: |
+          rm -rf ~/.sonar/cache
+          mkdir -p "${RUNNER_TEMP}/.sonar"
+
       - name: Run SonarQube Analysis
+        env:
+          SONAR_USER_HOME: ${{ runner.temp }}/.sonar
         run: |
           echo "sonar.host.url=${{ env.SONAR_HOST_URL }}" >> sonar-project.properties
           echo "sonar.projectKey=${{ env.SONAR_PROJECT_KEY }}" >> sonar-project.properties
