@@ -5,7 +5,10 @@
       location = "group:ExampleApp/ExampleAppUIKit/ExampleAppUIKit.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:ExampleApp/ExampleAppSwiftUI.xcodeproj">
+      location = "group:ExampleApp/ExampleAppUIKit/Pods/Pods.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:ExampleApp/ExampleAppSwiftUI/ExampleAppSwiftUI.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:TrustlySDK/TrustlySDK.xcodeproj">

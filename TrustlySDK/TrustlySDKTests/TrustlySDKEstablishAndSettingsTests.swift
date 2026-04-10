@@ -4,7 +4,7 @@
 //
 //  Created by Luiz Rath Alves on 02/04/26.
 //
-
+ 
 import XCTest
 @testable import TrustlySDK
 

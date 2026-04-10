@@ -18,26 +18,26 @@ class InitialViewController: UIViewController {
         super.viewDidLoad()
 
         self.establishData = [
-            "accessId": "<ACCESS_ID>",
-            "merchantId" : "<MERCHANT_ID>",
+            "accessId": "TSwGyK52Mnpt5b8C",
+            "merchantId" : "1127",
             "currency" : "USD",
             "amount" : "1.00",
-            "merchantReference" : "<MERCHANT_REFERENCE>",
+            "merchantReference" : "SDK-01",
             "paymentType" : "Retrieval",
             "returnUrl": "/returnUrl",
             "cancelUrl": "/cancelUrl",
-            "requestSignature": "<REQUEST_SIGNATURE>",
+            // "requestSignature": "<REQUEST_SIGNATURE>",
             "customer.name": "John",
             "customer.address.country": "US",
             "theme": "dark",
             "metadata.theme": "dark",
-            "metadata.deepLinkStrategy": "<[url-scheme, deeplink-url]>",
-            "metadata.deepLinkUrl": "<custom deeplink url>",
+            "metadata.deepLinkStrategy": "url-scheme",
+            // "metadata.deepLinkUrl": "<custom deeplink url>",
             "metadata.urlScheme": "demoapp://",
-            "description": "First Data Mobile Test",
+            "description": "iOS SDK ExampleAppUIKit Test",
 //            "metadata.flowType": "" // Uncomment and set a value in order to use a specific payment flow
-            "env": "<[int, sandbox, local]>",
-            "envHost": "<YOUR LOCAL URL WHEN `ENV` PROPERTY IS `LOCAL` (ex: https://192.168.0.30)>"
+            "env": "sandbox",
+            // "envHost": "<YOUR LOCAL URL WHEN `ENV` PROPERTY IS `LOCAL` (ex: https://192.168.0.30)>"
         ]
 
     }

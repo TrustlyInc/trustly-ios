@@ -42,12 +42,12 @@
 		};
 		69525C0B2F7F268C000A5F54 /* ExampleAppTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ExampleAppTests;
+			path = ../ExampleAppTests;
 			sourceTree = "<group>";
 		};
 		69525C152F7F268C000A5F54 /* ExampleAppUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ExampleAppUITests;
+			path = ../ExampleAppUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */

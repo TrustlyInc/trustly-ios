@@ -43,6 +43,15 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
       shouldAutocreateTestPlan = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "69525B952F7F2229000A5F54"
+            BuildableName = "TrustlySDK.framework"
+            BlueprintName = "TrustlySDK"
+            ReferencedContainer = "container:TrustlySDK.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <Testables>
          <TestableReference
             skipped = "NO"
@@ -56,15 +65,6 @@
             </BuildableReference>
          </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "69525B952F7F2229000A5F54"
-            BuildableName = "TrustlySDK.framework"
-            BlueprintName = "TrustlySDK"
-            ReferencedContainer = "container:TrustlySDK.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"

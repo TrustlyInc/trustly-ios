@@ -1,0 +1,16 @@
+PODS:
+  - TrustlySDK (4.2.0)
+
+DEPENDENCIES:
+  - TrustlySDK (from `../..`)
+
+EXTERNAL SOURCES:
+  TrustlySDK:
+    :path: "../.."
+
+SPEC CHECKSUMS:
+  TrustlySDK: 9ecce3fdec749558eb08b5b50deaca2e6dbe7ff5
+
+PODFILE CHECKSUM: 9b03f9ac6aff4cba6ed3b16b934bd29ebec4ba4e
+
+COCOAPODS: 1.16.2
