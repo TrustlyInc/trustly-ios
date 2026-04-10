@@ -48,3 +48,4 @@ Coverage.xml
 # Fastlane
 test_output/
 fastlane/report.xml
+fastlane/README.md
