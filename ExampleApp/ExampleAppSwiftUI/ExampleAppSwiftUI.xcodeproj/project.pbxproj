@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		69525C272F7F26E8000A5F54 /* TrustlySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69525C262F7F26E8000A5F54 /* TrustlySDK.framework */; };
+		153181EE2F900BB000D61531 /* TrustlySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69525C262F7F26E8000A5F54 /* TrustlySDK.framework */; };
+		153181EF2F900BB000D61531 /* TrustlySDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 69525C262F7F26E8000A5F54 /* TrustlySDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,7 +28,22 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		153181F02F900BB000D61531 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				153181EF2F900BB000D61531 /* TrustlySDK.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		153181DA2F900B3800D61531 /* ExampleAppSwiftUI.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ExampleAppSwiftUI.xcodeproj; sourceTree = "<group>"; };
 		69525BFB2F7F268B000A5F54 /* ExampleAppSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExampleAppSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69525C082F7F268C000A5F54 /* ExampleAppSwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExampleAppSwiftUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		69525C122F7F268C000A5F54 /* ExampleAppSwiftUIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExampleAppSwiftUIUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -37,15 +53,15 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		69525BFD2F7F268B000A5F54 /* ExampleAppSwiftUI */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ExampleAppSwiftUI;
+			name = ExampleAppSwiftUI;
 			sourceTree = "<group>";
 		};
-		69525C0B2F7F268C000A5F54 /* ExampleAppTests */ = {
+		69525C0B2F7F268C000A5F54 /* ../ExampleAppTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = ../ExampleAppTests;
 			sourceTree = "<group>";
 		};
-		69525C152F7F268C000A5F54 /* ExampleAppUITests */ = {
+		69525C152F7F268C000A5F54 /* ../ExampleAppUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = ../ExampleAppUITests;
 			sourceTree = "<group>";
@@ -57,7 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				69525C272F7F26E8000A5F54 /* TrustlySDK.framework in Frameworks */,
+				153181EE2F900BB000D61531 /* TrustlySDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,12 +94,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		153181E22F900B3800D61531 /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
+			sourceTree = "<group>";
+		};
 		69525BF22F7F268B000A5F54 = {
 			isa = PBXGroup;
 			children = (
 				69525BFD2F7F268B000A5F54 /* ExampleAppSwiftUI */,
-				69525C0B2F7F268C000A5F54 /* ExampleAppTests */,
-				69525C152F7F268C000A5F54 /* ExampleAppUITests */,
+				69525C0B2F7F268C000A5F54 /* ../ExampleAppTests */,
+				69525C152F7F268C000A5F54 /* ../ExampleAppUITests */,
 				69525C252F7F26E8000A5F54 /* Frameworks */,
 				69525BFC2F7F268B000A5F54 /* Products */,
 			);
@@ -117,6 +138,7 @@
 				69525BF72F7F268B000A5F54 /* Sources */,
 				69525BF82F7F268B000A5F54 /* Frameworks */,
 				69525BF92F7F268B000A5F54 /* Resources */,
+				153181F02F900BB000D61531 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -146,7 +168,7 @@
 				69525C0A2F7F268C000A5F54 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				69525C0B2F7F268C000A5F54 /* ExampleAppTests */,
+				69525C0B2F7F268C000A5F54 /* ../ExampleAppTests */,
 			);
 			name = ExampleAppSwiftUITests;
 			packageProductDependencies = (
@@ -169,7 +191,7 @@
 				69525C142F7F268C000A5F54 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				69525C152F7F268C000A5F54 /* ExampleAppUITests */,
+				69525C152F7F268C000A5F54 /* ../ExampleAppUITests */,
 			);
 			name = ExampleAppSwiftUIUITests;
 			packageProductDependencies = (
@@ -190,6 +212,7 @@
 				TargetAttributes = {
 					69525BFA2F7F268B000A5F54 = {
 						CreatedOnToolsVersion = 26.2;
+						LastSwiftMigration = 2640;
 					};
 					69525C072F7F268C000A5F54 = {
 						CreatedOnToolsVersion = 26.2;
@@ -213,6 +236,12 @@
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 69525BFC2F7F268B000A5F54 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 153181E22F900B3800D61531 /* Products */;
+					ProjectRef = 153181DA2F900B3800D61531 /* ExampleAppSwiftUI.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				69525BFA2F7F268B000A5F54 /* ExampleAppSwiftUI */,
@@ -410,6 +439,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 935WTYE9VM;
@@ -431,6 +461,7 @@
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -442,6 +473,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 935WTYE9VM;
