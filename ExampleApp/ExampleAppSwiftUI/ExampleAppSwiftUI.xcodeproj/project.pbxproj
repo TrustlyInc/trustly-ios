@@ -44,26 +44,18 @@
 
 /* Begin PBXFileReference section */
 		153181DA2F900B3800D61531 /* ExampleAppSwiftUI.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ExampleAppSwiftUI.xcodeproj; sourceTree = "<group>"; };
+		693143FD2F92CBEF00E7BE1D /* ExampleAppSwiftUI.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ExampleAppSwiftUI.xcodeproj; sourceTree = "<group>"; };
 		69525BFB2F7F268B000A5F54 /* ExampleAppSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExampleAppSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69525C082F7F268C000A5F54 /* ExampleAppSwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExampleAppSwiftUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		69525C122F7F268C000A5F54 /* ExampleAppSwiftUIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExampleAppSwiftUIUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		69525C262F7F26E8000A5F54 /* TrustlySDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TrustlySDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6957BC4F2F92CD4600F3DC23 /* ExampleAppSwiftUI.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ExampleAppSwiftUI.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		69525BFD2F7F268B000A5F54 /* ExampleAppSwiftUI */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			name = ExampleAppSwiftUI;
-			sourceTree = "<group>";
-		};
-		69525C0B2F7F268C000A5F54 /* ../ExampleAppTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ../ExampleAppTests;
-			sourceTree = "<group>";
-		};
-		69525C152F7F268C000A5F54 /* ../ExampleAppUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ../ExampleAppUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -99,12 +91,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		693144052F92CBEF00E7BE1D /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
+			sourceTree = "<group>";
+		};
 		69525BF22F7F268B000A5F54 = {
 			isa = PBXGroup;
 			children = (
 				69525BFD2F7F268B000A5F54 /* ExampleAppSwiftUI */,
-				69525C0B2F7F268C000A5F54 /* ../ExampleAppTests */,
-				69525C152F7F268C000A5F54 /* ../ExampleAppUITests */,
 				69525C252F7F26E8000A5F54 /* Frameworks */,
 				69525BFC2F7F268B000A5F54 /* Products */,
 			);
@@ -126,6 +121,11 @@
 				69525C262F7F26E8000A5F54 /* TrustlySDK.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6957BC572F92CD4600F3DC23 /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -167,9 +167,6 @@
 			dependencies = (
 				69525C0A2F7F268C000A5F54 /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				69525C0B2F7F268C000A5F54 /* ../ExampleAppTests */,
-			);
 			name = ExampleAppSwiftUITests;
 			packageProductDependencies = (
 			);
@@ -189,9 +186,6 @@
 			);
 			dependencies = (
 				69525C142F7F268C000A5F54 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				69525C152F7F268C000A5F54 /* ../ExampleAppUITests */,
 			);
 			name = ExampleAppSwiftUIUITests;
 			packageProductDependencies = (
@@ -237,6 +231,14 @@
 			productRefGroup = 69525BFC2F7F268B000A5F54 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
+				{
+					ProductGroup = 693144052F92CBEF00E7BE1D /* Products */;
+					ProjectRef = 693143FD2F92CBEF00E7BE1D /* ExampleAppSwiftUI.xcodeproj */;
+				},
+				{
+					ProductGroup = 6957BC572F92CD4600F3DC23 /* Products */;
+					ProjectRef = 6957BC4F2F92CD4600F3DC23 /* ExampleAppSwiftUI.xcodeproj */;
+				},
 				{
 					ProductGroup = 153181E22F900B3800D61531 /* Products */;
 					ProjectRef = 153181DA2F900B3800D61531 /* ExampleAppSwiftUI.xcodeproj */;
@@ -440,9 +442,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 935WTYE9VM;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -457,6 +459,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.trustly.ExampleApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
@@ -474,9 +477,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 935WTYE9VM;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -491,6 +494,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.trustly.ExampleApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
@@ -505,14 +509,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 935WTYE9VM;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.trustly.ExampleAppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -527,14 +532,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 935WTYE9VM;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.trustly.ExampleAppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -548,13 +554,14 @@
 		69525C232F7F268C000A5F54 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 935WTYE9VM;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.trustly.ExampleAppUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -568,13 +575,14 @@
 		69525C242F7F268C000A5F54 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 935WTYE9VM;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.trustly.ExampleAppUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;

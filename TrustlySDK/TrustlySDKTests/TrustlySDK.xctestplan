@@ -1,0 +1,25 @@
+{
+  "configurations" : [
+    {
+      "id" : "54E779B5-EB71-4114-A8C0-B5483CD16C94",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "performanceAntipatternCheckerEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:TrustlySDK.xcodeproj",
+        "identifier" : "69525BA02F7F222A000A5F54",
+        "name" : "TrustlySDKTests"
+      }
+    }
+  ],
+  "version" : 1
+}

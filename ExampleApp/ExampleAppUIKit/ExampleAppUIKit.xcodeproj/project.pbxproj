@@ -133,7 +133,6 @@
 				A084E8C04952DCC490164C2C /* Pods-ExampleAppUIKit.debug.xcconfig */,
 				375FEF1EB90F28F3757F32BA /* Pods-ExampleAppUIKit.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
