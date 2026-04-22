@@ -18,26 +18,23 @@ class InitialViewController: UIViewController {
         super.viewDidLoad()
 
         self.establishData = [
-            "accessId": "<ACCESS_ID>",
-            "merchantId" : "<MERCHANT_ID>",
+            "accessId": "BananaPie012345",
+            "merchantId" : "1196",
             "currency" : "USD",
             "amount" : "1.00",
-            "merchantReference" : "<MERCHANT_REFERENCE>",
+            "merchantReference" : "3D51F3A42EFE499A",
             "paymentType" : "Retrieval",
             "returnUrl": "/returnUrl",
             "cancelUrl": "/cancelUrl",
-            "requestSignature": "<REQUEST_SIGNATURE>",
+            "requestSignature": "HT5mVOqBXa8ZlvgX2USmPeLns5o=",
             "customer.name": "John",
             "customer.address.country": "US",
-            "theme": "dark",
-            "metadata.theme": "dark",
-            "metadata.deepLinkStrategy": "<[url-scheme, deeplink-url]>",
-            "metadata.deepLinkUrl": "<custom deeplink url>",
+//            "metadata.deepLinkStrategy": "<[url-scheme, deeplink-url]>",
+            "metadata.deepLinkUrl": "https://alpha-merchant.tools.devent.trustly.one/start/oauth/app/",
             "metadata.urlScheme": "demoapp://",
-            "description": "First Data Mobile Test",
-//            "metadata.flowType": "" // Uncomment and set a value in order to use a specific payment flow
-            "env": "<[int, sandbox, local]>",
-            "envHost": "<YOUR LOCAL URL WHEN `ENV` PROPERTY IS `LOCAL` (ex: https://192.168.0.30)>"
+            "description": "Globex Demo",
+            "env": "sandbox",
+            "envHost": "192.168.0.13:8000"
         ]
 
     }

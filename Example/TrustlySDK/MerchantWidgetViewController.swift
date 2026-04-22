@@ -13,6 +13,7 @@ import TrustlySDK
 class MerchantWidgetViewController: BaseViewController {
     
     @IBOutlet weak var amountTextView: UITextField!
+    @IBOutlet weak var widgetView: UIView!
     var establishData: Dictionary<AnyHashable,Any> = [:]
     
     private var lightboxViewController: LightBoxViewController?
@@ -23,8 +24,8 @@ class MerchantWidgetViewController: BaseViewController {
         let widgetVC = WidgetViewController(establishData: establishData)
         widgetVC.delegate = self
 
-        widgetVC.view.frame = CGRect(x: 15, y: 210, width: amountTextView.frame.width, height: 500)
-        view.addSubview(widgetVC.view)
+        widgetVC.view.frame.size = widgetView.frame.size
+        widgetView.addSubview(widgetVC.view)
        
     }
     
