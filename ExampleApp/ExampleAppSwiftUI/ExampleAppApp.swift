@@ -18,10 +18,13 @@ struct ExampleAppApp: App {
             ContentView()
                 .environment(viewModel)
                 .onOpenURL { url in
-                    if url.absoluteString == "demoapp://" {
-                        NotificationCenter.default.post(name: .trustlyCloseWebview, object: nil)
-                    }
+                    handleIncomingURL(url)
                 }
         }
     }
+    
+    private func handleIncomingURL(_ url: URL) {
+            guard url.scheme == "demoappSwiftUI://" else { return }
+            NotificationCenter.default.post(name: .trustlyCloseWebview, object: nil)
+        }
 }

@@ -44,6 +44,7 @@
 
 /* Begin PBXFileReference section */
 		153181DA2F900B3800D61531 /* ExampleAppSwiftUI.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ExampleAppSwiftUI.xcodeproj; sourceTree = "<group>"; };
+		6916D31C2F99769300404EE7 /* ExampleAppSwiftUI.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ExampleAppSwiftUI.xcodeproj; sourceTree = "<group>"; };
 		693143FD2F92CBEF00E7BE1D /* ExampleAppSwiftUI.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ExampleAppSwiftUI.xcodeproj; sourceTree = "<group>"; };
 		69525BFB2F7F268B000A5F54 /* ExampleAppSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExampleAppSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69525C082F7F268C000A5F54 /* ExampleAppSwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExampleAppSwiftUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -52,9 +53,22 @@
 		6957BC4F2F92CD4600F3DC23 /* ExampleAppSwiftUI.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ExampleAppSwiftUI.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		6916D3312F9976F000404EE7 /* Exceptions for "ExampleAppSwiftUI" folder in "ExampleAppSwiftUI" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"ExampleAppSwiftUI-Info.plist",
+			);
+			target = 69525BFA2F7F268B000A5F54 /* ExampleAppSwiftUI */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		69525BFD2F7F268B000A5F54 /* ExampleAppSwiftUI */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				6916D3312F9976F000404EE7 /* Exceptions for "ExampleAppSwiftUI" folder in "ExampleAppSwiftUI" target */,
+			);
 			name = ExampleAppSwiftUI;
 			sourceTree = "<group>";
 		};
@@ -87,6 +101,11 @@
 
 /* Begin PBXGroup section */
 		153181E22F900B3800D61531 /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6916D3242F99769300404EE7 /* Products */ = {
 			isa = PBXGroup;
 			name = Products;
 			sourceTree = "<group>";
@@ -242,6 +261,10 @@
 				{
 					ProductGroup = 153181E22F900B3800D61531 /* Products */;
 					ProjectRef = 153181DA2F900B3800D61531 /* ExampleAppSwiftUI.xcodeproj */;
+				},
+				{
+					ProductGroup = 6916D3242F99769300404EE7 /* Products */;
+					ProjectRef = 6916D31C2F99769300404EE7 /* ExampleAppSwiftUI.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -447,6 +470,7 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "ExampleAppSwiftUI-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -482,6 +506,7 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "ExampleAppSwiftUI-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

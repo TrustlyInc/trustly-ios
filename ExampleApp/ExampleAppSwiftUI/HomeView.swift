@@ -23,7 +23,8 @@ struct HomeView: View {
     @State private var returnUrl = "/returnUrl"
     @State private var cancelUrl = "/cancelUrl"
     @State private var theme = "dark"
-    @State private var urlScheme = "demoapp://"
+    @State private var urlScheme = "demoappSwiftUI://"
+    @State private var deepLinkStrategy = "url-scheme"
     @State private var description = "First Data Mobile Test"
 
     var body: some View {
@@ -142,6 +143,7 @@ struct HomeView: View {
             "customer.address.country": customerCountry,
             "theme": theme,
             "metadata.theme": theme,
+            "metadata.deepLinkStrategy": deepLinkStrategy,
             "metadata.urlScheme": urlScheme,
             "description": description,
             "env": env
