@@ -58,14 +58,14 @@ jobs:
             sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
             sudo xcodebuild -license accept
 
-      - name: Install CocoaPods
-        run: |
-            gem install cocoapods
-            pod install --project-directory=Example
-
       - name: Install sonnar-scanner
         run: |
          brew install sonar-scanner
+
+      - name: Reset SonarScanner cache
+        run: |
+          rm -rf ~/.sonar/cache
+          mkdir -p "${RUNNER_TEMP}/.sonar"
          
       - name: Update sonar properties
         run: |
@@ -84,6 +84,8 @@ jobs:
           sudo xcodebuild -runFirstLaunch
     
       - name: Run Sonar-Swift Script
+        env:
+          SONAR_USER_HOME: ${{ runner.temp }}/.sonar
         run: |
           chmod +x ./run-sonar-swift.sh
           ./run-sonar-swift.sh -v

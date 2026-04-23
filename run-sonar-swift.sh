@@ -314,7 +314,8 @@ if [ "$unittests" = "on" ]; then
     elif [[ ! -z "$projectFile" ]]; then
 	      buildCmd+=(-project "$projectFile")
     fi
-    buildCmd+=( -scheme "$appScheme" -configuration "$appConfiguration" -enableCodeCoverage YES -derivedDataPath sonar-reports/)
+	xcresultPath="sonar-reports/TestResults.xcresult"
+	buildCmd+=( -scheme "$appScheme" -configuration "$appConfiguration" -enableCodeCoverage YES -derivedDataPath sonar-reports/ -resultBundlePath "$xcresultPath")
     if [[ ! -z "$destinationSimulator" ]]; then
         buildCmd+=(-destination "$destinationSimulator" -destination-timeout 60)
     fi
@@ -341,7 +342,27 @@ if [ "$unittests" = "on" ]; then
 
 	firstProject=$(echo $projectFile | sed -n 1'p' | tr ',' '\n' | head -n 1)
 
-	bash xccov-to-sonarqube-generic.sh sonar-reports/Logs/Test/Run-TrustlySDK-Example-*.xcresult/ > sonar-reports/generic-coverage.xml
+	if [ ! -d "$xcresultPath" ]; then
+		echo "ERROR - No .xcresult bundle found at $xcresultPath"
+		exit 1
+	fi
+
+	if ! xcrun xccov view --report "$xcresultPath" >/dev/null 2>&1; then
+		echo "ERROR - xccov could not read coverage data from $xcresultPath"
+		exit 1
+	fi
+
+	runCommand sonar-reports/generic-coverage.xml bash xccov-to-sonarqube-generic.sh "$xcresultPath"
+
+	if [ ! -s sonar-reports/generic-coverage.xml ]; then
+		echo "ERROR - Generated sonar-reports/generic-coverage.xml is empty"
+		exit 1
+	fi
+
+	if ! grep -q "</coverage>" sonar-reports/generic-coverage.xml; then
+		echo "ERROR - Generated sonar-reports/generic-coverage.xml is malformed"
+		exit 1
+	fi
     # slatherCmd=($SLATHER_CMD coverage)
     # if [[ ! -z "$binaryName" ]]; then
     # 	slatherCmd+=( --binary-basename "$binaryName")

@@ -1,18 +1,3 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
-
 default_platform(:ios)
 
 TAG_VERSION = ENV["TAG_VERSION"] # Git tag version
@@ -21,23 +6,66 @@ platform :ios do
   lane :publish do
     lint
     build_and_run_tests
+    verify_example_integrations
   end
 
-  # Unit tests
-  desc "Build the application and run tests"
+  # Unit tests - SDK
+  desc "Build the SDK and run unit tests"
   lane :build_and_run_tests do
     scan(
-      workspace: "./Example/TrustlySDK.xcworkspace",
-      scheme: 'TrustlySDK-Example',
+      workspace: "./TrustlySDK.xcworkspace",
+      scheme: 'TrustlySDK',
       devices: ["iPhone 16"],
       clean: true
     )
   end
 
+  desc "Build SwiftUI example app for iOS Simulator (direct TrustlySDK integration)"
+  lane :verify_swiftui_example do
+    build_ios_app(
+      workspace: "./TrustlySDK.xcworkspace",
+      scheme: "ExampleAppSwiftUI",
+      configuration: "Debug",
+      sdk: "iphonesimulator",
+      destination: "platform=iOS Simulator,name=iPhone 17",
+      clean: true,
+      skip_archive: true,
+      skip_package_ipa: true,
+      silent: true
+    )
+  end
+
+  desc "Install pods and build UIKit example app for iOS Simulator (TrustlySDK via CocoaPods)"
+  lane :verify_uikit_example_cocoapods do
+    cocoapods(
+      podfile: "./ExampleApp/ExampleAppUIKit/Podfile",
+      clean_install: true,
+      silent: true
+    )
+
+    build_ios_app(
+      workspace: "./ExampleApp/ExampleAppUIKit/ExampleAppUIKit.xcworkspace",
+      scheme: "ExampleAppUIKit",
+      configuration: "Debug",
+      sdk: "iphonesimulator",
+      destination: "platform=iOS Simulator,name=iPhone 17",
+      clean: true,
+      skip_archive: true,
+      skip_package_ipa: true,
+      silent: true
+    )
+  end
+
+  desc "Verify TrustlySDK integration in both example apps"
+  lane :verify_example_integrations do
+    verify_swiftui_example
+    verify_uikit_example_cocoapods
+  end
+
   desc "Apply swift linting"
   lane :lint do
     swiftlint(
-      output_file: "sonar-reports/TrustlySDK-Example-swiftlint.txt",
+      output_file: "sonar-reports/TrustlySDK-swiftlint.txt",
       ignore_exit_status: true
     )
   end
