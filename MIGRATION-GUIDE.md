@@ -168,7 +168,14 @@ class CheckoutViewController: UIViewController, TrustlySDKProtocol {
         widgetVC.delegate = self
 
         addChild(widgetVC)
+        widgetVC.view.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(widgetVC.view)
+        NSLayoutConstraint.activate([
+            widgetVC.view.topAnchor.constraint(equalTo: view.topAnchor),
+            widgetVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            widgetVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            widgetVC.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
         widgetVC.didMove(toParent: self)
     }
 
