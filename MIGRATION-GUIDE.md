@@ -288,20 +288,14 @@ Use this callback ownership model:
 ### v3 integration examples
 
 - [trustly-ios-v3/Example/TrustlySDK/ViewController.swift](trustly-ios-v3/Example/TrustlySDK/ViewController.swift)
-- [trustly-ios-v3/Example/TrustlySDK/TrustlyLightBoxViewController.swift](trustly-ios-v3/Example/TrustlySDK/TrustlyLightBoxViewController.swift)
-- [trustly-ios-v3/Example/TrustlySDK/AppDelegate.swift](trustly-ios-v3/Example/TrustlySDK/AppDelegate.swift)
-- [trustly-ios-v3/Example/TrustlySDK/Info.plist](trustly-ios-v3/Example/TrustlySDK/Info.plist)
-
 ### v4 integration examples
 
-- [trustly-ios-v4/Example/TrustlySDK/MerchantWidgetViewController.swift](trustly-ios-v4/Example/TrustlySDK/MerchantWidgetViewController.swift)
-- [trustly-ios-v4/Example/TrustlySDK/MerchantLightBoxViewController.swift](trustly-ios-v4/Example/TrustlySDK/MerchantLightBoxViewController.swift)
-- [trustly-ios-v4/Example/TrustlySDK/AppDelegate.swift](trustly-ios-v4/Example/TrustlySDK/AppDelegate.swift)
-- [trustly-ios-v4/Example/TrustlySDK/Info.plist](trustly-ios-v4/Example/TrustlySDK/Info.plist)
-- [trustly-ios-v4/Example/TrustlySDK_ExampleDebug.entitlements](trustly-ios-v4/Example/TrustlySDK_ExampleDebug.entitlements)
+- [ExampleApp/ExampleAppUIKit/ExampleAppUIKit/MerchantWidgetViewController.swift](ExampleApp/ExampleAppUIKit/ExampleAppUIKit/MerchantWidgetViewController.swift)
+- [ExampleApp/ExampleAppUIKit/ExampleAppUIKit/MerchantLightBoxViewController.swift](ExampleApp/ExampleAppUIKit/ExampleAppUIKit/MerchantLightBoxViewController.swift)
+- [ExampleApp/ExampleAppUIKit/ExampleAppUIKit/AppDelegate.swift](ExampleApp/ExampleAppUIKit/ExampleAppUIKit/AppDelegate.swift)
 
 ### SDK public API references
 
-- [trustly-ios-v4/Sources/TrustlySDK/TrustlySDKProtocol.swift](trustly-ios-v4/Sources/TrustlySDK/TrustlySDKProtocol.swift)
-- [trustly-ios-v4/Sources/TrustlySDK/Controller/WidgetViewController.swift](trustly-ios-v4/Sources/TrustlySDK/Controller/WidgetViewController.swift)
-- [trustly-ios-v4/Sources/TrustlySDK/Controller/LightBoxViewController.swift](trustly-ios-v4/Sources/TrustlySDK/Controller/LightBoxViewController.swift)
+- [TrustlySDK/TrustlySDK/TrustlySDKProtocol.swift](TrustlySDK/TrustlySDK/TrustlySDKProtocol.swift)
+- [TrustlySDK/TrustlySDK/Controller/WidgetViewController.swift](TrustlySDK/TrustlySDK/Controller/WidgetViewController.swift)
+- [TrustlySDK/TrustlySDK/Controller/LightBoxViewController.swift](TrustlySDK/TrustlySDK/Controller/LightBoxViewController.swift)
