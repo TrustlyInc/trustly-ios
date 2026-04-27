@@ -40,13 +40,13 @@ It is written as an implementation guide, not a codebase analysis.
 
 ## Step-by-Step Upgrade Plan
 
-## 1. Update SDK dependency to v4
+### 1. Update SDK dependency to v4
 
 Use your standard dependency flow (CocoaPods/SPM) to pull v4 and run a clean build.
 
 Keep this PR small: dependency update only.
 
-## 2. Replace `TrustlyView` integration entry points
+### 2. Replace `TrustlyView` integration entry points
 
 Find and remove v3 usage patterns:
 
