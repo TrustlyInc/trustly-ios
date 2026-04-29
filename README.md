@@ -46,6 +46,10 @@ For production reason choose the `main` branch, but for test or validation choos
 </details>
 <br />
 
+## Upgrading
+---
+If you are upgrading from a previous version, see the [Migration Guide](MIGRATION-GUIDE.md) for version-specific instructions.
+
 ## Usage
 
 > [!NOTE]
@@ -66,7 +70,9 @@ For production reason choose the `main` branch, but for test or validation choos
 > 
 > **- Callback Handling Updated:** Methods previously relying on completionHandler have been superseded by the new TrustlySDKProtocol for more consistent and robust callback management.
 > 
-To quickly get up and running with this SDK see the [iOS Quickstart](https://amer.developers.trustly.com/payments/docs/ios-quickstart) in the Trustly Developer Documentation.
+> **Upgrading from v3?** See the [v3 → v4 Migration Guide](MIGRATION-GUIDE.md) for a step-by-step upgrade plan.
+> 
+To quickly get up and running with this SDK see the [iOS Quickstart](https://amer.developers.trustly.com/payments/reference/ios) in the Trustly Developer Documentation.
 
 
 <br />
