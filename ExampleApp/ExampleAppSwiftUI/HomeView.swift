@@ -17,7 +17,6 @@ struct HomeView: View {
     @State private var currency = "USD"
     @State private var paymentType = "Retrieval"
     @State private var env = "<[int, sandbox, local]>"
-    @State private var envHost = ""
     @State private var customerName = "John"
     @State private var customerCountry = "US"
     @State private var returnUrl = "/returnUrl"
@@ -93,13 +92,6 @@ struct HomeView: View {
                         TextField("int / sandbox / local", text: $env)
                             .multilineTextAlignment(.trailing)
                     }
-                    LabeledContent("Env Host") {
-                        TextField("https://...", text: $envHost)
-                            .multilineTextAlignment(.trailing)
-                            .keyboardType(.URL)
-                            .autocorrectionDisabled()
-                            .textInputAutocapitalization(.never)
-                    }
                     LabeledContent("Theme") {
                         TextField("Theme", text: $theme)
                             .multilineTextAlignment(.trailing)
@@ -148,9 +140,6 @@ struct HomeView: View {
             "description": description,
             "env": env
         ]
-        if !envHost.isEmpty {
-            data["envHost"] = envHost
-        }
         return data
     }
 }
