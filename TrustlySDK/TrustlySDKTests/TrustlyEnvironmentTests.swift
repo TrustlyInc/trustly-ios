@@ -35,17 +35,17 @@ class TrustlyEnvironmentTests: XCTestCase {
 
     func testLocalEnvironmentWithIPv4() {
         let environment = TrustlyEnvironment(env: "127.0.0.1")
-        XCTAssertEqual(environment.baseURL.url?.absoluteString, "http://127.0.0.1:8080")
+        XCTAssertEqual(environment.baseURL.url?.absoluteString, "http://127.0.0.1")
     }
 
     func testLocalEnvironmentWithLocal() {
         let environment = TrustlyEnvironment(env: "local")
-        XCTAssertEqual(environment.baseURL.url?.absoluteString, "http://localhost:8080")
+        XCTAssertEqual(environment.baseURL.url?.absoluteString, "http://localhost")
     }
 
     func testLocalEnvironmentWithLocalhost() {
         let environment = TrustlyEnvironment(env: "localhost")
-        XCTAssertEqual(environment.baseURL.url?.absoluteString, "http://localhost:8080")
+        XCTAssertEqual(environment.baseURL.url?.absoluteString, "http://localhost")
     }
 
     func testCustomEnvironment() {
