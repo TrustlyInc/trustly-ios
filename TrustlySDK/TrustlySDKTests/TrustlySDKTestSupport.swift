@@ -29,7 +29,6 @@ class TrustlySDKTestCase: XCTestCase {
             "customer.address.country": "US",
             "metadata.lang": "en",
             "env": "sandbox",
-            "envHost": "",
             "paymentType": Constants.paymentTypeVerification
         ]
     }

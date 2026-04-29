@@ -22,59 +22,56 @@ enum NetworkError: Error {
  @throws NetworkError.invalidUrl
  @result (url: URL, isLocal: Bool)
  */
-func buildEnvironment(resourceUrl:ResourceUrls, environment: String, localUrl: String, paymentType: String, build: String, path:PathUrls = .selectBank, query: [AnyHashable : Any]? = nil, hash: [AnyHashable : Any]? = nil) throws -> (url: URL, isLocal: Bool)  {
-    var resource = resourceUrl
-    var subDomain = ""
-    var urlString = ""
+func buildEnvironment(resourceUrl:ResourceUrls, env: String?, paymentType: String, build: String, path:PathUrls = .selectBank, query: [AnyHashable : Any]? = nil, hash: [AnyHashable : Any]? = nil) throws -> (url: URL, isLocal: Bool)  {
+    let resource = resourceUrl
+    let environment = TrustlyEnvironment(env: env)
+    var urlComponents = environment.baseURL
+    
+    if environment.isLocal {
+        let port = path == .selectBank ? Constants.portApi : Constants.portFrontend
+        urlComponents.port = port
+    }
+    
+    urlComponents.path = "/\(path.rawValue)/\(resource.rawValue)"
 
-    if !environment.isEmpty {
-        subDomain = environment
-    }
-    
-    switch resourceUrl {
-    case .index:
-        if paymentType != Constants.paymentTypeVerification {
-            resource = .selectBank
-        }
-    default:
-        break;
-    }
-    
-    let isLocalUrl = URLUtils.isLocalUrl(environment: environment)
-    
-    urlString = URLUtils.buildStringUrl(
-        domain: localUrl,
-        subDomain: subDomain,
-        path: path.rawValue,
-        resource: resource.rawValue,
-        isLocalUrl: isLocalUrl,
-        environment: environment,
-        port: path == .selectBank ? Constants.portApi : Constants.portFrontend
-    )
+    // Build query items
+    var queryItems: [URLQueryItem] = []
     
     if path == .selectBank {
-        
-        urlString = "\(urlString)?v=\(build)-ios-sdk"
+        queryItems.append(URLQueryItem(name: "v", value: "\(build)-ios-sdk"))
         
         let lastUsed = getLastBankUsedFrom(country: query?["customer.address.country"] as? String ?? "")
         if !lastUsed.isEmpty {
-            urlString = "\(urlString)&lastUsed=\(lastUsed)"
+            queryItems.append(URLQueryItem(name: "lastUsed", value: lastUsed))
         }
-        
     }
     
+    // Add custom query parameters
     if let query = query {
-        urlString = "\(urlString)&\(URLUtils.urlEncoded(query))"
+        for (key, value) in query {
+            if let keyStr = key as? String, let valueStr = value as? String {
+                queryItems.append(URLQueryItem(name: keyStr, value: valueStr))
+            }
+        }
     }
     
+    urlComponents.queryItems = queryItems.isEmpty ? nil : queryItems
+    
+    // Add fragment (hash)
     if let hash = hash {
-        urlString = "\(urlString)#\(URLUtils.urlEncoded(hash))"
+        var fragmentItems: [URLQueryItem] = []
+        for (key, value) in hash {
+            if let keyStr = key as? String, let valueStr = value as? String {
+                fragmentItems.append(URLQueryItem(name: keyStr, value: valueStr))
+            }
+        }
+        urlComponents.fragment = fragmentItems.map { "\($0.name)=\($0.value ?? "")" }.joined(separator: "&")
     }
     
-    guard let url = URL(string: urlString) else {
-        Logs.fault(log: Logs.networkHelper, message: "Invalid url: \(urlString)")
+    guard let url = urlComponents.url else {
+        Logs.fault(log: Logs.networkHelper, message: "Failed to build URL with components")
         throw NetworkError.invalidUrl
     }
-        
-    return (url: url, isLocal: isLocalUrl)
+    
+    return (url: url, isLocal: environment.isLocal)
 }

@@ -1,0 +1,60 @@
+import XCTest
+@testable import TrustlySDK
+
+class TrustlyEnvironmentTests: XCTestCase {
+
+    func testProductionEnvironmentWithNilEnv() {
+        let environment = TrustlyEnvironment(env: nil)
+        XCTAssertEqual(environment.baseURL, "https://trustly.one")
+    }
+
+    func testProductionEnvironmentWithEmptyEnv() {
+        let environment = TrustlyEnvironment(env: "")
+        XCTAssertEqual(environment.baseURL, "https://trustly.one")
+    }
+
+    func testProductionEnvironmentWithProd() {
+        let environment = TrustlyEnvironment(env: "prod")
+        XCTAssertEqual(environment.baseURL, "https://trustly.one")
+    }
+
+    func testProductionEnvironmentWithProdUppercase() {
+        let environment = TrustlyEnvironment(env: "PROD")
+        XCTAssertEqual(environment.baseURL, "https://trustly.one")
+    }
+
+    func testProductionEnvironmentWithProduction() {
+        let environment = TrustlyEnvironment(env: "production")
+        XCTAssertEqual(environment.baseURL, "https://trustly.one")
+    }
+
+    func testDevelopmentEnvironment() {
+        let environment = TrustlyEnvironment(env: "dev-667788")
+        XCTAssertEqual(environment.baseURL, "https://dev-667788.int.trustly.one")
+    }
+
+    func testLocalEnvironmentWithIPv4() {
+        let environment = TrustlyEnvironment(env: "127.0.0.1")
+        XCTAssertEqual(environment.baseURL, "http://127.0.0.1:8080")
+    }
+
+    func testLocalEnvironmentWithLocal() {
+        let environment = TrustlyEnvironment(env: "local")
+        XCTAssertEqual(environment.baseURL, "http://localhost:8080")
+    }
+
+    func testLocalEnvironmentWithLocalhost() {
+        let environment = TrustlyEnvironment(env: "localhost")
+        XCTAssertEqual(environment.baseURL, "http://localhost:8080")
+    }
+
+    func testCustomEnvironment() {
+        let environment = TrustlyEnvironment(env: "staging")
+        XCTAssertEqual(environment.baseURL, "https://staging.trustly.one")
+    }
+
+    func testCustomEnvironmentWithOtherValue() {
+        let environment = TrustlyEnvironment(env: "test")
+        XCTAssertEqual(environment.baseURL, "https://test.trustly.one")
+    }
+}
