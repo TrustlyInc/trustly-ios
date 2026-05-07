@@ -10,7 +10,7 @@ import Foundation
 
 struct Constants {
     static let buildSDK = "4.2.0"
-    static let baseDomain = "paywithmybank.com"
+    static let baseDomain = "trustly.one"
     
     static let returnURL = "msg://return"
     static let cancelURL = "msg://cancel"
@@ -25,8 +25,8 @@ struct Constants {
     
     static let settingsCacheTimeLimit = 15 // minutes
     
-    static let portApi = "8000"
-    static let portFrontend = "10000"
+    static let portApi: Int = 8000
+    static let portFrontend: Int = 10000
 
     static let inAppIntegrationContext = "InAppBrowser"
     static let secureBrowserIntegrationContext = "SecureBrowser"

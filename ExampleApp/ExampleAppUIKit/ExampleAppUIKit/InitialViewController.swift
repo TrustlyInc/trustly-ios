@@ -36,8 +36,7 @@ class InitialViewController: UIViewController {
             "metadata.urlScheme": "demoapp://",
             "description": "First Data Mobile Test",
             "flowType": "",
-            "env": "<[int, sandbox, local]>",
-            "envHost": "<YOUR LOCAL URL WHEN `ENV` PROPERTY IS `LOCAL` (ex: https://192.168.0.30)>"
+            "env": "<[int, sandbox, local]>"
         ]
 
     }

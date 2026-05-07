@@ -259,7 +259,8 @@ extension WebViewManager: ASWebAuthenticationPresentationContextProviding {
     func openOAuth(url: URL) {
         let host = url.host!
         let path = url.path
-        let isLocalEnvironment = URLUtils.isLocalUrl(environment: self.establishData?["env"] as! String)
+        let environment = TrustlyEnvironment(env: self.establishData?["env"] as? String)
+        let isLocalEnvironment = environment.isLocal
         
         if isLocalEnvironment || (self.checkUrl(host: host) &&
                                        path.contains(Constants.oauthLoginPath)) {

@@ -38,8 +38,7 @@ class TrustlyService {
         do {
             let environment = try buildEnvironment(
                 resourceUrl: .widget,
-                environment: (establishData["env"] ?? "") as! String,
-                localUrl: (establishData["envHost"] ?? "") as! String,
+                env: establishData["env"] as? String,
                 paymentType: (establishData["paymentType"] ?? "") as! String,
                 build: Constants.buildSDK,
                 query: establishData
@@ -69,8 +68,7 @@ class TrustlyService {
         do {
             let environment = try buildEnvironment(
                 resourceUrl: .index,
-                environment: (establishData["env"] ?? "") as! String,
-                localUrl: (establishData["envHost"] ?? "") as! String,
+                env: establishData["env"] as? String,
                 paymentType: (establishData["paymentType"] ?? "") as! String,
                 build: Constants.buildSDK
             )
