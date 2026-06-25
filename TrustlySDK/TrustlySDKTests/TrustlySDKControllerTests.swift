@@ -70,6 +70,46 @@ final class TrustlySDKControllerTests: TrustlySDKTestCase {
     }
 
     @MainActor
+    func testLightBoxViewControllerRemovesTrustlyContextFromReturnCallbackParameters() {
+        URLProtocol.registerClass(FailingURLProtocol.self)
+        defer { URLProtocol.unregisterClass(FailingURLProtocol.self) }
+
+        let delegate = TrustlySDKProtocolSpy()
+        let viewController = LightBoxViewController(establishData: makeBaseEstablishData())
+        viewController.delegate = delegate
+
+        viewController.loadViewIfNeeded()
+
+        let webViewManager: WebViewManager? = privateProperty(named: "webViewManager", from: viewController)
+        webViewManager?.returnHandler?(["status": "success", Constants.trustlyContext: "stored-context"])
+
+        XCTAssertEqual(delegate.returnParameters.count, 1)
+        XCTAssertEqual(delegate.returnParameters.first?["status"] as? String, "success")
+        XCTAssertNil(delegate.returnParameters.first?[Constants.trustlyContext])
+        XCTAssertEqual(LocalStorage.getFrom(key: Constants.repositoryTrustlyContext), "stored-context")
+    }
+
+    @MainActor
+    func testLightBoxViewControllerRemovesTrustlyContextFromCancelCallbackParameters() {
+        URLProtocol.registerClass(FailingURLProtocol.self)
+        defer { URLProtocol.unregisterClass(FailingURLProtocol.self) }
+
+        let delegate = TrustlySDKProtocolSpy()
+        let viewController = LightBoxViewController(establishData: makeBaseEstablishData())
+        viewController.delegate = delegate
+
+        viewController.loadViewIfNeeded()
+
+        let webViewManager: WebViewManager? = privateProperty(named: "webViewManager", from: viewController)
+        webViewManager?.cancelHandler?(["reason": "cancelled", Constants.trustlyContext: "stored-context"])
+
+        XCTAssertEqual(delegate.cancelParameters.count, 1)
+        XCTAssertEqual(delegate.cancelParameters.first?["reason"] as? String, "cancelled")
+        XCTAssertNil(delegate.cancelParameters.first?[Constants.trustlyContext])
+        XCTAssertEqual(LocalStorage.getFrom(key: Constants.repositoryTrustlyContext), "stored-context")
+    }
+
+    @MainActor
     func testWidgetViewControllerForwardsBankSelectionToDelegate() {
         let delegate = TrustlySDKProtocolSpy()
         let viewController = WidgetViewController(establishData: makeBaseEstablishData())

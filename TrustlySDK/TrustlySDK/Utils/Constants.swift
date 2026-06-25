@@ -47,6 +47,8 @@ struct Constants {
     
     static let baseUrls = ["paywithmybank.com", "trustly.one"]
     
+    static let trustlyContext = "trustlyContext"
+    
     // MARK: OsLog
     static let categoryLogWidgetVC = "widgetViewController"
     static let categoryLogLightboxVC = "lightboxViewController"

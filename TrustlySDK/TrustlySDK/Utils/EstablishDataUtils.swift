@@ -198,5 +198,16 @@ struct EstablishDataUtils {
         
         return urlScheme.components(separatedBy: ":")[0]
     }
+    
+    static func saveLocalAndRemoveTrustlyContextFrom(establishData: [AnyHashable : Any]) -> [AnyHashable : Any] {
+        var localEstablishData = establishData
+        
+        if let trustlyContext = localEstablishData[Constants.trustlyContext] as? String  {
+            LocalStorage.save(trustlyContext, forKey: Constants.repositoryTrustlyContext)
+            localEstablishData.removeValue(forKey: Constants.trustlyContext)
+        }
+        
+        return localEstablishData
+    }
 
 }
