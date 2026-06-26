@@ -1,5 +1,5 @@
 PODS:
-  - TrustlySDK (4.2.0)
+  - TrustlySDK (4.3.0)
 
 DEPENDENCIES:
   - TrustlySDK (from `../..`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "../.."
 
 SPEC CHECKSUMS:
-  TrustlySDK: 9ecce3fdec749558eb08b5b50deaca2e6dbe7ff5
+  TrustlySDK: 6b0bfc19c86fdb9e7d94ab7ee05f1add14ea3ecb
 
 PODFILE CHECKSUM: 9b03f9ac6aff4cba6ed3b16b934bd29ebec4ba4e
 

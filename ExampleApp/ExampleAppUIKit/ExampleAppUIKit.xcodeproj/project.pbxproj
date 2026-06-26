@@ -57,11 +57,15 @@
 		};
 		69525CA02F83FBC3000A5F54 /* ExampleAppUIKitTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = ExampleAppUIKitTests;
 			sourceTree = "<group>";
 		};
 		69525CAA2F83FBC3000A5F54 /* ExampleAppUIKitUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = ExampleAppUIKitUITests;
 			sourceTree = "<group>";
 		};
@@ -298,13 +302,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ExampleAppUIKit/Pods-ExampleAppUIKit-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ExampleAppUIKit/Pods-ExampleAppUIKit-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

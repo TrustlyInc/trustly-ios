@@ -9,7 +9,7 @@ import Foundation
 
 
 struct Constants {
-    static let buildSDK = "4.2.0"
+    static let buildSDK = "4.3.0"
     static let baseDomain = "trustly.one"
     
     static let returnURL = "msg://return"
