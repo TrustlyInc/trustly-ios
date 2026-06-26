@@ -15,7 +15,7 @@ final class LocalStorage {
         return userDefaults.string(forKey: key) ?? defaultValue
     }
     
-    static func save(_ value: String, forKey key: String) {
+    static func save(_ value: Any, forKey key: String) {
         userDefaults.set(value,forKey: key)
     }
 }
