@@ -9,7 +9,7 @@ import Foundation
 
 
 struct Constants {
-    static let buildSDK = "4.2.0"
+    static let buildSDK = "4.3.0"
     static let baseDomain = "trustly.one"
     
     static let returnURL = "msg://return"
@@ -46,6 +46,8 @@ struct Constants {
     static let oauthLoginPath = "/oauth/login/"
     
     static let baseUrls = ["paywithmybank.com", "trustly.one"]
+    
+    static let trustlyContext = "trustlyContext"
     
     // MARK: OsLog
     static let categoryLogWidgetVC = "widgetViewController"

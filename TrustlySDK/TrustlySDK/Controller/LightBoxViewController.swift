@@ -183,15 +183,14 @@ extension LightBoxViewController {
     }
     
     private func onReturn(_ returnParameters: [AnyHashable : Any]) -> Void{
+        let cleanedReturnParameters = EstablishDataUtils.saveLocalAndRemoveTrustlyContextFrom(establishData: returnParameters)
         
-        if let trustlyContext = returnParameters["trustlyContext"] as? String  {
-            LocalStorage.save(trustlyContext, forKey: Constants.repositoryTrustlyContext)
-        }
-        
-        self.delegate?.onReturn(returnParameters)
+        self.delegate?.onReturn(cleanedReturnParameters)
     }
     
     private func onCancel(_ returnParameters: [AnyHashable : Any]) -> Void{
-        self.delegate?.onCancel(returnParameters)
+        let cleanedReturnParameters = EstablishDataUtils.saveLocalAndRemoveTrustlyContextFrom(establishData: returnParameters)
+        
+        self.delegate?.onCancel(cleanedReturnParameters)
     }
 }

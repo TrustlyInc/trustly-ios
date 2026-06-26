@@ -84,6 +84,26 @@ final class TrustlySDKEstablishAndSettingsTests: TrustlySDKTestCase {
         XCTAssertEqual(prepared["widgetLoaded"] as? String, "true")
     }
 
+    func testSaveLocalAndRemoveTrustlyContextFromStoresAndRemovesTrustlyContext() {
+        let establishData: [AnyHashable: Any] = ["status": "success", Constants.trustlyContext: "stored-context"]
+
+        let filtered = EstablishDataUtils.saveLocalAndRemoveTrustlyContextFrom(establishData: establishData)
+
+        XCTAssertEqual(filtered["status"] as? String, "success")
+        XCTAssertNil(filtered[Constants.trustlyContext])
+        XCTAssertEqual(LocalStorage.getFrom(key: Constants.repositoryTrustlyContext), "stored-context")
+    }
+
+    func testSaveLocalAndRemoveTrustlyContextFromReturnsOriginalWhenNoContextExists() {
+        let establishData: [AnyHashable: Any] = ["status": "success"]
+
+        let filtered = EstablishDataUtils.saveLocalAndRemoveTrustlyContextFrom(establishData: establishData)
+
+        XCTAssertEqual(filtered["status"] as? String, "success")
+        XCTAssertNil(filtered[Constants.trustlyContext])
+        XCTAssertEqual(LocalStorage.getFrom(key: Constants.repositoryTrustlyContext), "")
+    }
+
     func testExtractUrlSchemeReturnsCustomSchemeWithoutSeparator() {
         let establishData: [AnyHashable: Any] = ["metadata.urlScheme": "merchant-app://callback"]
 
