@@ -1,0 +1,80 @@
+//
+//  Constants.swift
+//  Pods-TrustlySDK_Example
+//
+//  Created by Marcos Rivereto on 29/01/24.
+//
+
+import Foundation
+
+
+struct Constants {
+    static let buildSDK = "4.3.0"
+    static let baseDomain = "trustly.one"
+    
+    static let returnURL = "msg://return"
+    static let cancelURL = "msg://cancel"
+    static let establishVersion = "2"
+    static let deviceType = "mobile"
+    static let devicePlatform = "ios:native"
+    static let paymentTypeVerification = "Verification"
+    static let storageSupported = "supported"
+    
+    static let lightboxContentInApp = "in-app-browser"
+    static let lightboxContentWebview = "webview"
+    
+    static let settingsCacheTimeLimit = 15 // minutes
+    
+    static let portApi: Int = 8000
+    static let portFrontend: Int = 10000
+
+    static let inAppIntegrationContext = "InAppBrowser"
+    static let secureBrowserIntegrationContext = "SecureBrowser"
+    static let messageWebviewHandler = "PayWithMyBankNativeSDK"
+    
+    static let widgetPage = "widget"
+    static let loadingType = "loading"
+    
+    static let undefinedURI = "/undefined"
+    
+    static let establishDataDocsLink = "https://amer.developers.trustly.com/payments/docs/establish-data#base-properties"
+
+    static let trustlyCloseWebview = "trustly.close.webView"
+    
+    static let widgetView:Int = 100
+    
+    static let oauthLoginPath = "/oauth/login/"
+    
+    static let baseUrls = ["paywithmybank.com", "trustly.one"]
+    
+    static let trustlyContext = "trustlyContext"
+    
+    // MARK: OsLog
+    static let categoryLogWidgetVC = "widgetViewController"
+    static let categoryLogLightboxVC = "lightboxViewController"
+    static let categoryWebViewManager = "webViewManager"
+    static let categoryDeviceHelper = "deviceHelper"
+    static let categoryNetworkHelper = "networkHelper"
+    static let categoryApiRequest = "apiRequest"
+    static let categoryTrustlyService = "trustlyService"
+    static let categorySettingsManager = "settingsManager"
+    static let categoryJsonUtils = "jsonUtils"
+    static let categoryEstablishDataUtils = "establishDataUtils"
+    static let categoryStringExtensions = "string+extensions"
+    
+    // MARK: Repository Keys
+    static let repositoryGRP = "Trustly.grp"
+    static let repositoryTrustlyContext = "Trustly.trustlyContext"
+    
+    // MARK: Establish validation
+    static let requiredKeys: Set<AnyHashable> = [AnyHashable("accessId"),
+                                                 AnyHashable("merchantId"),
+                                                 AnyHashable("merchantReference"),
+                                                 AnyHashable("returnUrl"),
+                                                 AnyHashable("cancelUrl"),
+                                                 AnyHashable("requestSignature"),
+                                                 AnyHashable("customer.address.country")]
+    
+    static let trustly_url_scheme = "trustly-url-scheme://"
+
+}

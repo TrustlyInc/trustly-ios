@@ -15,7 +15,7 @@ let package = Package(
     ],
     targets: [
         .target(name: "TrustlySDK",
-            path: "Sources",
+            path: "TrustlySDK/TrustlySDK",
             resources: [.copy("TrustlySDK/PrivacyInfo.xcprivacy")]
         ),
     ]

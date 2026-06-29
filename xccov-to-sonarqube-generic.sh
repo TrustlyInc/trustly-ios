@@ -19,13 +19,22 @@ function xccov_to_generic {
 
 function check_xcode_version() {
   local major=${1:-0} minor=${2:-0}
-  return $(( (major >= 14) || (major == 13 && minor >= 3) ))
+
+  if (( major > 13 )); then
+    return 0
+  fi
+
+  if (( major == 13 && minor >= 3 )); then
+    return 0
+  fi
+
+  return 1
 }
 
 if ! xcode_version="$(xcodebuild -version | sed -n '1s/^Xcode \([0-9.]*\)$/\1/p')"; then
   echo 'Failed to get Xcode version' 1>&2
   exit 1
-elif check_xcode_version ${xcode_version//./ }; then
+elif ! check_xcode_version ${xcode_version//./ }; then
   echo "Xcode version '$xcode_version' not supported, version 13.3 or above is required" 1>&2;
   exit 1
 fi
