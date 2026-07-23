@@ -1,5 +1,5 @@
 //
-//  TrustlySDKNetworkHelperTests.swift
+//  TrustlySDKStringExtensionTests.swift
 //  TrustlySDK
 //
 //  Created by Andre Guedes on 23/07/26.

@@ -47,7 +47,7 @@ extension String {
         
         // 2. Strict allowed characters
         var allowed = CharacterSet.alphanumerics
-        allowed.insert(charactersIn: "-_.*")
+        allowed.insert(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~*")
         
         // 3. Percent-encode non-alphanumeric characters
         let encoded = rawString.addingPercentEncoding(withAllowedCharacters: allowed) ?? rawString
