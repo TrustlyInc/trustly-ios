@@ -102,6 +102,12 @@ final class TrustlySDKStringExtensionTests: TrustlySDKTestCase {
         let numericInput = "1175"
         XCTAssertEqual(numericInput.urlEncodedForm(), "1175")
     }
+    
+    /// Test that non-ASCII characters are percent-encoded (UTF-8) to remain safe for use in `percentEncodedQueryItems`
+    func testNonASCIICharactersArePercentEncoded() {
+        let input = "José"
+        XCTAssertEqual(input.urlEncodedForm(), "Jos%C3%A9")
+    }
 
     // MARK: - URLComponents Integration Tests (No Double-Encoding)
 
@@ -118,7 +124,7 @@ final class TrustlySDKStringExtensionTests: TrustlySDKTestCase {
         ]
         
         // CRITICAL: Assigning to percentEncodedQueryItems prevents double-encoding
-        components.percentEncodedQueryItems = queryItems.isEmpty ? nil : queryItems
+        components.percentEncodedQueryItems = queryItems
         
         let urlString = components.url?.absoluteString ?? ""
         
@@ -140,7 +146,7 @@ final class TrustlySDKStringExtensionTests: TrustlySDKTestCase {
         ]
         
         // WRONG: Standard queryItems treats % as a literal character and encodes it to %25
-        components.queryItems = queryItems.isEmpty ? nil : queryItems
+        components.queryItems = queryItems
         
         let urlString = components.url?.absoluteString ?? ""
         

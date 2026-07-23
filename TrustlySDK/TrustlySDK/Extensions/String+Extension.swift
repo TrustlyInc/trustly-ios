@@ -45,9 +45,8 @@ extension String {
         // 1. Remove existing percent-encoding if the string was already encoded
         let rawString = self.removingPercentEncoding ?? self
         
-        // 2. Strict allowed characters
-        var allowed = CharacterSet.alphanumerics
-        allowed.insert(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~*")
+        // 2. Strict allowed characters (ASCII only for predictable URL encoding)
+        let allowed = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~*")
         
         // 3. Percent-encode non-alphanumeric characters
         let encoded = rawString.addingPercentEncoding(withAllowedCharacters: allowed) ?? rawString
