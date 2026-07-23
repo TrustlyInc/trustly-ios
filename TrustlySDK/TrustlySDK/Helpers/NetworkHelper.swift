@@ -50,12 +50,14 @@ func buildEnvironment(resourceUrl:ResourceUrls, env: String?, paymentType: Strin
     if let query = query {
         for (key, value) in query {
             if let keyStr = key as? String, let valueStr = value as? String {
-                queryItems.append(URLQueryItem(name: keyStr, value: valueStr))
+                let encodedKey = keyStr.urlEncodedForm()
+                let encodedValue = valueStr.urlEncodedForm()
+                queryItems.append(URLQueryItem(name: encodedKey, value: encodedValue))
             }
         }
     }
     
-    urlComponents.queryItems = queryItems.isEmpty ? nil : queryItems
+    urlComponents.percentEncodedQueryItems = queryItems.isEmpty ? nil : queryItems
     
     // Add fragment (hash)
     if let hash = hash {
