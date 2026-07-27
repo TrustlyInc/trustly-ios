@@ -82,6 +82,7 @@ ___
 
 | VERSION   | DESCRIPTION   | BRANCH |
 | :-------: | :-----------  | :----------- |
+4.3.1     | Fix encode error. | *main*
 4.3.0     | Add last used bank. | *main*
 4.2.0     | Add universal link support | *main*
 4.1.0     | Change inAppBrowser integration | *main*
