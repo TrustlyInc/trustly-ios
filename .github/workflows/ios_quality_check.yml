@@ -55,12 +55,6 @@ jobs:
             brew update
             # Install SwiftLint
             brew install swiftlint
-            # Install Tailor
-            brew install tailor
-            # Install xcpretty
-            sudo gem install -n /usr/local/bin xcpretty
-            # Install Lizard
-            brew install lizard
             sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
             sudo xcodebuild -license accept
 
