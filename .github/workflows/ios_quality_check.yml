@@ -83,6 +83,15 @@ jobs:
           sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
           sudo xcodebuild -runFirstLaunch
     
+      - name: Run Fastlane Lint
+        run: bundle exec fastlane lint
+
+      - name: Run Fastlane Tests
+        run: bundle exec fastlane build_and_run_tests
+
+      - name: Run Fastlane Verify Example Integrations
+        run: bundle exec fastlane verify_example_integrations
+
       - name: Run Sonar-Swift Script
         env:
           SONAR_USER_HOME: ${{ runner.temp }}/.sonar
