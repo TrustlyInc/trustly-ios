@@ -108,4 +108,36 @@ platform :ios do
       ].join(" ")
     )
   end
+
+  # Slack: notify on success — scoped to ci_quality only
+  after_all do |lane|
+    next unless lane == :ci_quality
+
+    slack(
+      message: "✅ [iOS SDK] Build succeeded",
+      success: true,
+      default_payloads: [],
+      payload: {
+        "Repo"  => ENV["GITHUB_REPOSITORY"],
+        "Actor" => ENV["GITHUB_ACTOR"],
+        "Run"   => "#{ENV['GITHUB_SERVER_URL']}/#{ENV['GITHUB_REPOSITORY']}/actions/runs/#{ENV['GITHUB_RUN_ID']}"
+      }
+    )
+  end
+
+  # Slack: notify on failure — scoped to ci_quality only
+  error do |lane, exception|
+    next unless lane == :ci_quality
+
+    slack(
+      message: "❌ [iOS SDK] Build failed",
+      success: false,
+      default_payloads: [],
+      payload: {
+        "Repo"  => ENV["GITHUB_REPOSITORY"],
+        "Actor" => ENV["GITHUB_ACTOR"],
+        "Run"   => "#{ENV['GITHUB_SERVER_URL']}/#{ENV['GITHUB_REPOSITORY']}/actions/runs/#{ENV['GITHUB_RUN_ID']}"
+      }
+    )
+  end
 end
