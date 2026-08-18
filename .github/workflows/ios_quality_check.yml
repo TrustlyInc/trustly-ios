@@ -108,30 +108,30 @@ jobs:
             echo "Coverage report not found!" && exit 1
           fi
 
-      - name: Notify Slack on success
-        if: success()
-        uses: slackapi/slack-github-action@v2
-        with:
-          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-          webhook-type: incoming-webhook
-          payload: |
-            {
-              "attachments": [{
-                "color": "good",
-                "text": "✅ [iOS SDK] Build succeeded | repo: ${{ github.repository }} | actor: ${{ github.actor }} | <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View run>"
-              }]
-            }
+      # - name: Notify Slack on success
+      #   if: success()
+      #   uses: slackapi/slack-github-action@v2
+      #   with:
+      #     webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+      #     webhook-type: incoming-webhook
+      #     payload: |
+      #       {
+      #         "attachments": [{
+      #           "color": "good",
+      #           "text": "✅ [iOS SDK] Build succeeded | repo: ${{ github.repository }} | actor: ${{ github.actor }} | <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View run>"
+      #         }]
+      #       }
 
-      - name: Notify Slack on failure
-        if: failure()
-        uses: slackapi/slack-github-action@v2
-        with:
-          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-          webhook-type: incoming-webhook
-          payload: |
-            {
-              "attachments": [{
-                "color": "danger",
-                "text": "❌ [iOS SDK] Build failed | repo: ${{ github.repository }} | actor: ${{ github.actor }} | <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View run>"
-              }]
-            }
+      # - name: Notify Slack on failure
+      #   if: failure()
+      #   uses: slackapi/slack-github-action@v2
+      #   with:
+      #     webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+      #     webhook-type: incoming-webhook
+      #     payload: |
+      #       {
+      #         "attachments": [{
+      #           "color": "danger",
+      #           "text": "❌ [iOS SDK] Build failed | repo: ${{ github.repository }} | actor: ${{ github.actor }} | <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View run>"
+      #         }]
+      #       }
