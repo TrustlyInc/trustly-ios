@@ -74,6 +74,14 @@ platform :ios do
     )
   end
 
+  desc "Run full CI quality pipeline: lint, tests, example verification, and SonarQube analysis"
+  lane :ci_quality do
+    lint
+    build_and_run_tests
+    verify_example_integrations
+    sonar_analysis
+  end
+
   desc "Generate coverage XML and run SonarQube analysis; replaces run-sonar-swift.sh"
   lane :sonar_analysis do
     xcresult_path = "sonar-reports/TestResults.xcresult"
