@@ -58,7 +58,7 @@ jobs:
             sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
             sudo xcodebuild -license accept
 
-      - name: Install sonnar-scanner
+      - name: Install sonar-scanner
         run: |
          brew install sonar-scanner
 
@@ -66,72 +66,21 @@ jobs:
         run: |
           rm -rf ~/.sonar/cache
           mkdir -p "${RUNNER_TEMP}/.sonar"
-         
-      - name: Update sonar properties
-        run: |
-          echo "sonar.host.url=${{ env.SONAR_HOST_URL }}" >> sonar-project.properties
-          echo "sonar.projectKey=${{ env.SONAR_PROJECT_KEY }}" >> sonar-project.properties
-          echo "sonar.projectName=${{ env.SONAR_PROJECT_NAME }}" >> sonar-project.properties
-          echo "sonar.login=${{ secrets.SONAR_TOKEN_SECRET }}" >> sonar-project.properties
-          echo "sonar.pullrequest.key=${{ github.event.number }}" >> sonar-project.properties
-          echo "sonar.pullrequest.branch=${{ github.head_ref }}" >> sonar-project.properties
-          echo "sonar.pullrequest.base=${{ github.base_ref }}" >> sonar-project.properties
-          echo "sonar.scm.revision=${{ env.GIT_REVISION }}" >> sonar-project.properties
 
-      - name: Install Xcode dependencies
-        run: |
-          sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
-          sudo xcodebuild -runFirstLaunch
-    
-      - name: Run Fastlane Lint
-        run: bundle exec fastlane lint
-
-      - name: Run Fastlane Tests
-        run: bundle exec fastlane build_and_run_tests
-
-      - name: Run Fastlane Verify Example Integrations
-        run: bundle exec fastlane verify_example_integrations
-
-      - name: Run Sonar-Swift Script
+      - name: Run CI Quality
         env:
+          SONAR_PROJECT_KEY: ${{ env.SONAR_PROJECT_KEY }}
+          SONAR_PROJECT_NAME: ${{ env.SONAR_PROJECT_NAME }}
+          SONAR_HOST_URL: ${{ env.SONAR_HOST_URL }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_SECRET }}
+          PR_NUMBER: ${{ github.event.number }}
+          BRANCH_ORIGIN: ${{ github.head_ref }}
+          BASE_BRANCH: ${{ github.base_ref }}
+          GIT_REVISION: ${{ env.GIT_REVISION }}
+          SLACK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_SERVER_URL: ${{ github.server_url }}
           SONAR_USER_HOME: ${{ runner.temp }}/.sonar
-        run: |
-          chmod +x ./run-sonar-swift.sh
-          ./run-sonar-swift.sh -v
-
-      - name: Verify Coverage Report
-        run: |
-          if [ -f "sonar-reports/generic-coverage.xml" ]; then
-            echo "Coverage report generated successfully: sonar-reports/generic-coverage.xml"
-            cat sonar-reports/generic-coverage.xml
-          else
-            echo "Coverage report not found!" && exit 1
-          fi
-
-      # - name: Notify Slack on success
-      #   if: success()
-      #   uses: slackapi/slack-github-action@v2
-      #   with:
-      #     webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-      #     webhook-type: incoming-webhook
-      #     payload: |
-      #       {
-      #         "attachments": [{
-      #           "color": "good",
-      #           "text": "✅ [iOS SDK] Build succeeded | repo: ${{ github.repository }} | actor: ${{ github.actor }} | <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View run>"
-      #         }]
-      #       }
-
-      # - name: Notify Slack on failure
-      #   if: failure()
-      #   uses: slackapi/slack-github-action@v2
-      #   with:
-      #     webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-      #     webhook-type: incoming-webhook
-      #     payload: |
-      #       {
-      #         "attachments": [{
-      #           "color": "danger",
-      #           "text": "❌ [iOS SDK] Build failed | repo: ${{ github.repository }} | actor: ${{ github.actor }} | <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View run>"
-      #         }]
-      #       }
+        run: bundle exec fastlane ci_quality
