@@ -73,4 +73,31 @@ platform :ios do
       ignore_exit_status: true
     )
   end
+
+  desc "Generate coverage XML and run SonarQube analysis; replaces run-sonar-swift.sh"
+  lane :sonar_analysis do
+    xcresult_path = "sonar-reports/TestResults.xcresult"
+
+    # Generate coverage XML from the .xcresult produced by build_and_run_tests
+    sh("bash xccov-to-sonarqube-generic.sh #{xcresult_path} > sonar-reports/generic-coverage.xml")
+
+    # Verify coverage report was produced
+    UI.user_error!("Coverage report not found: sonar-reports/generic-coverage.xml") unless File.exist?("sonar-reports/generic-coverage.xml")
+    UI.user_error!("Coverage report is empty: sonar-reports/generic-coverage.xml") if File.zero?("sonar-reports/generic-coverage.xml")
+
+    # Run SonarQube analysis (sonar-project.properties provides base config)
+    sonar(
+      project_key: ENV["SONAR_PROJECT_KEY"],
+      project_name: ENV["SONAR_PROJECT_NAME"],
+      sonar_url: ENV["SONAR_HOST_URL"],
+      sonar_token: ENV["SONAR_TOKEN"],
+      sonar_runner_args: [
+        "-Dsonar.pullrequest.key=#{ENV['PR_NUMBER']}",
+        "-Dsonar.pullrequest.branch=#{ENV['BRANCH_ORIGIN']}",
+        "-Dsonar.pullrequest.base=#{ENV['BASE_BRANCH']}",
+        "-Dsonar.scm.revision=#{ENV['GIT_REVISION']}",
+        "-Dsonar.coverageReportPaths=sonar-reports/generic-coverage.xml"
+      ].join(" ")
+    )
+  end
 end
