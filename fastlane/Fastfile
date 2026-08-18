@@ -10,13 +10,17 @@ platform :ios do
   end
 
   # Unit tests - SDK
-  desc "Build the SDK and run unit tests"
+  desc "Build the SDK and run unit tests; produces sonar-reports/TestResults.xcresult for coverage"
   lane :build_and_run_tests do
     scan(
       workspace: "./TrustlySDK.xcworkspace",
       scheme: 'TrustlySDK',
       devices: ["iPhone 16"],
-      clean: true
+      clean: true,
+      code_coverage: true,
+      derived_data_path: "sonar-reports/",
+      result_bundle: true,
+      result_bundle_path: "sonar-reports/TestResults.xcresult"
     )
   end
 
