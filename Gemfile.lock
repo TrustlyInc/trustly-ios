@@ -299,6 +299,7 @@ DEPENDENCIES
   abbrev
   cocoapods
   fastlane
+  xcpretty
 
 BUNDLED WITH
    2.6.9
