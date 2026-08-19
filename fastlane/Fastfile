@@ -10,18 +10,24 @@ platform :ios do
   end
 
   # Unit tests - SDK
+  # Uses raw xcodebuild (not scan) to avoid fastlane's xcrun simctl validation,
+  # which fails on GitHub-hosted runners where the simulator runtime is broken.
+  # This mirrors exactly what run-sonar-swift.sh did.
   desc "Build the SDK and run unit tests; produces sonar-reports/TestResults.xcresult for coverage"
   lane :build_and_run_tests do
-    scan(
-      workspace: "./TrustlySDK.xcworkspace",
-      scheme: 'TrustlySDK',
-      devices: ["iPhone 16"],
-      clean: true,
-      code_coverage: true,
-      derived_data_path: "sonar-reports/",
-      result_bundle: true,
-      result_bundle_path: "sonar-reports/TestResults.xcresult"
-    )
+    sh("mkdir -p ../sonar-reports")
+    sh([
+      "xcodebuild clean build test",
+      "-workspace ../TrustlySDK.xcworkspace",
+      "-scheme TrustlySDK",
+      "-configuration Debug",
+      "-enableCodeCoverage YES",
+      "-derivedDataPath ../sonar-reports/",
+      "-resultBundlePath ../sonar-reports/TestResults.xcresult",
+      "-destination 'platform=iOS Simulator,name=iPhone 17 Pro Max,OS=latest'",
+      "-destination-timeout 60",
+      "| xcpretty -t --report junit || true"
+    ].join(" "))
   end
 
   desc "Build SwiftUI example app for iOS Simulator (direct TrustlySDK integration)"
@@ -68,6 +74,8 @@ platform :ios do
 
   desc "Apply swift linting"
   lane :lint do
+    # sonar-reports/ lives at the repo root; Fastlane's sh() runs from fastlane/
+    sh("mkdir -p ../sonar-reports")
     swiftlint(
       output_file: "sonar-reports/TrustlySDK-swiftlint.txt",
       ignore_exit_status: true
@@ -84,14 +92,16 @@ platform :ios do
 
   desc "Generate coverage XML and run SonarQube analysis; replaces run-sonar-swift.sh"
   lane :sonar_analysis do
-    xcresult_path = "sonar-reports/TestResults.xcresult"
+    # sh() runs from fastlane/; use ../ to reference repo-root paths
+    xcresult_path = File.expand_path("../sonar-reports/TestResults.xcresult", __dir__)
+    coverage_xml  = File.expand_path("../sonar-reports/generic-coverage.xml", __dir__)
 
     # Generate coverage XML from the .xcresult produced by build_and_run_tests
-    sh("bash xccov-to-sonarqube-generic.sh #{xcresult_path} > sonar-reports/generic-coverage.xml")
+    sh("bash ../xccov-to-sonarqube-generic.sh #{xcresult_path} > #{coverage_xml}")
 
     # Verify coverage report was produced
-    UI.user_error!("Coverage report not found: sonar-reports/generic-coverage.xml") unless File.exist?("sonar-reports/generic-coverage.xml")
-    UI.user_error!("Coverage report is empty: sonar-reports/generic-coverage.xml") if File.zero?("sonar-reports/generic-coverage.xml")
+    UI.user_error!("Coverage report not found: #{coverage_xml}") unless File.exist?(coverage_xml)
+    UI.user_error!("Coverage report is empty: #{coverage_xml}") if File.zero?(coverage_xml)
 
     # Run SonarQube analysis (sonar-project.properties provides base config)
     sonar(
@@ -112,6 +122,7 @@ platform :ios do
   # Slack: notify on success — scoped to ci_quality only
   after_all do |lane|
     next unless lane == :ci_quality
+    next if ENV["SLACK_URL"].to_s.strip.empty?
 
     slack(
       message: "✅ [iOS SDK] Build succeeded",
@@ -128,6 +139,7 @@ platform :ios do
   # Slack: notify on failure — scoped to ci_quality only
   error do |lane, exception|
     next unless lane == :ci_quality
+    next if ENV["SLACK_URL"].to_s.strip.empty?
 
     slack(
       message: "❌ [iOS SDK] Build failed",
