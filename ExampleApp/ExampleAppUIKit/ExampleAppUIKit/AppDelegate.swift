@@ -76,7 +76,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 return
             }
 
-            if components.path == "/start/oauth/app/" {
+            if components.path == "/trustly-alpha" || components.path.hasPrefix("/trustly-alpha/") {
                 NotificationCenter.default.post(name: .trustlyCloseWebview, object: nil)
             } else {
                 print("Unrecognized path: \(components.path)")
