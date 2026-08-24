@@ -52,3 +52,11 @@ fastlane/README.md
 
 # SPM
 .swiftpm/
+
+# AI / spec-driven development artifacts
+.specs/
+AGENTS.md
+CONTEXT.md
+STATE.md
+REFUTATION.md
+worktrees/
