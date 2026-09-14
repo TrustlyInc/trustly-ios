@@ -151,9 +151,9 @@ platform :ios do
     main_branch_sonar_analysis
   end
 
-  # Slack: notify on success — scoped to ci_quality only
+  # Slack: notify on success — scoped to ci_quality and main_quality
   after_all do |lane|
-    next unless lane == :ci_quality
+    next unless [:ci_quality, :main_quality].include?(lane)
     next if ENV["SLACK_URL"].to_s.strip.empty?
 
     slack(
@@ -168,9 +168,9 @@ platform :ios do
     )
   end
 
-  # Slack: notify on failure — scoped to ci_quality only
+  # Slack: notify on failure — scoped to ci_quality and main_quality
   error do |lane, exception|
-    next unless lane == :ci_quality
+    next unless [:ci_quality, :main_quality].include?(lane)
     next if ENV["SLACK_URL"].to_s.strip.empty?
 
     slack(
