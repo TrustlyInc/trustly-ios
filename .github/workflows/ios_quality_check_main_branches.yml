@@ -5,10 +5,9 @@
 name: iOS Main Branches Quality Check
 
 on:
-  push:
-    branches:
-      - main
-      - DEV
+  pull_request:
+    types: [closed]
+    branches: [main]
 
 env:
   SONAR_HOST_URL: "https://sonarqube.trustly.one"
@@ -19,6 +18,9 @@ env:
 jobs:
   run_tests_and_sonar_analysis:
     runs-on: macOS-latest
+    if: >-
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.head.ref == 'DEV'
 
     steps:
       # actions/checkout -> v6.0.2
