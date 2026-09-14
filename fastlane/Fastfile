@@ -119,6 +119,32 @@ platform :ios do
     )
   end
 
+  desc "Generate coverage XML and run SonarQube branch-mode analysis for main; reads SONAR_BRANCH_NAME env var (default: main)"
+  lane :main_branch_sonar_analysis do
+    xcresult_path = File.expand_path("../sonar-reports/TestResults.xcresult", __dir__)
+    coverage_xml  = File.expand_path("../sonar-reports/generic-coverage.xml", __dir__)
+    branch_name   = ENV["SONAR_BRANCH_NAME"] || "main"
+
+    # Generate coverage XML from the .xcresult produced by build_and_run_tests
+    sh("bash ../xccov-to-sonarqube-generic.sh #{xcresult_path} > #{coverage_xml}")
+
+    # Verify coverage report was produced
+    UI.user_error!("Coverage report not found: #{coverage_xml}") unless File.exist?(coverage_xml)
+    UI.user_error!("Coverage report is empty: #{coverage_xml}") if File.zero?(coverage_xml)
+
+    # Run SonarQube branch-mode analysis (sonar-project.properties provides base config)
+    sonar(
+      project_key: ENV["SONAR_PROJECT_KEY"],
+      project_name: ENV["SONAR_PROJECT_NAME"],
+      sonar_url: ENV["SONAR_HOST_URL"],
+      sonar_token: ENV["SONAR_TOKEN"],
+      sonar_runner_args: [
+        "-Dsonar.branch.name=#{branch_name}",
+        "-Dsonar.coverageReportPaths=sonar-reports/generic-coverage.xml"
+      ].join(" ")
+    )
+  end
+
   # Slack: notify on success — scoped to ci_quality only
   after_all do |lane|
     next unless lane == :ci_quality
