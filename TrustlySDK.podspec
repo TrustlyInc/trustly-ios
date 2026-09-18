@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'TrustlySDK'
 
-  s.version          = '4.3.1'
+  s.version          = '4.3.2'
 
   s.summary          = 'This SDK help the merchants to integrate their solutions with Trustly Widget and LightBox.'
   s.swift_version    = '5.0'
@@ -24,6 +24,6 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '12.0'
 
   s.source_files = 'TrustlySDK/TrustlySDK/**/*.swift'
-  s.resources = 'TrustlySDK/TrustlySDK/PrivacyInfo.xcprivacy'
+  s.resource_bundles = { 'TrustlySDK_Privacy' => ['TrustlySDK/TrustlySDK/PrivacyInfo.xcprivacy'] }
 
 end
