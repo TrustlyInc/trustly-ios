@@ -5,20 +5,28 @@
 name: iOS Main Branches Quality Check
 
 on:
-  push:
-    branches:
-      - main
-      - DEV
+  pull_request:
+    types: [closed]
+    branches: [main]
 
 env:
   SONAR_HOST_URL: "https://sonarqube.trustly.one"
   SONAR_PROJECT_KEY: "trustly-ios"
   SONAR_PROJECT_NAME: "trustly-ios"
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_SECRET }}
+  SONAR_BRANCH_NAME: "main"
+  SLACK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  GITHUB_REPOSITORY: ${{ github.repository }}
+  GITHUB_ACTOR: ${{ github.actor }}
+  GITHUB_RUN_ID: ${{ github.run_id }}
+  GITHUB_SERVER_URL: ${{ github.server_url }}
 
 jobs:
   run_tests_and_sonar_analysis:
     runs-on: macOS-latest
+    if: >-
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.head.ref == 'DEV'
 
     steps:
       # actions/checkout -> v6.0.2
@@ -27,43 +35,26 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install dependencies
-        run: |
-          brew update
-          brew install swiftlint
-          brew install tailor
-          sudo gem install -n /usr/local/bin xcpretty
-          brew install lizard
-          brew install fastlane
-          brew install sonar-scanner
+      # maxim-lobanov/setup-xcode -> v1.7.0
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@ed7a3b1fda3918c0306d1b724322adc0b8cc0a90 # v1.7.0
+        with:
+          xcode-version: latest
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+          bundler: 'latest'
+          bundler-cache: true
+
+      - name: Install sonar-scanner
+        run: brew install sonar-scanner
 
       - name: Reset SonarScanner cache
         run: |
           rm -rf ~/.sonar/cache
           mkdir -p "${RUNNER_TEMP}/.sonar"
 
-      - name: Run SonarQube Analysis
-        env:
-          SONAR_USER_HOME: ${{ runner.temp }}/.sonar
-        run: |
-          echo "sonar.host.url=${{ env.SONAR_HOST_URL }}" >> sonar-project.properties
-          echo "sonar.projectKey=${{ env.SONAR_PROJECT_KEY }}" >> sonar-project.properties
-          echo "sonar.projectName=${{ env.SONAR_PROJECT_NAME }}" >> sonar-project.properties
-          echo "sonar.login=${{ env.SONAR_TOKEN }}" >> sonar-project.properties
-          echo "sonar.branch.name=${{ github.ref_name }}" >> sonar-project.properties
-
-          chmod +x ./run-sonar-swift.sh
-          ./run-sonar-swift.sh -v
-
-      - name: Verify Coverage Report
-        run: |
-          if [ -f "sonar-reports/generic-coverage.xml" ]; then
-            echo "Coverage report generated successfully: sonar-reports/generic-coverage.xml"
-            cat sonar-reports/generic-coverage.xml
-          else
-            echo "Coverage report not found!" && exit 1
-          fi
-      - name: Run TrustlySDK Fastlane Checks
-        run: |
-          bundle exec fastlane lint
-          bundle exec fastlane build_and_run_tests
+      - name: Run main-branch quality checks
+        run: bundle exec fastlane main_quality
