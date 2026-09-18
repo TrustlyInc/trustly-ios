@@ -37,6 +37,7 @@ Carthage/Build
 #
 */Podfile.lock
 */Pods/
+**/Pods/
 
 # Sonar
 sonar-reports/*
