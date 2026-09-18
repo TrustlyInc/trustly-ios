@@ -1,8 +1,6 @@
 platform :ios, '12.0'
 
 target 'ExampleAppUIKit' do
-    use_frameworks!
-
     pod 'TrustlySDK', :path => '../..'
 end
 
