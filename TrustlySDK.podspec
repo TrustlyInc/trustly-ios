@@ -24,6 +24,6 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '12.0'
 
   s.source_files = 'TrustlySDK/TrustlySDK/**/*.swift'
-  s.resources = 'TrustlySDK/TrustlySDK/PrivacyInfo.xcprivacy'
+  s.resource_bundles = { 'TrustlySDK_Privacy' => ['TrustlySDK/TrustlySDK/PrivacyInfo.xcprivacy'] }
 
 end
