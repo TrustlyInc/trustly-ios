@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import TrustlySDK
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -17,6 +18,24 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let _ = (scene as? UIWindowScene) else { return }
+
+        // Handle URLs / universal links that launched the app from a cold start.
+        if let url = connectionOptions.urlContexts.first?.url {
+            handleDeepLink(url: url)
+        }
+
+        if let userActivity = connectionOptions.userActivities.first {
+            handleUserActivity(userActivity)
+        }
+    }
+
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        guard let url = URLContexts.first?.url else { return }
+        handleDeepLink(url: url)
+    }
+
+    func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+        handleUserActivity(userActivity)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -47,6 +66,36 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
     }
 
+    // MARK: - Deep links
+
+    private func handleDeepLink(url: URL) {
+        if url.absoluteString == "demoapp://" {
+            NotificationCenter.default.post(name: .trustlyCloseWebview, object: nil)
+        }
+    }
+
+    private func handleUserActivity(_ userActivity: NSUserActivity) {
+        guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+              let url = userActivity.webpageURL else {
+            return
+        }
+
+        print("Universal Link: \(url.absoluteString)")
+
+        handleUniversalLink(url: url)
+    }
+
+    private func handleUniversalLink(url: URL) {
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
+            return
+        }
+
+        if components.path == "/start/oauth/app/" {
+            NotificationCenter.default.post(name: .trustlyCloseWebview, object: nil)
+        } else {
+            print("Unrecognized path: \(components.path)")
+        }
+    }
 
 }
 

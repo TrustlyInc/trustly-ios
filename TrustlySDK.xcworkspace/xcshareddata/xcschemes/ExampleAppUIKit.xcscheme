@@ -16,7 +16,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "44A9330273BEC0CEE9601F83E4A251BB"
-               BuildableName = "Pods_ExampleAppUIKit.framework"
+               BuildableName = "libPods-ExampleAppUIKit.a"
                BlueprintName = "Pods-ExampleAppUIKit"
                ReferencedContainer = "container:ExampleApp/ExampleAppUIKit/Pods/Pods.xcodeproj">
             </BuildableReference>
@@ -30,7 +30,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "77127F2B80807CFC98D2D2E894F9051C"
-               BuildableName = "TrustlySDK.framework"
+               BuildableName = "libTrustlySDK.a"
                BlueprintName = "TrustlySDK"
                ReferencedContainer = "container:ExampleApp/ExampleAppUIKit/Pods/Pods.xcodeproj">
             </BuildableReference>
